@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/bauDeAkumas.css" />
+    <title>Bau de Akumas no mi</title>
+  </head>
+  <body>
+    <main>
+      <div id="stats">
+        <img id="perfil-player" src="" alt="" />
+        <span id="stat">Gold: <span id="berryText">0</span></span>
+      </div>
+      <div class="cardBau">
+        <h1>Baú das Akuma no Mi</h1>
+        <div id="containerBau">
+          <img
+            id="bauFechado"
+            src="imagens/bau-fechado.webp"
+            alt="Baú fechado"
+            width="400"
+            height="300"
+            decoding="async"
+            fetchpriority="high"
+          />
+
+          <img
+            id="bauAberto"
+            src="imagens/bau-aberto.webp"
+            alt="Baú aberto"
+            width="400"
+            height="300"
+            decoding="async"
+          />
+        </div>
+
+        <div id="containerInfo">
+          <div id="infoBau" aria-label="Baús disponíveis">
+            <span
+              ><span id="qtdAtual">5</span>/<span id="qtdTotal">5</span></span
+            >
+            <small>Disponíveis</small>
+          </div>
+          <button id="abrirBau">Abrir Baú</button>
+        </div>
+        <div id="container-textoBau">
+          <p id="textoBau"></p>
+        </div>
+      </div>
+      <div id="card-inventario">
+        <h2>Inventário</h2>
+        <ul id="inventario"></ul>
+      </div>
+    </main>
+
+    <script src="bauDeAkumas.js"></script>
+  </body>
+</html>
