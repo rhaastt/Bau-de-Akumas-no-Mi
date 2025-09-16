@@ -1,4 +1,4 @@
-import { bauDeAkumas } from "./javascript/akumasNoMi.js";
+import { bauDeAkumas } from "./akumasNoMi.js";
 
 document.addEventListener("DOMContentLoaded", function () {
   const btnAbrirBau = document.getElementById("abrirBauDeAkumas");
