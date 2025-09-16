@@ -9,8 +9,12 @@
   <body>
     <main>
       <div id="stats">
-        <img id="perfil-player" src="" alt="" />
-        <span id="stat">Gold: <span id="berryText">0</span></span>
+        <img
+          id="perfil-player"
+          src="imagens/icon_chapeu_de_palha.webp"
+          alt=""
+        />
+        <span id="stat">Beri: <span id="berryText">0</span></span>
       </div>
       <div class="cardBau">
         <h1>Baú das Akuma no Mi</h1>
@@ -38,11 +42,13 @@
         <div id="containerInfo">
           <div id="infoBau" aria-label="Baús disponíveis">
             <span
-              ><span id="qtdAtual">5</span>/<span id="qtdTotal">5</span></span
-            >
+              ><span id="qtdAtualDeBaus"></span>/<span
+                id="qtdTotalDeBaus"
+              ></span
+            ></span>
             <small>Disponíveis</small>
           </div>
-          <button id="abrirBau">Abrir Baú</button>
+          <button id="abrirBauDeAkumas">Abrir Baú</button>
         </div>
         <div id="container-textoBau">
           <p id="textoBau"></p>
@@ -54,6 +60,6 @@
       </div>
     </main>
 
-    <script src="bauDeAkumas.js"></script>
+    <script type="module" src="./javascript/bauDeAkumas.js"></script>
   </body>
 </html>
