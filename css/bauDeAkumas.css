@@ -61,12 +61,75 @@ h1 {
 }
 
 .cardBau {
+  position: relative;
   width: 360px;
   padding: 20px;
   border: 1px solid black;
   display: grid;
   border-radius: 16px;
   gap: 16px;
+}
+
+#dropAkuma {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  transform: translate(-50%, -10%);
+  z-index: 5;
+  pointer-events: none;
+}
+#dropAkuma.hidden {
+  display: none;
+}
+#dropAkuma.show {
+  display: block;
+  animation: akumaJump 600ms ease-out both;
+}
+
+#dropAkuma .drop-inner {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  transform-style: preserve-3d;
+}
+
+#dropAkuma img {
+  width: 140px;
+  height: 140px;
+  border: 1px solid black;
+  border-radius: 16px;
+  object-fit: contain;
+}
+#dropAkuma.show .drop-inner img {
+  animation: akumaFlip 1.2s ease-out both;
+  transform-origin: center;
+  backface-visibility: hidden;
+}
+
+@keyframes akumaFlip {
+  0% {
+    opacity: 0;
+    transform: perspective(600px) rotateY(90deg) scale(1.2);
+  }
+  50% {
+    opacity: 1;
+    transform: perspective(600px) rotateY(-12deg) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(600px) rotateY(0deg) scale(1);
+  }
+}
+#dropAkuma .drop-legend {
+  max-width: 240px;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: center;
+  color: #111;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 10px;
 }
 
 #containerBau {
@@ -83,7 +146,7 @@ h1 {
   position: relative;
 }
 
-#containerBau img {
+#containerBau > img {
   position: absolute;
   inset: 0;
   margin: auto;
@@ -112,7 +175,7 @@ h1 {
 .fade-out {
   opacity: 0;
 }
-.fade-out {
+.fade-in {
   opacity: 1;
 }
 
@@ -175,8 +238,6 @@ h1 {
   margin: 0;
 }
 
-/* ==== INVENTÁRIO ==== */
-/* ==== INVENTÁRIO (BÁSICO) ==== */
 #card-inventario {
   width: 420px;
   border: 1px solid #000;
@@ -201,28 +262,25 @@ h1 {
   list-style: none;
 }
 
-/* slot quadrado e simples */
 #inventario .slot {
-  position: relative; /* ancora label e o "+" */
-  aspect-ratio: 1 / 1; /* mantém quadrado */
+  position: relative;
+  aspect-ratio: 1 / 1;
   border: 1px solid #000;
   border-radius: 12px;
   overflow: hidden;
   background: #f7f7f7;
 }
 
-/* área da imagem (deixa espaço para a label) */
 #inventario .slot .pad {
   position: absolute;
   left: 6px;
   right: 6px;
   top: 6px;
-  bottom: 30px; /* reserva 30px para a legenda */
+  bottom: 30px;
   display: grid;
   place-items: center;
 }
 
-/* imagem centralizada na área útil */
 #inventario .slot .pad img {
   width: 100%;
   height: 100%;
@@ -230,25 +288,22 @@ h1 {
   display: block;
 }
 
-/* legenda básica no rodapé (máx. 2 linhas, sem prefixo) */
 #inventario .slot .label {
   position: absolute;
   left: 6px;
   right: 6px;
   bottom: 6px;
   padding: 2px 4px;
-  height: 24px; /* altura “alvo” */
+  height: 24px;
   font-size: 10px;
   line-height: 1.1;
   text-align: center;
   color: #111;
   background: rgba(255, 255, 255, 0.85);
   border-radius: 6px;
-  overflow: hidden; /* corta excesso */
-  white-space: normal; /* permite 2 linhas */
+  overflow: hidden;
 }
 
-/* “+” centralizado no MESMO centro da área da imagem */
 #inventario .slot.vazio .pad::after {
   content: "+";
   position: absolute;

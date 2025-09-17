@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const qtdTotalDeBausEl = document.getElementById("qtdTotalDeBaus");
   const inventarioEl = document.getElementById("inventario");
   const textoBauEl = document.getElementById("textoBau");
+  const dropAkumaEl = document.getElementById("dropAkuma");
+  const dropImgEl = document.getElementById("dropImg");
+  const dropLegendEl = document.getElementById("dropLegend");
   const SLOT_COUNT = 12;
 
   function exige(id, el) {
@@ -18,9 +21,12 @@ document.addEventListener("DOMContentLoaded", function () {
   exige("qtdTotalDeBaus", qtdTotalDeBausEl);
   exige("inventario", inventarioEl);
   exige("textoBau", textoBauEl);
+  exige("dropAkuma", dropAkumaEl);
+  exige("dropImg", dropImgEl);
+  exige("dropLegend", dropLegendEl);
 
   const totalDeBaus = 10;
-  let atualDeBaus = 10;
+  let atualDeBaus = 7;
   let aberto = false;
   let busy = false;
 
@@ -49,6 +55,20 @@ document.addEventListener("DOMContentLoaded", function () {
     (f) => preload(f.img)
   );
 
+  function esc(s) {
+    return String(s).replace(
+      /[&<>"']/g,
+      (m) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        }[m])
+    );
+  }
+
   function atualizarContador() {
     qtdAtualDeBausEl.textContent = atualDeBaus;
     atualizarBotao();
@@ -75,9 +95,38 @@ document.addEventListener("DOMContentLoaded", function () {
     return todasAkumasNoMi[i];
   }
 
+  function dropFruta() {
+    const fruta = sortearAkuma();
+    inventario.push(fruta);
+    renderInventario();
+    mostrarTexto(fruta);
+
+    // imagem e legenda do drop
+    dropImgEl.src = fruta.img;
+    dropImgEl.alt = fruta.nome;
+    dropLegendEl.textContent = `${fruta.nome}`;
+
+    // reinicia a animação
+    dropAkumaEl.classList.remove("show");
+    // força reflow para reiniciar
+    // eslint-disable-next-line no-unused-expressions
+    dropAkumaEl.offsetWidth;
+    dropAkumaEl.classList.remove("hidden");
+    dropAkumaEl.classList.add("show");
+    // some após um tempo
+    const VISIBLE_MS = 1400;
+    clearTimeout(dropFruta._t);
+    dropFruta._t = setTimeout(() => {
+      dropAkumaEl.classList.remove("show");
+      dropAkumaEl.classList.add("hidden");
+    }, VISIBLE_MS);
+  }
+
   // texto do baú (formatação legível)
   function mostrarTexto(fruta) {
-    textoBauEl.innerHTML = `<strong>${fruta.nome}</strong> — <em>${fruta.tipo}</em><br>${fruta.desc}`;
+    textoBauEl.innerHTML = `<strong>${esc(fruta.nome)}</strong> — <em>${esc(
+      fruta.tipo
+    )}</em><br>${fruta.desc}`;
   }
 
   function renderInventario() {
@@ -102,12 +151,6 @@ document.addEventListener("DOMContentLoaded", function () {
             </li>`;
       })
       .join("");
-  }
-  function dropFruta() {
-    const fruta = sortearAkuma();
-    inventario.push(fruta);
-    renderInventario();
-    mostrarTexto(fruta);
   }
 
   btnAbrirBau.addEventListener("click", function () {
