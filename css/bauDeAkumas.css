@@ -42,24 +42,25 @@ main {
   object-fit: cover;
   border: 1px solid #000;
   border-radius: 10px;
-  background: #f7f7f7;
+  background: #dfdfdf;
   display: block;
 }
 #stat {
   border: 1px solid #000;
   border-radius: 10px;
   padding: 8px 10px;
+  margin-bottom: 8px;
   display: block;
   text-align: center;
   background: #fff;
 }
-
-h1 {
-  text-align: center;
-  margin-bottom: 16px;
-  font-size: 18px;
+#abrirMochilaBtn {
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  cursor: pointer;
 }
-
 .cardBau {
   position: relative;
   width: 360px;
@@ -70,66 +71,10 @@ h1 {
   gap: 16px;
 }
 
-#dropAkuma {
-  position: absolute;
-  left: 50%;
-  top: 38%;
-  transform: translate(-50%, -10%);
-  z-index: 5;
-  pointer-events: none;
-}
-#dropAkuma.hidden {
-  display: none;
-}
-#dropAkuma.show {
-  display: block;
-  animation: akumaJump 600ms ease-out both;
-}
-
-#dropAkuma .drop-inner {
-  display: grid;
-  gap: 8px;
-  justify-items: center;
-  transform-style: preserve-3d;
-}
-
-#dropAkuma img {
-  width: 140px;
-  height: 140px;
-  border: 1px solid black;
-  border-radius: 16px;
-  object-fit: contain;
-}
-#dropAkuma.show .drop-inner img {
-  animation: akumaFlip 1.2s ease-out both;
-  transform-origin: center;
-  backface-visibility: hidden;
-}
-
-@keyframes akumaFlip {
-  0% {
-    opacity: 0;
-    transform: perspective(600px) rotateY(90deg) scale(1.2);
-  }
-  50% {
-    opacity: 1;
-    transform: perspective(600px) rotateY(-12deg) scale(1.05);
-  }
-  100% {
-    opacity: 1;
-    transform: perspective(600px) rotateY(0deg) scale(1);
-  }
-}
-#dropAkuma .drop-legend {
-  max-width: 240px;
-  padding: 8px 10px;
-  font-size: 12px;
-  line-height: 1.2;
+.cardBau > h1 {
   text-align: center;
-  color: #111;
-  background: #fff;
-  border: 1px solid #000;
-  border-radius: 10px;
+  margin-bottom: 16px;
+  font-size: 18px;
 }
 
 #containerBau {
@@ -142,7 +87,7 @@ h1 {
   align-items: center;
   height: 300px;
   contain: content;
-  background-color: #f1f1f1;
+  background-color: #dfdfdf;
   position: relative;
 }
 
@@ -238,15 +183,83 @@ h1 {
   margin: 0;
 }
 
+#dropAkuma {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  transform: translate(-50%, -10%);
+  z-index: 5;
+  pointer-events: none;
+}
+#dropAkuma.hidden {
+  display: none;
+}
+#dropAkuma.show {
+  display: block;
+  animation: akumaJump 600ms ease-out both;
+}
+
+#dropAkuma .drop-inner {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  transform-style: preserve-3d;
+}
+
+#dropAkuma img {
+  width: 140px;
+  height: 140px;
+  border: 1px solid black;
+  border-radius: 16px;
+  object-fit: contain;
+  background: #ffffff;
+}
+#dropAkuma.show .drop-inner img {
+  animation: akumaFlip 1.2s ease-out both;
+  transform-origin: center;
+  backface-visibility: hidden;
+}
+
+@keyframes akumaFlip {
+  0% {
+    opacity: 0;
+    transform: perspective(600px) rotateY(90deg) scale(1.2);
+  }
+  50% {
+    opacity: 1;
+    transform: perspective(600px) rotateY(-12deg) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(600px) rotateY(0deg) scale(1);
+  }
+}
+#dropAkuma .drop-legend {
+  max-width: 240px;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: center;
+  color: #111;
+  background: #ffffff;
+  border: 1px solid #000;
+  border-radius: 10px;
+}
+
 #card-inventario {
   width: 420px;
   border: 1px solid #000;
   border-radius: 16px;
   background: #fff;
   padding: 14px 14px 18px;
-  display: grid;
+  display: none;
   gap: 12px;
+
+  opacity: 0;
+  transform: scale(0.9);
+  will-change: opacity, transform;
 }
+
 #card-inventario h2 {
   font-size: 18px;
   margin: 0 0 2px 0;
@@ -268,7 +281,7 @@ h1 {
   border: 1px solid #000;
   border-radius: 12px;
   overflow: hidden;
-  background: #f7f7f7;
+  background: #fcfcfc;
 }
 
 #inventario .slot .pad {
@@ -314,4 +327,37 @@ h1 {
   opacity: 0.35;
   line-height: 1;
   pointer-events: none;
+}
+
+#card-inventario.show {
+  animation: showMochila 300ms ease-out forwards;
+}
+
+@keyframes showMochila {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+#card-inventario.hiding {
+  animation: hideMochila 250ms ease-in forwards;
+}
+
+#card-inventario.hiding {
+  animation: hideMochila 250ms ease-in forwards;
+}
+
+@keyframes hideMochila {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
+  }
 }

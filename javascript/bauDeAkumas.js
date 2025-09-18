@@ -5,11 +5,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const contBau = document.getElementById("containerBau");
   const qtdAtualDeBausEl = document.getElementById("qtdAtualDeBaus");
   const qtdTotalDeBausEl = document.getElementById("qtdTotalDeBaus");
+  const cardInventarioEl = document.getElementById("card-inventario");
   const inventarioEl = document.getElementById("inventario");
   const textoBauEl = document.getElementById("textoBau");
   const dropAkumaEl = document.getElementById("dropAkuma");
   const dropImgEl = document.getElementById("dropImg");
   const dropLegendEl = document.getElementById("dropLegend");
+  const abrirMochilaBtn = document.getElementById("abrirMochilaBtn");
   const SLOT_COUNT = 12;
 
   function exige(id, el) {
@@ -19,11 +21,13 @@ document.addEventListener("DOMContentLoaded", function () {
   exige("containerBau", contBau);
   exige("qtdAtualDeBaus", qtdAtualDeBausEl);
   exige("qtdTotalDeBaus", qtdTotalDeBausEl);
+  exige("card-inventario", cardInventarioEl);
   exige("inventario", inventarioEl);
   exige("textoBau", textoBauEl);
   exige("dropAkuma", dropAkumaEl);
   exige("dropImg", dropImgEl);
   exige("dropLegend", dropLegendEl);
+  exige("abrirMochilaBtn", abrirMochilaBtn);
 
   const totalDeBaus = 10;
   let atualDeBaus = 7;
@@ -95,6 +99,61 @@ document.addEventListener("DOMContentLoaded", function () {
     return todasAkumasNoMi[i];
   }
 
+  // === Inventário (helpers de abrir/fechar/toggle) ===
+  const AUTO_ABRIR_MOCHILA_NO_1_DROP = true;
+  let abriuAutomaticoJa = false;
+
+  function restartAnimation(el, cls) {
+    el.classList.remove(cls);
+    void el.offsetWidth; // força reflow
+    el.classList.add(cls);
+  }
+  function prefersReducedMotion() {
+    return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  }
+
+  function abrirInventario() {
+    if (getComputedStyle(cardInventarioEl).display !== "none") return; // já aberto
+    cardInventarioEl.style.display = "grid";
+    abrirMochilaBtn.textContent = "Fechar Mochila";
+    if (!prefersReducedMotion()) {
+      restartAnimation(cardInventarioEl, "show"); // usa @keyframes showMochila
+    } else {
+      cardInventarioEl.style.opacity = "1";
+      cardInventarioEl.style.transform = "none";
+    }
+  }
+
+  function fecharInventario() {
+    if (getComputedStyle(cardInventarioEl).display === "none") return;
+    if (prefersReducedMotion()) {
+      cardInventarioEl.style.display = "none";
+      abrirMochilaBtn.textContent = "Abrir Mochila";
+      return;
+    }
+    cardInventarioEl.classList.remove("show");
+    cardInventarioEl.classList.add("hiding");
+    abrirMochilaBtn.textContent = "Abrir Mochila";
+
+    const onEnd = () => {
+      cardInventarioEl.classList.remove("hiding");
+      cardInventarioEl.style.display = "none";
+      cardInventarioEl.removeEventListener("animationend", onEnd);
+    };
+    cardInventarioEl.addEventListener("animationend", onEnd, { once: true });
+  }
+
+  function toggleInventario() {
+    const fechado = getComputedStyle(cardInventarioEl).display === "none";
+    if (fechado) abrirInventario();
+    else fecharInventario();
+  }
+
+  abrirMochilaBtn.addEventListener("click", toggleInventario);
+
+  let dropTimeoutId = null;
+  const VISIBLE_MS = 1400;
+
   function dropFruta() {
     const fruta = sortearAkuma();
     inventario.push(fruta);
@@ -114,19 +173,24 @@ document.addEventListener("DOMContentLoaded", function () {
     dropAkumaEl.classList.remove("hidden");
     dropAkumaEl.classList.add("show");
     // some após um tempo
-    const VISIBLE_MS = 1400;
-    clearTimeout(dropFruta._t);
-    dropFruta._t = setTimeout(() => {
+
+    clearTimeout(dropTimeoutId);
+    dropTimeoutId = setTimeout(() => {
       dropAkumaEl.classList.remove("show");
       dropAkumaEl.classList.add("hidden");
     }, VISIBLE_MS);
+
+    if (AUTO_ABRIR_MOCHILA_NO_1_DROP && !abriuAutomaticoJa) {
+      abrirInventario();
+      abriuAutomaticoJa = true;
+    }
   }
 
   // texto do baú (formatação legível)
   function mostrarTexto(fruta) {
     textoBauEl.innerHTML = `<strong>${esc(fruta.nome)}</strong> — <em>${esc(
       fruta.tipo
-    )}</em><br>${fruta.desc}`;
+    )}</em><br>${esc(fruta.desc)}`;
   }
 
   function renderInventario() {
@@ -144,10 +208,12 @@ document.addEventListener("DOMContentLoaded", function () {
         // slot preenchido: imagem na .pad + legenda em faixa
         return `<li class="slot">
               <div class="pad">
-                <img src="${f.img}" alt="${f.nome}"
-                     title="${f.nome} — ${f.tipo}\n${f.desc}" decoding="async">
+                <img src="${f.img}" alt="${esc(f.nome)}"
+                     title="${esc(f.nome)} — ${esc(f.tipo)}&#10;${esc(
+          f.desc
+        ).replace(/\n/g, " ")}"decoding="async">
               </div>
-              <span class="label">${f.nome}</span>
+              <span class="label">${esc(f.nome)}</span>
             </li>`;
       })
       .join("");
