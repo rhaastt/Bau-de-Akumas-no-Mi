@@ -1,33 +1,36 @@
-import { bauDeAkumas } from "./akumasNoMi.js";
+import { bauDeItens } from "./akumasNoMi.js";
 
 document.addEventListener("DOMContentLoaded", function () {
-  const btnAbrirBau = document.getElementById("abrirBauDeAkumas");
+  const btnAbrirBau = document.getElementById("abrirBauDeItens");
   const contBau = document.getElementById("containerBau");
   const qtdAtualDeBausEl = document.getElementById("qtdAtualDeBaus");
   const qtdTotalDeBausEl = document.getElementById("qtdTotalDeBaus");
   const cardInventarioEl = document.getElementById("card-inventario");
   const inventarioEl = document.getElementById("inventario");
   const textoBauEl = document.getElementById("textoBau");
-  const dropAkumaEl = document.getElementById("dropAkuma");
+
+  // id alinhado com o HTML: dropItem
+  const dropItemEl = document.getElementById("dropItem");
   const dropImgEl = document.getElementById("dropImg");
   const dropLegendEl = document.getElementById("dropLegend");
-  const abrirMochilaBtn = document.getElementById("abrirMochilaBtn");
+  const abrirInventarioBtn = document.getElementById("abrirInventarioBtn");
+
   const SLOT_COUNT = 12;
 
   function exige(id, el) {
     if (!el) throw new Error(`Elemento com id "${id}" não encontrado no DOM.`);
   }
-  exige("abrirBauDeAkumas", btnAbrirBau);
+  exige("abrirBauDeItens", btnAbrirBau);
   exige("containerBau", contBau);
   exige("qtdAtualDeBaus", qtdAtualDeBausEl);
   exige("qtdTotalDeBaus", qtdTotalDeBausEl);
   exige("card-inventario", cardInventarioEl);
   exige("inventario", inventarioEl);
   exige("textoBau", textoBauEl);
-  exige("dropAkuma", dropAkumaEl);
+  exige("dropItem", dropItemEl);
   exige("dropImg", dropImgEl);
   exige("dropLegend", dropLegendEl);
-  exige("abrirMochilaBtn", abrirMochilaBtn);
+  exige("abrirInventarioBtn", abrirInventarioBtn);
 
   const totalDeBaus = 10;
   let atualDeBaus = 7;
@@ -54,8 +57,8 @@ document.addEventListener("DOMContentLoaded", function () {
   preload("imagens/bau-fechado.webp");
   preload("imagens/bau-aberto.webp");
 
-  // Pré-carregar imagem das frutas (todas apontam para a mesma temporária)
-  [...bauDeAkumas.paramecia, ...bauDeAkumas.logia, ...bauDeAkumas.zoan].forEach(
+  // Pré-carregar imagens dos itens
+  [...bauDeItens.paramecia, ...bauDeItens.logia, ...bauDeItens.zoan].forEach(
     (f) => preload(f.img)
   );
 
@@ -89,19 +92,19 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // sorteio unificado
-  function sortearAkuma() {
-    const todasAkumasNoMi = [
-      ...bauDeAkumas.paramecia,
-      ...bauDeAkumas.logia,
-      ...bauDeAkumas.zoan,
+  function sortearItem() {
+    const todosItens = [
+      ...bauDeItens.paramecia,
+      ...bauDeItens.logia,
+      ...bauDeItens.zoan,
     ];
-    const i = Math.floor(Math.random() * todasAkumasNoMi.length);
-    return todasAkumasNoMi[i];
+    const i = Math.floor(Math.random() * todosItens.length);
+    return todosItens[i];
   }
 
   // === Inventário (helpers de abrir/fechar/toggle) ===
-  const AUTO_ABRIR_MOCHILA_NO_1_DROP = true;
-  let abriuAutomaticoJa = false;
+  const AUTO_ABRIR_inventario_NO_1_DROP = true;
+  let abriuAutomatico = false;
 
   function restartAnimation(el, cls) {
     el.classList.remove(cls);
@@ -115,9 +118,9 @@ document.addEventListener("DOMContentLoaded", function () {
   function abrirInventario() {
     if (getComputedStyle(cardInventarioEl).display !== "none") return; // já aberto
     cardInventarioEl.style.display = "grid";
-    abrirMochilaBtn.textContent = "Fechar Mochila";
+    abrirInventarioBtn.textContent = "Fechar inventário";
     if (!prefersReducedMotion()) {
-      restartAnimation(cardInventarioEl, "show"); // usa @keyframes showMochila
+      restartAnimation(cardInventarioEl, "show"); // espera classe .show no CSS
     } else {
       cardInventarioEl.style.opacity = "1";
       cardInventarioEl.style.transform = "none";
@@ -128,12 +131,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (getComputedStyle(cardInventarioEl).display === "none") return;
     if (prefersReducedMotion()) {
       cardInventarioEl.style.display = "none";
-      abrirMochilaBtn.textContent = "Abrir Mochila";
+      abrirInventarioBtn.textContent = "Abrir inventário";
       return;
     }
     cardInventarioEl.classList.remove("show");
     cardInventarioEl.classList.add("hiding");
-    abrirMochilaBtn.textContent = "Abrir Mochila";
+    abrirInventarioBtn.textContent = "Abrir inventário";
 
     const onEnd = () => {
       cardInventarioEl.classList.remove("hiding");
@@ -149,48 +152,47 @@ document.addEventListener("DOMContentLoaded", function () {
     else fecharInventario();
   }
 
-  abrirMochilaBtn.addEventListener("click", toggleInventario);
+  abrirInventarioBtn.addEventListener("click", toggleInventario);
 
   let dropTimeoutId = null;
   const VISIBLE_MS = 1400;
 
-  function dropFruta() {
-    const fruta = sortearAkuma();
-    inventario.push(fruta);
+  function dropItem() {
+    const item = sortearItem();
+    inventario.push(item);
     renderInventario();
-    mostrarTexto(fruta);
+    mostrarTexto(item);
 
     // imagem e legenda do drop
-    dropImgEl.src = fruta.img;
-    dropImgEl.alt = fruta.nome;
-    dropLegendEl.textContent = `${fruta.nome}`;
+    dropImgEl.src = item.img;
+    dropImgEl.alt = item.nome;
+    dropLegendEl.textContent = `${item.nome}`;
 
     // reinicia a animação
-    dropAkumaEl.classList.remove("show");
+    dropItemEl.classList.remove("show");
     // força reflow para reiniciar
-    // eslint-disable-next-line no-unused-expressions
-    dropAkumaEl.offsetWidth;
-    dropAkumaEl.classList.remove("hidden");
-    dropAkumaEl.classList.add("show");
-    // some após um tempo
+    dropItemEl.offsetWidth; // eslint-disable-line no-unused-expressions
+    dropItemEl.classList.remove("hidden");
+    dropItemEl.classList.add("show");
 
+    // some após um tempo
     clearTimeout(dropTimeoutId);
     dropTimeoutId = setTimeout(() => {
-      dropAkumaEl.classList.remove("show");
-      dropAkumaEl.classList.add("hidden");
+      dropItemEl.classList.remove("show");
+      dropItemEl.classList.add("hidden");
     }, VISIBLE_MS);
 
-    if (AUTO_ABRIR_MOCHILA_NO_1_DROP && !abriuAutomaticoJa) {
+    if (AUTO_ABRIR_inventario_NO_1_DROP && !abriuAutomatico) {
       abrirInventario();
-      abriuAutomaticoJa = true;
+      abriuAutomatico = true;
     }
   }
 
   // texto do baú (formatação legível)
-  function mostrarTexto(fruta) {
-    textoBauEl.innerHTML = `<strong>${esc(fruta.nome)}</strong> — <em>${esc(
-      fruta.tipo
-    )}</em><br>${esc(fruta.desc)}`;
+  function mostrarTexto(item) {
+    textoBauEl.innerHTML = `<strong>${esc(item.nome)}</strong> — <em>${esc(
+      item.tipo
+    )}</em><br>${esc(item.desc)}`;
   }
 
   function renderInventario() {
@@ -200,21 +202,22 @@ document.addEventListener("DOMContentLoaded", function () {
     inventarioEl.innerHTML = itens
       .map((f) => {
         if (!f) {
-          // slot vazio com área .pad para centralizar o "+"
+          // slot vazio com área .pad para centralizar
           return `<li class="slot vazio">
-                <div class="pad"></div>
-              </li>`;
+            <div class="pad"></div>
+          </li>`;
         }
         // slot preenchido: imagem na .pad + legenda em faixa
         return `<li class="slot">
-              <div class="pad">
-                <img src="${f.img}" alt="${esc(f.nome)}"
-                     title="${esc(f.nome)} — ${esc(f.tipo)}&#10;${esc(
+          <div class="pad">
+            <img src="${f.img}" alt="${esc(f.nome)}"
+                 title="${esc(f.nome)} — ${esc(f.tipo)}&#10;${esc(
           f.desc
-        ).replace(/\n/g, " ")}"decoding="async">
-              </div>
-              <span class="label">${esc(f.nome)}</span>
-            </li>`;
+        ).replace(/\n/g, " ")}"
+                 decoding="async">
+          </div>
+          <span class="label">${esc(f.nome)}</span>
+        </li>`;
       })
       .join("");
   }
@@ -242,7 +245,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const ANIM_MS = 380;
 
     if (aberto) {
-      setTimeout(dropFruta, ANIM_MS);
+      setTimeout(dropItem, ANIM_MS);
     }
 
     setTimeout(function () {

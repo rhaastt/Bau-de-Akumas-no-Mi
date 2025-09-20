@@ -1,0 +1,115 @@
+/* ===== Card do Baú ===== */
+.cardBau {
+  max-width: 420px;
+  height: 100%;
+  width: 360px;
+  position: relative;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 16px;
+  gap: 16px;
+  display: grid;
+  justify-self: center;
+}
+
+.cardBau > h1 {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+#containerBau {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 300px;
+  border: 1px solid black;
+  border-radius: 16px;
+}
+#containerBau.open #bauFechado {
+  opacity: 0;
+}
+#containerBau.open #bauAberto {
+  opacity: 1;
+}
+
+#containerBau > img {
+  border-radius: 16px;
+  position: absolute;
+  inset: 0;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  will-change: opacity;
+}
+
+#containerBau:not(.open) #bauFechado {
+  opacity: 1;
+}
+#containerBau:not(.open) #bauAberto {
+  opacity: 0;
+}
+
+.fade-out {
+  opacity: 0;
+}
+.fade-in {
+  opacity: 1;
+}
+
+#quantidadeBau {
+  line-height: 1.1;
+}
+
+#containerInfo {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+#infoBau {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 20px;
+}
+#infoBau small {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+#quantidadeBaus {
+  display: inline-block;
+  margin-bottom: 2px;
+}
+#quantidadeBaus small {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+#abrirBauDeItens {
+  width: 120px;
+  height: 60px;
+}
+
+#container-textoBau {
+  border: 1px solid #000;
+  border-radius: 12px;
+  height: auto;
+  margin-inline: 8px;
+  display: grid;
+  align-items: center;
+  padding: 8px 12px;
+}
+#container-textoBau p {
+  font-size: 14px;
+  line-height: 1.35;
+  margin: 0;
+}

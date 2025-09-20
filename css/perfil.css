@@ -1,0 +1,19 @@
+/* ===== Perfil Usuário ===== */
+#stats {
+  width: 160px;
+  border: 1px solid #000;
+  border-radius: 16px;
+  padding: 12px;
+  background: orange;
+  display: grid;
+  gap: 12px;
+}
+#perfil-player {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border: 1px solid #000;
+  border-radius: 10px;
+  background: #dfdfdf;
+  display: block;
+}

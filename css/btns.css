@@ -1,0 +1,19 @@
+/* ===== Botões ===== */
+#abrirInventarioBtn,
+#abrirBauDeItens {
+  border: 1px solid black;
+  border-radius: 10px;
+  display: block;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+#abrirInventarioBtn:hover,
+#abrirBauDeItens:hover {
+  filter: brightness(0.97);
+}
+
+#abrirInventarioBtn:disabled,
+#abrirBauDeItens:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
