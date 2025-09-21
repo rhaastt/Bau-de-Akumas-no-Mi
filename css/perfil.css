@@ -1,6 +1,8 @@
 /* ===== Perfil Usuário ===== */
 #stats {
+  flex: 0 0 160px;
   width: 160px;
+
   border: 1px solid #000;
   border-radius: 16px;
   padding: 12px;
@@ -16,4 +18,13 @@
   border-radius: 10px;
   background: #dfdfdf;
   display: block;
+}
+
+#stat {
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: block;
+  text-align: center;
+  background: #fff;
 }

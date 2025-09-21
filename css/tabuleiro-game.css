@@ -1,32 +1,28 @@
-html,
-body {
-  height: 100%;
-}
-
 main {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 20px;
-  display: grid;
-  gap: 18px;
+  padding: 16px;
 }
 
 /* ===== Aréa do Game ===== */
 #game-container {
-  display: grid;
-  grid-template-columns: 160px 1fr 420px;
-  align-items: start;
-  gap: 20px;
-  padding: 30px;
+  width: 100%;
+  display: flex;
+  flex-direction: wrap;
+  gap: 16px;
+  padding: 16px;
   border: 1px solid #000;
-  border-radius: 16px;
-  background: royalblue;
-  max-width: 100%;
+  border-radius: 12px;
+  align-items: flex-start;
 }
 @media (max-width: 920px) {
   #game-container {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     max-width: 480px;
     margin-inline: auto;
   }
+}
+
+#game-container > * {
+  min-width: 0;
 }

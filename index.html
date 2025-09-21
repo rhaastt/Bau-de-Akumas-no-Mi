@@ -8,8 +8,6 @@
   </head>
   <body>
     <main>
-      <a href="card.html">card</a>
-
       <section id="game-container">
         <div id="stats">
           <img
@@ -17,7 +15,7 @@
             src="imagens/icon-perfil.webp"
             alt="Perfil do jogador"
           />
-          <span id="stat">Beri: <span id="berryText">0</span></span>
+          <span id="stat">Beri: <strong id="berryText">0</strong></span>
           <button id="abrirInventarioBtn">Abrir Inventário</button>
         </div>
 
@@ -43,7 +41,6 @@
               decoding="async"
             />
 
-            <!-- id padronizado para 'dropItem' -->
             <div id="dropItem" class="hidden" aria-live="polite">
               <div class="drop-inner" role="figure" aria-label="Item obtido">
                 <img id="dropImg" src="" alt="" decoding="async" />
@@ -76,9 +73,6 @@
       </section>
     </main>
 
-    <!-- removi a <section> vazia -->
-
-    <!-- este arquivo é o JS abaixo -->
     <script type="module" src="javascript/bauDeItens.js"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-export const bauDeAkumas = {
+export const bauDeItens = {
   paramecia: [
     {
       nome: "Ami Ami no Mi",
