@@ -7,9 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const qtdTotalDeBausEl = document.getElementById("qtdTotalDeBaus");
   const cardInventarioEl = document.getElementById("card-inventario");
   const inventarioEl = document.getElementById("inventario");
-  const textoBauEl = document.getElementById("textoBau");
 
-  // id alinhado com o HTML: dropItem
+  const textoBauEl = document.getElementById("textoBau");
   const dropItemEl = document.getElementById("dropItem");
   const dropImgEl = document.getElementById("dropImg");
   const dropLegendEl = document.getElementById("dropLegend");
@@ -39,13 +38,76 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const inventario = [];
 
+  // ===== MODAL DO ITEM (mantendo ids/variáveis) =====
+  const inventarioItem = document.getElementById("inventarioItem");
+  const inventarioItemCard = document.getElementById("inventarioItemCard");
+  const inventarioItemImg = document.getElementById("inventarioItemImg");
+  const inventarioItemNome = document.getElementById("inventarioItemNome");
+  const inventarioItemDescricao = document.getElementById("inventarioItemDescricao");;
+  const btnFecharCardItemIventario = document.getElementById("btnFecharCardItemIventario");
+  
+  function showItemInventario(item) {
+    inventarioItemImg.src = item.img;
+    inventarioItemImg.alt = item.nome;
+    inventarioItemNome.textContent = item.nome;
+    inventarioItemDescricao.textContent = item.desc;
+    inventarioItem.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+  function closeItemInventario() {
+    const modal = document.getElementById("inventarioItem");
+    const card = document.getElementById("inventarioItemCard");
+
+    modal.classList.add("closing");
+  
+    card.addEventListener("animationend", () => {
+      modal.classList.remove("active", "closing");
+      document.body.style.overflow = "";
+    }, { once: true });
+  }
+  btnFecharCardItemIventario.addEventListener("click", closeItemInventario);
+  inventarioItem.addEventListener("click", (e) => {
+    if (!inventarioItemCard.contains(e.target)) closeItemInventario();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && inventarioItem.classList.contains("active")) {
+      closeItemInventario();
+    }
+  });
+
+  // ===== Hidratar slots pós-render (NÃO altera renderInventario) =====
+  function hidratarInventarioSlots() {
+    // Marca cada slot preenchido com data-idx de acordo com a ordem do array
+    const lis = Array.from(inventarioEl.querySelectorAll("li.slot"));
+    let idxItem = 0;
+    for (const li of lis) {
+      const isVazio = li.classList.contains("vazio");
+      if (isVazio) {
+        li.removeAttribute("data-idx");
+        continue;
+      }
+      li.dataset.idx = String(idxItem);
+      idxItem += 1;
+    }
+  }
+
+  // Abrir modal ao clicar em slot preenchido
+  inventarioEl.addEventListener("click", (e) => {
+    const li = e.target.closest("li.slot");
+    if (!li || !li.dataset.idx) return;
+    const idx = Number(li.dataset.idx);
+    const item = inventario[idx];
+    if (item) showItemInventario(item);
+  });
+
   // contador inicial
   qtdTotalDeBausEl.textContent = totalDeBaus;
   qtdAtualDeBausEl.textContent = atualDeBaus;
   atualizarBotao();
   renderInventario();
+  hidratarInventarioSlots();
 
-  // preload util
+  // ===== util =====
   function preload(src) {
     const im = new Image();
     im.decoding = "async";
@@ -63,17 +125,9 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 
   function esc(s) {
-    return String(s).replace(
-      /[&<>"']/g,
-      (m) =>
-        ({
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#39;",
-        }[m])
-    );
+    return String(s).replace(/[&<>"']/g, (m) => (
+      { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]
+    ));
   }
 
   function atualizarContador() {
@@ -127,6 +181,32 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function renderInventario() {
+  const slots = [];
+  for (let i = 0; i < SLOT_COUNT; i++) {
+    const item = inventario[i];
+    if (item) {
+      slots.push(
+        `<li class="slot">
+          <div class="pad">
+            <img src="${item.img}" alt="${esc(item.nome)}">
+          </div>
+          <div class="label">${esc(item.nome)}</div>
+        </li>`
+      );
+    } else {
+      slots.push(
+        `<li class="slot vazio">
+          <div class="pad"></div>
+          <div class="label">Vazio</div>
+        </li>`
+      );
+    }
+  }
+  inventarioEl.innerHTML = slots.join("");
+}
+
+
   function fecharInventario() {
     if (getComputedStyle(cardInventarioEl).display === "none") return;
     if (prefersReducedMotion()) {
@@ -134,12 +214,11 @@ document.addEventListener("DOMContentLoaded", function () {
       abrirInventarioBtn.textContent = "Abrir inventário";
       return;
     }
-    cardInventarioEl.classList.remove("show");
     cardInventarioEl.classList.add("hiding");
     abrirInventarioBtn.textContent = "Abrir inventário";
 
     const onEnd = () => {
-      cardInventarioEl.classList.remove("hiding");
+      cardInventarioEl.classList.remove("hiding", "show");
       cardInventarioEl.style.display = "none";
       cardInventarioEl.removeEventListener("animationend", onEnd);
     };
@@ -160,7 +239,9 @@ document.addEventListener("DOMContentLoaded", function () {
   function dropItem() {
     const item = sortearItem();
     inventario.push(item);
-    renderInventario();
+
+    renderInventario();          // mantém sua função
+    hidratarInventarioSlots();   // marca data-idx após render
     mostrarTexto(item);
 
     // imagem e legenda do drop
@@ -170,8 +251,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // reinicia a animação
     dropItemEl.classList.remove("show");
-    // força reflow para reiniciar
-    dropItemEl.offsetWidth; // eslint-disable-line no-unused-expressions
+    dropItemEl.offsetWidth; // força reflow
     dropItemEl.classList.remove("hidden");
     dropItemEl.classList.add("show");
 
@@ -190,36 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // texto do baú (formatação legível)
   function mostrarTexto(item) {
-    textoBauEl.innerHTML = `<strong>${esc(item.nome)}</strong> — <em>${esc(
-      item.tipo
-    )}</em><br>${esc(item.desc)}`;
-  }
-
-  function renderInventario() {
-    const itens = [...inventario];
-    while (itens.length < SLOT_COUNT) itens.push(null);
-
-    inventarioEl.innerHTML = itens
-      .map((f) => {
-        if (!f) {
-          // slot vazio com área .pad para centralizar
-          return `<li class="slot vazio">
-            <div class="pad"></div>
-          </li>`;
-        }
-        // slot preenchido: imagem na .pad + legenda em faixa
-        return `<li class="slot">
-          <div class="pad">
-            <img src="${f.img}" alt="${esc(f.nome)}"
-                 title="${esc(f.nome)} — ${esc(f.tipo)}&#10;${esc(
-          f.desc
-        ).replace(/\n/g, " ")}"
-                 decoding="async">
-          </div>
-          <span class="label">${esc(f.nome)}</span>
-        </li>`;
-      })
-      .join("");
+    textoBauEl.innerHTML = `<strong>${esc(item.nome)}</strong> — <em>${esc(item.tipo)}</em><br>${esc(item.desc)}`;
   }
 
   btnAbrirBau.addEventListener("click", function () {

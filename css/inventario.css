@@ -1,20 +1,65 @@
 /* ===== inventario ===== */
 #card-inventario {
-  flex: 1 1 560px;
-  min-width: 520px;
+  display: none;
+  flex: 1 1 360px;
+  min-width: 320px;
   border: 1px solid #000;
   border-radius: 16px;
   padding: 14px;
-  opacity: 0;
   transform: scale(0.9);
   will-change: opacity, transform;
+  opacity: 0;
+  
 }
+
+#card-inventario.show {
+  display: grid;
+  animation: showInventario 250ms ease-out forwards;
+
+}
+
+#card-inventario > h2 {
+  font-size: 18px;
+  margin: 18px;
+  text-align: center;
+}
+
+#card-inventario.hiding {
+  animation: hideInventario 300ms ease-in forwards;
+  pointer-events: none; 
+  
+}
+
+
+
+@keyframes showInventario {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+
+@keyframes hideInventario {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
+  }
+}
+
 
 #inventario {
   display: grid;
-  position: relative;
+  margin: 0;
   padding: 10px;
-  display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
@@ -22,12 +67,6 @@
   #inventario {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-#card-inventario > h2 {
-  font-size: 18px;
-  text-align: center;
-  background-color: brown;
 }
 
 #inventario .slot {
@@ -48,11 +87,16 @@
   place-items: center;
 }
 
+
+
 #inventario .slot .pad img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
+}
+#inventario .slot .pad img:hover {
+  cursor: pointer;
 }
 
 #inventario .slot .label {
@@ -76,38 +120,84 @@
   top: 50%;
   bottom: 50%;
   left: 50%;
-
   transform: translate(-50%, -50%);
   font-size: 28px;
   opacity: 0.35;
   pointer-events: none;
 }
 
-#card-inventario.show {
-  animation: showInventario 300ms ease-out forwards;
+#inventarioItem{
+  position: fixed;
+  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.06);
+  z-index: 2000;
+}
+#inventarioItem.active{
+  display: flex;
 }
 
-@keyframes showInventario {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-#card-inventario.hiding {
-  animation: hideInventario 250ms ease-in forwards;
+#inventarioItemCard{
+  display: grid;
+  grid-template-columns: 400px;
+  place-items: center;
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 1rem;
+  min-width: 100px;
+  max-width: 40%;
+  text-align: center;
+  animation: fadeInUp 0.3s ease forwards;
 }
 
-@keyframes hideInventario {
-  from {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.95) translateY(12px);
-  }
+#invetarioItemImg{
+  width: 96px;
+  height: 96px;
+  border: 1px solid black;
+  border-radius: 8px;
+  margin: 0 auto ;
+  display: block;
+  
+}
+
+#invetarioItemNome{
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+#invetarioItemDescricao{
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+
+#btnFecharCardItemIventario{
+  border: 1px solid #000;
+  background: #fff;
+  border-radius: 8px;
+  padding: .5rem .9rem;
+  cursor: pointer;
+}
+
+@keyframes fadeInUp{
+  from{ opacity:0; transform: translateY(6px); }
+  to{ opacity:1; transform: translateY(0); }
+}
+
+#inventarioItem.closing #inventarioItemCard {
+  animation: fadeOutDown 0.25s ease forwards;
+}
+
+@keyframes fadeOutDown {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(20px); }
 }

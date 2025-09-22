@@ -1,6 +1,5 @@
 /* ===== Card do Baú ===== */
 .cardBau {
-  flex: 1 1 360px;
   min-width: 320px;
   max-width: 320px;
   position: relative;

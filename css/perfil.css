@@ -1,12 +1,10 @@
 /* ===== Perfil Usuário ===== */
 #stats {
   flex: 0 0 160px;
-  width: 160px;
-
+  width: 180px;
   border: 1px solid #000;
   border-radius: 16px;
   padding: 12px;
-  background: orange;
   display: grid;
   gap: 12px;
 }
