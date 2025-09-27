@@ -2,7 +2,7 @@
 
 .container-game{
     width: 400px;
-    
+    height: auto;
     margin: 0 auto;
     padding: 22px 0px;
 }
@@ -111,9 +111,7 @@
     letter-spacing: .3px;
 }
 
-#btn-bau:hover{
-    transform: scale(1.08);
-}
+
 
 nav{
     width: 100%;
@@ -134,7 +132,7 @@ nav{
     display: flex;
 }
 
-.nav-item:hover{
+button:hover{
     transform: scale(1.08);
 }
 

@@ -1,4 +1,11 @@
 /* ===== Botões ===== */
+.btn{
+  border: 1px solid black;
+  border-radius: 10px;
+  display: block;
+  padding: 8px 10px;
+  cursor: pointer;
+}
 #abrirInventarioBtn,
 #abrirBauDeItens {
   border: 1px solid black;
