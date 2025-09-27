@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="componentes.css">
+    <title>Document</title>
+</head>
+<body>
+    <main class="container-game">
+        <div class="box-sem-borda space-between" id="container-top">
+            <div class="box border container-icone-img"><img id="perfil-img" src="../imagens/icon-perfil.webp" alt=""></div>
+            <div class="box border" id="berrys"><spam>Berrys: <strong id="qtd-berrys">9999.99</strong></spam></div>
+            <div class="box border"><img  id="carrinho-img" src="../imagens/icone-carrinho-loja.webp" alt=""></div>
+        </div>
+
+        <div class="box-sem-borda space-between" id="container-bau-busca">
+            <span class="box border" id="elemento-em-acao-nome">BAU</span>
+            <span class="box border"><img src="../imagens/icone-busca.webp" alt="buscar"></span>
+        </div>
+
+        <div  id="elemento-em-acao">
+            <div class="box border" id="container-bau"><img id="bau-img" src="../imagens/bau-fechado.webp" alt=""></div>
+            <div class="box-sem-borda space-between" id="acoes-bau">
+                <span class="box border" id="contador-bau">
+                    <strong id="qtd-bau"><span id="qtd-atual">6</span>/<span id="qtd-limite">20</span></strong>
+                    <strong id="texto-contador-bau">Dinsponiveis</strong>
+                </span>
+                <button class="border" id="btn-bau">ABRIR BAU</button>
+            </div>
+        </div>
+
+        <nav class="border " >
+            <ul class="box-sem-borda space-between" id="nav-itens">
+                <li class="border nav-item container-icone-img"><button type="button"><img src="../imagens/icon-perfil.webp" alt=""></button></li>
+                <li class="border nav-item container-icone-img"><button type="button"><img src="../imagens/icone-bau.webp" alt=""></button></li>
+                <li class="border nav-item container-icone-img"><button type="button"><img src="../imagens/icone-mochila.webp" alt=""></button></li>
+                <li class="border nav-item container-icone-img"><button type="button"><img src="../imagens/icone-configuracao.webp" alt=""></button></li>
+            </ul>
+        </nav>
+    </main>
+</body>
+</html>
