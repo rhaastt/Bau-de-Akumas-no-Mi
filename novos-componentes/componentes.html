@@ -1,43 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="componentes.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./componentes.css" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <main class="container-game">
-        <div class="box-sem-borda space-between" id="container-top">
-            <button class="box border container-icone-img"><img id="perfil-img" src="../imagens/icon-perfil.webp" alt=""></button>
-            <div class="box border" id="berrys"><spam>Berrys: <strong id="qtd-berrys">9999.99</strong></spam></div>
-            <button class="box border"><img  id="carrinho-img" src="../imagens/icone-carrinho-loja.webp" alt=""></div>
-            </button>
-
-        <div class="box-sem-borda space-between" id="container-bau-busca">
-            <span class="box border" id="elemento-em-acao-nome">BAU</span>
-            <button class="box border"><img src="../imagens/icone-busca.webp" alt="buscar"></button>
-        </div>
-
-        <div  id="elemento-em-acao">
-            <div class="box border" id="container-bau"><img id="bau-img" src="../imagens/bau-fechado.webp" alt=""></div>
-            <div class="box-sem-borda space-between" id="acoes-bau">
-                <span class="box border" id="contador-bau">
-                    <strong id="qtd-bau"><span id="qtd-atual">6</span>/<span id="qtd-limite">20</span></strong>
-                    <strong id="texto-contador-bau">Dinsponiveis</strong>
-                </span>
-                <button class="border" id="btn-bau">ABRIR BAU</button>
+      <nav class="container-fixed-top">
+        <ul class="border">
+          <div class="box-space-between" id="container-top">
+            <div class="avatar" id="container-avatar-img">
+              <img id="avatar-img" src="../imagens/icon-perfil.webp" alt="" />
             </div>
-        </div>
+            <div class="box border" id="berrys">
+              <span>Berrys: <strong id="qtd-berrys">9999.99</strong></span>
+            </div>
+            <button class="box border" id="container-carrinho">
+              <img
+                id="carrinho-img"
+                src="../imagens/icone-carrinho-loja.webp"
+                alt=""
+              />
+            </button>
+          </div>
+        </ul>
+      </nav>
 
-        <nav class="border " >
-            <ul class="box-sem-borda space-between" id="nav-itens">
-                <li><button class="border nav-item container-icone-img" type="button"><img src="../imagens/icon-perfil.webp" alt=""></button></li>
-                <li><button class="border nav-item container-icone-img" type="button"><img src="../imagens/icone-bau.webp" alt=""></button></li>
-                <li><button class="border nav-item container-icone-img" type="button"><img src="../imagens/icone-mochila.webp" alt=""></button></li>
-                <li><button class="border nav-item container-icone-img" type="button"><img src="../imagens/icone-configuracao.webp" alt=""></button></li>
-            </ul>
-        </nav>
+      <section class="container-acao">
+        <div class="box-space-between" id="container-bau-e-busca">
+          <span class="box" id="elemento-em-acao-nome">BAU</span>
+          <button class="box border" id="btn-buscar">
+            <img src="../imagens/icone-busca.webp" alt="buscar" />
+          </button>
+        </div>
+        <div id="elemento-em-acao">
+          <div class="box border" id="container-bau">
+            <img id="bau-img" src="../imagens/bau-fechado.webp" alt="" />
+          </div>
+          <div class="box-space-between" id="acoes-bau">
+            <span class="box" id="contador-bau">
+              <strong id="qtd-bau"
+                ><span id="qtd-atual">6</span>/<span id="qtd-limite"
+                  >20</span
+                ></strong
+              >
+              <strong id="texto-contador-bau">Dinsponiveis</strong>
+            </span>
+            <button class="border" id="btn-bau">ABRIR BAU</button>
+          </div>
+        </div>
+      </section>
+
+      <nav class="container-fixed-bottom">
+        <ul class="border box-space-between nav-itens">
+          <li>
+            <button class="border nav-item container-icone-img" type="button">
+              <img src="../imagens/icon-perfil.webp" alt="" />
+            </button>
+          </li>
+          <li>
+            <button class="border nav-item container-icone-img" type="button">
+              <img src="../imagens/icone-bau.webp" alt="" />
+            </button>
+          </li>
+          <li>
+            <button class="border nav-item container-icone-img" type="button">
+              <img src="../imagens/icone-mochila.webp" alt="" />
+            </button>
+          </li>
+          <li>
+            <button class="border nav-item container-icone-img" type="button">
+              <img src="../imagens/icone-configuracao.webp" alt="" />
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <section id="container-mochila">
+        <h2>mochila</h2>
+        <ul class="border" id="mochila-itens"></ul>
+      </section>
     </main>
-</body>
+  </body>
 </html>

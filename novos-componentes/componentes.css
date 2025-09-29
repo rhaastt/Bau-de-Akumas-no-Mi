@@ -1,138 +1,222 @@
 @import url(../css/reset.css);
 
-.container-game{
-    width: 400px;
-    height: auto;
-    margin: 0 auto;
-    padding: 22px 0px;
+/* Layout */
+html {
+  font-size: clamp(14px, 2.2vmin, 18px);
+}
+body {
+  padding-block: clamp(8px, 4vw, 26px);
+  padding-inline: clamp(12px, 5vw, 26px);
+  max-width: 100%;
+  min-height: 100dvh;
+  font-size: clamp(8px, 2.8vw, 18px);
+}
+.container-game {
+  inline-size: 100%;
+  max-inline-size: min(420px, 92vw);
+  margin-inline: auto;
 }
 
-.border{
-    border: 1px solid black;
-    border-radius: 8px;
+#container-top {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  padding: max(8px, env(safe-area-inset-bottom)) 26px;
+  background-color: #fff;
 }
 
+.container-fixed-bottom {
+  position: relative;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  inline-size: 100%;
+  padding: max(8px, env(safe-area-inset-bottom)) 26px;
+}
+.container-fixed-top {
+  position: relative;
+  left: 0;
+  right: 0;
+  top: 0;
+  inline-size: 100%;
+  padding: max(8px, env(safe-area-inset-top)) 6px;
+}
+
+.container-icone-img {
+  inline-size: clamp(48px, 12vw, 60px);
+  aspect-ratio: 1;
+}
+.container-icone-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+#container-bau {
+  margin-block-end: 24px;
+}
+
+/* Ultilitarios */
+.border {
+  border: 1px solid black;
+  border-radius: 8px;
+}
 .box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.box-space-between {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.box-sem-borda{
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-
+button:hover {
+  transform: scale(1.08);
 }
 
-.space-between{
-    justify-content: space-between;
+@media (hover: hover) and (pointer: fine) {
+  button:hover,
+  .nav-item:hover {
+    transform: scale(1.04);
+    transition: transform 0.15s ease;
+  }
 }
 
-
-.container-icone-img{
-    width: 70px;
-    height: 70px;
-
+/*  Avatar Icone */
+.avatar {
+  inline-size: clamp(48px, 14vw, 60px);
+  aspect-ratio: 1;
+  border: 1px solid #000;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #fff;
 }
 
-.container-icone-img img{
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
+#avatar-img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
 }
 
-
-#berrys{
-    width: 210px;
-    height: 70px;
-    padding: 18px 32px;
-    font-size: 18px;
-    display: flex;
-    align-items: center;       
-    justify-content: center;
-    text-align: center;
+/* Barra de berrys(dinheiro)*/
+#berrys {
+  inline-size: clamp(180px, 60vw, 260px);
+  min-block-size: clamp(44px, 12vw, 60px);
+  padding: 12px 26px;
+  font-size: clamp(14px, 2.8vw, 18px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-#container-bau-busca{
-    margin: 38px 0px 26px 0px;  
+/*container carrinho*/
+#container-carrinho {
+  inline-size: clamp(44px, 12vw, 64px);
 }
 
-#elemento-em-acao-nome{
-    width: 144px;
-    height: 60px;
+/*container-acao*/
+.container-acao {
+  inline-size: 100%;
+  max-inline-size: min(420px, 92vw);
+  margin-inline: auto;
 }
 
-
-#container-bau{
-    margin-bottom:  26px;
+/*icone busca*/
+#container-bau-e-busca {
+  margin-block: 26px 18px;
 }
 
-#bau-img{
-    width: 100%;
-    height: auto;
-    display: block;
+.btn-busca {
 }
 
-#acoes-bau{
-    width: 100%;
-    max-height: 78px;
-    margin-bottom: 56px;
+#elemento-em-acao-nome {
+  inline-size: clamp(60px, 20vw, 80px);
+  min-block-size: clamp(20px, 12vw, 30px);
 }
 
-#contador-bau{
-    width: 160px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 6px 8px;
+/*bau*/
 
+#bau-img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-#qtd-bau{
-    font-size: 48px;
-    line-height: 1;
-    
+#acoes-bau {
+  inline-size: 100%;
+  margin-block-end: clamp(24px, 6vw, 56px);
+  display: grid;
+  justify-content: space-between;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
 }
 
-#texto-contador-bau{
-    font-size: 20px;
-    
+#contador-bau {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
 }
 
-
-#btn-bau{
-    width: 170px;
-    height: 78;
-    padding: 26px;
-    font-size: 16px;
-    letter-spacing: .3px;
+#qtd-bau {
+  font-size: clamp(28px, 8vw, 48px);
+  line-height: 1;
+}
+#texto-contador-bau {
+  font-size: clamp(18px, 3.6vw, 20px);
 }
 
-
-
-nav{
-    width: 100%;
-    height: 78px;
-    
-    padding: 12px 26px;
-    justify-content: center;
+#btn-bau {
+  inline-size: 100%;
+  max-inline-size: 220px;
+  min-block-size: clamp(44px, 10vw, 78px);
+  padding: 18px 26px;
+  font-size: clamp(14px, 2.8vw, 16px);
+  letter-spacing: 0.3px;
+  background: #fff;
 }
 
-#nav-itens{
-    display: flex;
-    gap: 12px;
+/* Navageção */
+
+.nav-itens {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  padding: max(8px, env(safe-area-inset-bottom)) 26px;
+  background-color: #fff;
 }
 
-.nav-item{
-    width: 54px;
-    height: 54px;
-    display: flex;
+.nav-item {
+  inline-size: clamp(54px, 12vw, 54px);
+  block-size: clamp(54px, 12vw, 54px);
+  display: flex;
 }
 
-button:hover{
-    transform: scale(1.08);
+/* breakpoints*/
+@media (min-width: 480px) {
+  .container-game,
+  .card-acao {
+    max-inline-size: 480px;
+  }
+  #acoes-bau {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
 }
-
+@media (min-width: 768px) {
+  .container-game,
+  .card-acao {
+    max-inline-size: 560px;
+  }
+  nav,
+  section {
+    padding-block: 12px;
+    padding-inline: clamp(26px, 5vw, 56px);
+  }
+}
