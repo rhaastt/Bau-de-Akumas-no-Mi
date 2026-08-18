@@ -1,8 +1,5 @@
 @import url(reset.css);
-@import url(tabuleiro-game.css);
-@import url(inventario.css);
-@import url(bau-de-itens.css);
-@import url(perfil.css);
-@import url(btns.css);
+@import url(componentes.css);
+@import url(mochila.css);
 @import url(dropItem.css);
-
+@import url(modal-item.css);

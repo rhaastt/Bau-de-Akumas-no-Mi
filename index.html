@@ -7,25 +7,52 @@
     <title>Baú de Akumas no Mi</title>
   </head>
   <body>
-    <main>
-
-      <section id="game-container">
-        <div id="stats">
-          <img
-            id="perfil-player"
-            src="imagens/icon-perfil.webp"
-            alt="Perfil do jogador"
-          />
-          <span id="stat">Beri: <strong id="berryText">0</strong></span>
-          <button id="abrirInventarioBtn">Abrir Inventário</button>
+    <main class="container-game">
+      <nav class="container-fixed-top">
+        <div class="border">
+          <div class="box-space-between" id="container-top">
+            <div class="avatar" id="container-avatar-img">
+              <img
+                id="avatar-img"
+                src="imagens/icon-perfil.webp"
+                alt="Perfil do jogador"
+              />
+            </div>
+            <div class="box border" id="berrys">
+              <span>Berrys: <strong id="qtd-berrys">9999.99</strong></span>
+            </div>
+            <button
+              class="box border"
+              id="container-carrinho"
+              type="button"
+              aria-disabled="true"
+            >
+              <img
+                id="carrinho-img"
+                src="imagens/icone-carrinho-loja.webp"
+                alt="Loja"
+              />
+            </button>
+          </div>
         </div>
+      </nav>
 
-        <div class="cardBau">
-          <h1>Baú das Akuma no Mi</h1>
-
-          <div id="containerBau">
+      <section class="container-acao">
+        <div class="box-space-between" id="container-bau-e-busca">
+          <span class="box" id="elemento-em-acao-nome">BAU</span>
+          <button
+            class="box border"
+            id="btn-buscar"
+            type="button"
+            aria-disabled="true"
+          >
+            <img src="imagens/icone-busca.webp" alt="Buscar" />
+          </button>
+        </div>
+        <div id="elemento-em-acao">
+          <div class="box border" id="container-bau">
             <img
-              id="bauFechado"
+              id="bau-fechado"
               src="imagens/bau-fechado.webp"
               alt="Baú fechado"
               width="400"
@@ -34,7 +61,7 @@
               fetchpriority="high"
             />
             <img
-              id="bauAberto"
+              id="bau-aberto"
               src="imagens/bau-aberto.webp"
               alt="Baú aberto"
               width="400"
@@ -49,39 +76,80 @@
               </div>
             </div>
           </div>
-
-          <div id="containerInfo">
-            <div id="infoBau" aria-label="Baús disponíveis">
-              <span>
-                <span id="qtdAtualDeBaus"></span>/<span
-                  id="qtdTotalDeBaus"
-                ></span>
-              </span>
-              <small>Disponíveis</small>
-            </div>
-            <button id="abrirBauDeItens">Abrir Baú</button>
-          </div>
-
-          <div id="container-textoBau">
-            <p id="textoBau"></p>
-          </div>
-        </div>
-
-        <div id="card-inventario">
-        <h2>Inventário</h2>
-        <ul id="inventario"></ul>
-        </div>
-        <div id="inventarioItem">
-          <div id="inventarioItemCard">
-            <img id="inventarioItemImg" src="" alt="">
-            <div id="inventarioItemNome"></div>
-            <div id="inventarioItemDescricao"></div>
-            <button id="btnFecharCardItemIventario">Fechar</button>
+          <div class="box-space-between" id="acoes-bau">
+            <span class="box" id="contador-bau">
+              <strong id="qtd-bau"
+                ><span id="qtd-atual">6</span>/<span id="qtd-limite"
+                  >20</span
+                ></strong
+              >
+              <strong id="texto-contador-bau">Disponíveis</strong>
+            </span>
+            <button class="border" id="btn-bau" type="button">ABRIR BAU</button>
           </div>
         </div>
       </section>
+
+      <nav class="container-fixed-bottom">
+        <ul class="border box-space-between nav-itens">
+          <li>
+            <button
+              class="border nav-item container-icone-img"
+              type="button"
+              aria-disabled="true"
+            >
+              <img src="imagens/icon-perfil.webp" alt="Perfil" />
+            </button>
+          </li>
+          <li>
+            <button
+              class="border nav-item container-icone-img"
+              type="button"
+              aria-disabled="true"
+            >
+              <img src="imagens/icone-bau.webp" alt="Baús" />
+            </button>
+          </li>
+          <li>
+            <button
+              class="border nav-item container-icone-img"
+              type="button"
+              id="btn-mochila"
+              aria-label="Abrir mochila"
+              aria-expanded="false"
+              aria-controls="container-mochila"
+            >
+              <img src="imagens/icone-mochila.webp" alt="" />
+            </button>
+          </li>
+          <li>
+            <button
+              class="border nav-item container-icone-img"
+              type="button"
+              aria-disabled="true"
+            >
+              <img src="imagens/icone-configuracao.webp" alt="Configurações" />
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <section id="container-mochila">
+        <h2>Mochila</h2>
+        <ul class="border" id="mochila-itens"></ul>
+      </section>
     </main>
 
-    <script type="module" src="javascript/bauDeItens.js"></script>
+    <div id="inventarioItem">
+      <div id="inventarioItemCard" role="dialog" aria-modal="true">
+        <img id="inventarioItemImg" src="" alt="" />
+        <div id="inventarioItemNome"></div>
+        <div id="inventarioItemTipo"></div>
+        <div id="inventarioItemDescricao"></div>
+        <button id="btnFecharCardItemIventario" type="button">Fechar</button>
+      </div>
+    </div>
+
+    <script type="module" src="javascript/jogo.js"></script>
   </body>
 </html>

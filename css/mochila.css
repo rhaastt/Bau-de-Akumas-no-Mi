@@ -1,0 +1,115 @@
+/* ===== Mochila ===== */
+#container-mochila {
+  display: none;
+  border: 1px solid #000;
+  border-radius: 16px;
+  padding: 14px;
+  margin-block-end: 24px;
+  transform: scale(0.9);
+  will-change: opacity, transform;
+  opacity: 0;
+}
+
+#container-mochila.show {
+  display: grid;
+  animation: showMochila 250ms ease-out forwards;
+}
+
+#container-mochila > h2 {
+  font-size: clamp(16px, 3.4vw, 18px);
+  margin-block-end: 12px;
+  text-align: center;
+}
+
+#container-mochila.hiding {
+  animation: hideMochila 300ms ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes showMochila {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes hideMochila {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
+  }
+}
+
+/* Grid de slots: auto-fill se adapta à largura estreita do layout sem
+   precisar de media query. */
+#mochila-itens {
+  display: grid;
+  margin: 0;
+  padding: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 12px;
+  border: 1px solid #000;
+  border-radius: 12px;
+}
+
+#mochila-itens .slot {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border: 1px solid #000;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+#mochila-itens .slot:not(.vazio) {
+  cursor: pointer;
+}
+
+#mochila-itens .slot .pad {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: 6px;
+  bottom: 26px;
+  display: grid;
+  place-items: center;
+}
+
+#mochila-itens .slot .pad img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+#mochila-itens .slot .label {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  padding: 2px 4px;
+  height: 20px;
+  font-size: 9px;
+  line-height: 16px;
+  text-align: center;
+  color: #111;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 6px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+#mochila-itens .slot.vazio .pad::after {
+  content: "+";
+  font-size: 28px;
+  opacity: 0.35;
+  pointer-events: none;
+}
