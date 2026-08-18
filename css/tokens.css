@@ -30,6 +30,16 @@
   --op-fraca: 0.35;
   --op-media: 0.75;
 
+  /* Raridade — a única cor do sistema, contida à borda do slot e ao selo.
+     Todas passam de 4.5:1 sobre branco, então servem também como texto.
+     Comum fica na tinta preta: a maioria dos itens segue como antes e a cor
+     vira sinal de exceção. */
+  --rar-comum: #111111;
+  --rar-incomum: #1b7f3b;
+  --rar-raro: #1a5fb4;
+  --rar-epico: #7326a8;
+  --rar-lendario: #a35a00;
+
   /* Layout */
   --largura-app: min(420px, 92vw);
   --largura-conteudo: 1100px;
@@ -40,6 +50,24 @@
   --dur-rapida: 150ms;
   --dur-media: 250ms;
   --dur-lenta: 350ms;
+}
+
+/* Um só lugar traduz raridade em cor: qualquer elemento com data-raridade
+   define --cor-raridade, e os componentes abaixo dele só consomem a variável. */
+[data-raridade="Comum"] {
+  --cor-raridade: var(--rar-comum);
+}
+[data-raridade="Incomum"] {
+  --cor-raridade: var(--rar-incomum);
+}
+[data-raridade="Raro"] {
+  --cor-raridade: var(--rar-raro);
+}
+[data-raridade="Épico"] {
+  --cor-raridade: var(--rar-epico);
+}
+[data-raridade="Lendário"] {
+  --cor-raridade: var(--rar-lendario);
 }
 
 /* Desligar animações por configuração do usuário, pelo mesmo caminho

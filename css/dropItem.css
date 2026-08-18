@@ -63,9 +63,8 @@
   font-size: 12px;
   line-height: 1.2;
   text-align: center;
-  color: #111;
-  background: #ffffff;
-  border: 1px solid #000;
+  background: var(--cor-fundo);
+  color: var(--cor-raridade, var(--cor-tinta));
+  border: 1px solid var(--cor-raridade, var(--cor-tinta));
   border-radius: 10px;
-  
 }

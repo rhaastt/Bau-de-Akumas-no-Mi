@@ -3,6 +3,7 @@
 import { pegar, preload } from "../util.js";
 import * as estado from "../estado.js";
 import { irPara } from "../navegacao.js";
+import { sortearPorRaridade } from "../raridade.js";
 
 const ANIM_MS = 380;
 const VISIBLE_MS = 1400;
@@ -19,10 +20,9 @@ let aberto = false;
 let busy = false;
 let dropTimeoutId = null;
 
-/** Sorteio uniforme sobre o catálogo inteiro — frutas e armas juntas. */
+/** Sorteio ponderado por raridade sobre o catálogo inteiro. */
 function sortearItem() {
-  const itens = estado.catalogo();
-  return itens[Math.floor(Math.random() * itens.length)];
+  return sortearPorRaridade(estado.catalogo());
 }
 
 function atualizarBotao() {
@@ -43,6 +43,8 @@ function dropItem() {
   dropImgEl.src = item.img;
   dropImgEl.alt = item.nome;
   dropLegendEl.textContent = item.nome;
+  // A cor da raridade tinge a legenda do drop.
+  dropItemEl.dataset.raridade = item.raridade ?? "";
 
   dropItemEl.classList.remove("show");
   void dropItemEl.offsetWidth; // força reflow para reiniciar a animação

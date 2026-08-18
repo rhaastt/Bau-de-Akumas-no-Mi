@@ -8,6 +8,7 @@ let card;
 let img;
 let nome;
 let tipo;
+let raridade;
 let descricao;
 
 export function abrirItem(item) {
@@ -16,6 +17,13 @@ export function abrirItem(item) {
   nome.textContent = item.nome;
   tipo.textContent = item.tipo;
   descricao.textContent = item.desc;
+
+  // O selo diz a raridade por escrito, não só pela cor — quem não distingue
+  // as cores continua tendo a informação.
+  raridade.textContent = item.raridade ?? "";
+  raridade.hidden = !item.raridade;
+  card.dataset.raridade = item.raridade ?? "";
+
   modal.classList.add("active");
   document.body.style.overflow = "hidden";
 }
@@ -47,6 +55,7 @@ export function iniciarModal() {
   img = pegar("inventarioItemImg");
   nome = pegar("inventarioItemNome");
   tipo = pegar("inventarioItemTipo");
+  raridade = pegar("inventarioItemRaridade");
   descricao = pegar("inventarioItemDescricao");
 
   pegar("btnFecharCardItemIventario").addEventListener("click", fecharItem);

@@ -74,7 +74,8 @@ export function slotHTML(item, { idx, obtida = true, rotuloVazio = "Vazio" } = {
   }
   const attrIdx = idx === undefined ? "" : ` data-idx="${idx}"`;
   const classe = obtida ? "slot" : "slot nao-obtida";
-  return `<li class="${classe}"${attrIdx}>
+  const attrRar = item.raridade ? ` data-raridade="${esc(item.raridade)}"` : "";
+  return `<li class="${classe}"${attrIdx}${attrRar}>
     <div class="pad">
       <img src="${esc(item.img)}" alt="${esc(item.nome)}" loading="lazy" decoding="async">
     </div>

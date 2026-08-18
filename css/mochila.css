@@ -13,9 +13,16 @@
 .grade-slots .slot {
   position: relative;
   aspect-ratio: 1 / 1;
-  border: var(--borda);
+  border: 1px solid var(--cor-raridade, var(--cor-tinta));
   border-radius: var(--raio-md);
   overflow: hidden;
+}
+
+/* As duas raridades mais altas ganham traço mais grosso: um segundo sinal
+   além da cor, para quem não distingue os tons. */
+.grade-slots .slot[data-raridade="Épico"],
+.grade-slots .slot[data-raridade="Lendário"] {
+  border-width: 2px;
 }
 
 .grade-slots .slot[data-idx] {

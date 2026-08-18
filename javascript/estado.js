@@ -14,6 +14,7 @@ let _categorias = [];
 let _tiposPorCategoria = {};
 let _totalPorTipo = {};
 let _totalPorCategoria = {};
+let _totalPorRaridade = {};
 
 export function definirCatalogo(itens) {
   _catalogo = itens;
@@ -22,11 +23,14 @@ export function definirCatalogo(itens) {
   _tiposPorCategoria = {};
   _totalPorTipo = {};
   _totalPorCategoria = {};
+  _totalPorRaridade = {};
 
   for (const item of itens) {
     _totalPorTipo[item.tipo] = (_totalPorTipo[item.tipo] || 0) + 1;
     _totalPorCategoria[item.categoria] =
       (_totalPorCategoria[item.categoria] || 0) + 1;
+    _totalPorRaridade[item.raridade] =
+      (_totalPorRaridade[item.raridade] || 0) + 1;
 
     const lista = (_tiposPorCategoria[item.categoria] ||= []);
     if (!lista.includes(item.tipo)) lista.push(item.tipo);
@@ -38,6 +42,7 @@ export const categorias = () => _categorias;
 export const tiposDe = (categoria) => _tiposPorCategoria[categoria] ?? [];
 export const totalPorTipo = () => _totalPorTipo;
 export const totalPorCategoria = () => _totalPorCategoria;
+export const totalPorRaridade = () => _totalPorRaridade;
 
 const estadoInicial = () => ({
   mochila: [],

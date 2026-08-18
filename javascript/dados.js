@@ -8,6 +8,8 @@
  * navegador, enquanto módulos JSON só chegaram ao Firefox recentemente.
  */
 
+import { raridadeDoTipo } from "./raridade.js";
+
 const ARQUIVOS = ["dados/frutas.json", "dados/armas.json"];
 
 async function carregarArquivo(caminho) {
@@ -20,8 +22,13 @@ async function carregarArquivo(caminho) {
     throw new Error(`${caminho} não tem uma lista "itens".`);
   }
   // A categoria fica no topo do arquivo e é carimbada em cada item aqui,
-  // para não se repetir 109 vezes no JSON.
-  return dados.itens.map((item) => ({ ...item, categoria: dados.categoria }));
+  // para não se repetir 109 vezes no JSON. A raridade sai do tipo pelo mesmo
+  // motivo — mas um item pode trazer a sua e ter precedência.
+  return dados.itens.map((item) => ({
+    ...item,
+    categoria: dados.categoria,
+    raridade: item.raridade ?? raridadeDoTipo(item.tipo),
+  }));
 }
 
 /** Busca todos os arquivos em paralelo e devolve a lista achatada. */

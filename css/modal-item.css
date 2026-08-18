@@ -32,7 +32,7 @@
   width: 96px;
   height: 96px;
   object-fit: contain;
-  border: 1px solid #000;
+  border: 2px solid var(--cor-raridade, var(--cor-tinta));
   border-radius: 8px;
   display: block;
 }
@@ -46,6 +46,22 @@
   font-size: 0.85rem;
   font-style: italic;
   opacity: 0.75;
+}
+
+/* Selo de raridade: cor + nome escrito, para a informação não depender da cor. */
+.selo-raridade {
+  border: 1px solid var(--cor-raridade, var(--cor-tinta));
+  color: var(--cor-raridade, var(--cor-tinta));
+  border-radius: var(--raio-pill);
+  padding: 2px var(--e3);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.selo-raridade[hidden] {
+  display: none;
 }
 
 #inventarioItemDescricao {
