@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const inventarioItemCard = document.getElementById("inventarioItemCard");
   const inventarioItemImg = document.getElementById("inventarioItemImg");
   const inventarioItemNome = document.getElementById("inventarioItemNome");
-  const inventarioItemDescricao = document.getElementById("inventarioItemDescricao");;
+  const inventarioItemDescricao = document.getElementById("inventarioItemDescricao");
   const btnFecharCardItemIventario = document.getElementById("btnFecharCardItemIventario");
   
   function showItemInventario(item) {
