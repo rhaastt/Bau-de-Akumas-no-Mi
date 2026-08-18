@@ -1,0 +1,14 @@
+{
+  "name": "bau-de-itens",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Mini-jogo estático em que o jogador abre baús e coleciona itens de One Piece",
+  "scripts": {
+    "test": "node testes/executar.js",
+    "start": "node testes/servidor.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.0"
+  }
+}
