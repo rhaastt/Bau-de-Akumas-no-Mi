@@ -8,138 +8,270 @@
   </head>
   <body>
     <main class="container-game">
-      <nav class="container-fixed-top">
-        <div class="border">
-          <div class="box-space-between" id="container-top">
-            <div class="avatar" id="container-avatar-img">
-              <img
-                id="avatar-img"
-                src="imagens/icon-perfil.webp"
-                alt="Perfil do jogador"
-              />
-            </div>
-            <div class="box border" id="berrys">
-              <span>Berrys: <strong id="qtd-berrys">9999.99</strong></span>
-            </div>
-            <button
-              class="box border"
-              id="container-carrinho"
-              type="button"
-              aria-disabled="true"
-            >
-              <img
-                id="carrinho-img"
-                src="imagens/icone-carrinho-loja.webp"
-                alt="Loja"
-              />
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      <section class="container-acao">
-        <div class="box-space-between" id="container-bau-e-busca">
-          <span class="box" id="elemento-em-acao-nome">BAU</span>
+      <!-- ===== Barra superior (persistente) ===== -->
+      <header class="barra-topo">
+        <div class="box-space-between" id="container-top">
           <button
-            class="box border"
-            id="btn-buscar"
+            class="avatar"
+            id="btn-avatar"
             type="button"
-            aria-disabled="true"
+            data-tela="perfil"
+            aria-label="Abrir perfil"
           >
-            <img src="imagens/icone-busca.webp" alt="Buscar" />
+            <img id="avatar-img" src="imagens/icon-perfil.webp" alt="" />
+          </button>
+
+          <div class="box border" id="berrys">
+            <span>Berrys: <strong id="qtd-berrys">0</strong></span>
+          </div>
+
+          <button
+            class="box border botao-icone"
+            id="container-carrinho"
+            type="button"
+            data-tela="loja"
+            aria-label="Abrir loja"
+          >
+            <img src="imagens/icone-carrinho-loja.webp" alt="" />
           </button>
         </div>
-        <div id="elemento-em-acao">
-          <div class="box border" id="container-bau">
-            <img
-              id="bau-fechado"
-              src="imagens/bau-fechado.webp"
-              alt="Baú fechado"
-              width="400"
-              height="300"
-              decoding="async"
-              fetchpriority="high"
-            />
-            <img
-              id="bau-aberto"
-              src="imagens/bau-aberto.webp"
-              alt="Baú aberto"
-              width="400"
-              height="300"
-              decoding="async"
-            />
+      </header>
 
-            <div id="dropItem" class="hidden" aria-live="polite">
-              <div class="drop-inner" role="figure" aria-label="Item obtido">
-                <img id="dropImg" src="" alt="" decoding="async" />
-                <div class="drop-legend" id="dropLegend"></div>
+      <!-- ===== Área de conteúdo ===== -->
+      <div class="area-conteudo">
+        <div class="box-space-between cabecalho-tela">
+          <h1 class="box" id="titulo-tela">BAÚ</h1>
+          <button
+            class="box border botao-icone"
+            id="btn-buscar"
+            type="button"
+            data-tela="busca"
+            aria-label="Buscar frutas"
+          >
+            <img src="imagens/icone-busca.webp" alt="" />
+          </button>
+        </div>
+
+        <!-- ---------- Tela: Baú ---------- -->
+        <section class="tela" id="tela-bau" aria-labelledby="titulo-tela">
+          <div class="bau-layout">
+            <div class="bau-principal">
+              <div class="border" id="container-bau">
+                <img
+                  id="bau-fechado"
+                  src="imagens/bau-fechado.webp"
+                  alt="Baú fechado"
+                  width="400"
+                  height="300"
+                  decoding="async"
+                  fetchpriority="high"
+                />
+                <img
+                  id="bau-aberto"
+                  src="imagens/bau-aberto.webp"
+                  alt="Baú aberto"
+                  width="400"
+                  height="300"
+                  decoding="async"
+                />
+
+                <div id="dropItem" class="hidden" aria-live="polite">
+                  <div class="drop-inner" role="figure" aria-label="Item obtido">
+                    <img id="dropImg" src="" alt="" decoding="async" />
+                    <div class="drop-legend" id="dropLegend"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="box-space-between" id="acoes-bau">
+                <span class="box border" id="contador-bau">
+                  <strong id="qtd-bau"
+                    ><span id="qtd-atual">0</span>/<span id="qtd-limite"
+                      >0</span
+                    ></strong
+                  >
+                  <strong id="texto-contador-bau">Disponíveis</strong>
+                </span>
+                <button class="btn" id="btn-bau" type="button">ABRIR BAÚ</button>
               </div>
             </div>
-          </div>
-          <div class="box-space-between" id="acoes-bau">
-            <span class="box" id="contador-bau">
-              <strong id="qtd-bau"
-                ><span id="qtd-atual">6</span>/<span id="qtd-limite"
-                  >20</span
-                ></strong
-              >
-              <strong id="texto-contador-bau">Disponíveis</strong>
-            </span>
-            <button class="border" id="btn-bau" type="button">ABRIR BAU</button>
-          </div>
-        </div>
-      </section>
 
-      <nav class="container-fixed-bottom">
-        <ul class="border box-space-between nav-itens">
+            <!-- Companheira no desktop; escondida no mobile, onde a Mochila
+                 é uma tela própria. Mesmo componente, mesmo estado. -->
+            <aside class="painel mochila-lateral" aria-label="Mochila">
+              <h2 class="titulo-painel">Mochila</h2>
+              <ul class="grade-slots" id="mochila-lateral-itens"></ul>
+            </aside>
+          </div>
+        </section>
+
+        <!-- ---------- Tela: Mochila ---------- -->
+        <section class="tela" id="tela-mochila" hidden>
+          <div class="painel">
+            <ul class="grade-slots" id="mochila-itens"></ul>
+          </div>
+        </section>
+
+        <!-- ---------- Tela: Perfil ---------- -->
+        <section class="tela" id="tela-perfil" hidden>
+          <div class="perfil-layout">
+            <div class="painel perfil-cartao">
+              <div class="avatar avatar-grande">
+                <img src="imagens/icon-perfil.webp" alt="" />
+              </div>
+              <p class="perfil-nome">Pirata</p>
+              <p class="perfil-subtitulo">Caçador de Akuma no Mi</p>
+            </div>
+
+            <div class="painel">
+              <h2 class="titulo-painel">Números</h2>
+              <ul class="lista-estatisticas" id="perfil-estatisticas"></ul>
+            </div>
+
+            <div class="painel perfil-progresso">
+              <h2 class="titulo-painel">Coleção por tipo</h2>
+              <div id="perfil-barras"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---------- Tela: Loja ---------- -->
+        <section class="tela" id="tela-loja" hidden>
+          <div class="painel">
+            <h2 class="titulo-painel">Comprar baús</h2>
+            <p class="texto-apoio">
+              Baús disponíveis são limitados a
+              <strong id="loja-limite">0</strong> no total.
+            </p>
+            <ul class="lista-pacotes" id="loja-pacotes"></ul>
+            <p class="aviso" id="loja-aviso" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+
+        <!-- ---------- Tela: Configurações ---------- -->
+        <section class="tela" id="tela-config" hidden>
+          <div class="painel">
+            <h2 class="titulo-painel">Preferências</h2>
+            <ul class="lista-opcoes">
+              <li class="linha-opcao">
+                <label class="opcao-texto" for="cfg-animacoes">
+                  <span class="opcao-titulo">Animações</span>
+                  <span class="opcao-descricao"
+                    >Transições do baú, do drop e das telas.</span
+                  >
+                </label>
+                <button
+                  class="toggle"
+                  id="cfg-animacoes"
+                  type="button"
+                  role="switch"
+                  aria-checked="true"
+                >
+                  <span class="toggle-polegar"></span>
+                </button>
+              </li>
+              <li class="linha-opcao">
+                <label class="opcao-texto" for="cfg-ir-mochila">
+                  <span class="opcao-titulo">Ir para a mochila ao ganhar</span>
+                  <span class="opcao-descricao"
+                    >Abre a mochila automaticamente após cada item.</span
+                  >
+                </label>
+                <button
+                  class="toggle"
+                  id="cfg-ir-mochila"
+                  type="button"
+                  role="switch"
+                  aria-checked="false"
+                >
+                  <span class="toggle-polegar"></span>
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div class="painel">
+            <h2 class="titulo-painel">Progresso</h2>
+            <p class="texto-apoio">
+              O progresso não é salvo: recarregar a página já zera tudo.
+            </p>
+            <button class="btn" id="btn-resetar" type="button">
+              RESETAR PROGRESSO
+            </button>
+            <p class="aviso" id="config-aviso" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+
+        <!-- ---------- Tela: Busca ---------- -->
+        <section class="tela" id="tela-busca" hidden>
+          <div class="painel">
+            <label class="rotulo-campo" for="busca-campo">Buscar no catálogo</label>
+            <input
+              type="search"
+              id="busca-campo"
+              placeholder="Nome da fruta..."
+              autocomplete="off"
+            />
+            <ul class="lista-chips" id="busca-chips"></ul>
+            <p class="texto-apoio" id="busca-resumo" role="status" aria-live="polite"></p>
+          </div>
+          <div class="painel">
+            <ul class="grade-slots" id="busca-resultados"></ul>
+            <p class="estado-vazio" id="busca-vazio" hidden>
+              Nenhuma fruta encontrada.
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <!-- ===== Navegação (rodapé no mobile, rail no desktop) ===== -->
+      <nav class="nav-principal" aria-label="Navegação principal">
+        <ul class="border nav-itens">
           <li>
             <button
-              class="border nav-item container-icone-img"
+              class="border nav-item"
               type="button"
-              aria-disabled="true"
+              data-tela="perfil"
+              aria-label="Perfil"
             >
-              <img src="imagens/icon-perfil.webp" alt="Perfil" />
+              <img src="imagens/icon-perfil.webp" alt="" />
             </button>
           </li>
           <li>
             <button
-              class="border nav-item container-icone-img"
+              class="border nav-item"
               type="button"
-              aria-disabled="true"
+              data-tela="bau"
+              aria-label="Baú"
             >
-              <img src="imagens/icone-bau.webp" alt="Baús" />
+              <img src="imagens/icone-bau.webp" alt="" />
             </button>
           </li>
           <li>
             <button
-              class="border nav-item container-icone-img"
+              class="border nav-item"
               type="button"
-              id="btn-mochila"
-              aria-label="Abrir mochila"
-              aria-expanded="false"
-              aria-controls="container-mochila"
+              data-tela="mochila"
+              aria-label="Mochila"
             >
               <img src="imagens/icone-mochila.webp" alt="" />
             </button>
           </li>
           <li>
             <button
-              class="border nav-item container-icone-img"
+              class="border nav-item"
               type="button"
-              aria-disabled="true"
+              data-tela="config"
+              aria-label="Configurações"
             >
-              <img src="imagens/icone-configuracao.webp" alt="Configurações" />
+              <img src="imagens/icone-configuracao.webp" alt="" />
             </button>
           </li>
         </ul>
       </nav>
-
-      <section id="container-mochila">
-        <h2>Mochila</h2>
-        <ul class="border" id="mochila-itens"></ul>
-      </section>
     </main>
 
+    <!-- ===== Modal de detalhe do item (compartilhado) ===== -->
     <div id="inventarioItem">
       <div id="inventarioItemCard" role="dialog" aria-modal="true">
         <img id="inventarioItemImg" src="" alt="" />

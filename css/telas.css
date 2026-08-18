@@ -1,0 +1,332 @@
+/* ===== Telas e componentes compartilhados =====
+   Tudo em preto e branco: estados usam inversão e as opacidades que o
+   design já praticava, nunca cor. */
+
+.tela[hidden] {
+  display: none;
+}
+
+/* ===== Painel: base visual de todas as telas ===== */
+.painel {
+  border: var(--borda);
+  border-radius: var(--raio-lg);
+  padding: var(--e4);
+  margin-block-end: var(--e4);
+  background-color: var(--cor-fundo);
+}
+
+.titulo-painel {
+  font-size: clamp(15px, 3.4vw, 18px);
+  font-weight: 700;
+  margin-block-end: var(--e3);
+}
+
+.texto-apoio {
+  font-size: clamp(12px, 2.6vw, 14px);
+  opacity: var(--op-media);
+  margin-block-end: var(--e3);
+}
+
+.aviso {
+  font-size: clamp(12px, 2.6vw, 14px);
+  margin-block-start: var(--e3);
+  min-block-size: 1.2em;
+}
+
+.estado-vazio {
+  text-align: center;
+  padding-block: var(--e6);
+  opacity: var(--op-fraca);
+  font-size: clamp(14px, 3vw, 16px);
+}
+
+/* ===== Botão ===== */
+.btn {
+  border: var(--borda);
+  border-radius: var(--raio-sm);
+  background: var(--cor-fundo);
+  color: var(--cor-tinta);
+  cursor: pointer;
+  inline-size: 100%;
+  min-block-size: var(--toque-min);
+  padding: var(--e3) var(--e5);
+  font-size: clamp(13px, 2.8vw, 16px);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.btn:disabled {
+  opacity: var(--op-fraca);
+  cursor: not-allowed;
+}
+
+.btn-compacto {
+  inline-size: auto;
+  min-inline-size: 128px;
+  padding: var(--e2) var(--e4);
+  font-size: clamp(11px, 2.4vw, 13px);
+}
+
+/* ===== Tela Baú ===== */
+.bau-layout {
+  display: grid;
+  gap: var(--e4);
+}
+
+/* A mochila lateral é exclusiva do desktop; no mobile a Mochila é tela. */
+.mochila-lateral {
+  display: none;
+}
+
+/* ===== Tela Perfil ===== */
+.perfil-cartao {
+  display: grid;
+  justify-items: center;
+  gap: var(--e1);
+  text-align: center;
+}
+
+.avatar-grande {
+  inline-size: clamp(88px, 26vw, 120px);
+}
+
+.perfil-nome {
+  font-size: clamp(18px, 4.4vw, 24px);
+  font-weight: 700;
+}
+
+.perfil-subtitulo {
+  font-size: clamp(12px, 2.6vw, 14px);
+  opacity: var(--op-media);
+}
+
+.lista-estatisticas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--e3);
+}
+
+.estatistica {
+  border: var(--borda);
+  border-radius: var(--raio-md);
+  padding: var(--e3);
+  display: grid;
+  gap: 2px;
+  text-align: center;
+}
+
+.estatistica-valor {
+  font-size: clamp(18px, 4.6vw, 24px);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.estatistica-rotulo {
+  font-size: clamp(11px, 2.4vw, 12px);
+  opacity: var(--op-media);
+}
+
+/* Barra de progresso: trilho com borda, preenchimento sólido preto. */
+.progresso-linha + .progresso-linha {
+  margin-block-start: var(--e3);
+}
+
+.progresso-topo {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--e2);
+  font-size: clamp(12px, 2.6vw, 14px);
+  margin-block-end: var(--e1);
+}
+
+.progresso-valor {
+  font-variant-numeric: tabular-nums;
+  opacity: var(--op-media);
+}
+
+.progresso-trilho {
+  block-size: 14px;
+  border: var(--borda);
+  border-radius: var(--raio-pill);
+  overflow: hidden;
+}
+
+.progresso-preenchimento {
+  block-size: 100%;
+  background-color: var(--cor-tinta);
+  transition: inline-size var(--dur-media) ease;
+}
+
+/* ===== Tela Loja ===== */
+.lista-pacotes {
+  display: grid;
+  gap: var(--e3);
+}
+
+.pacote {
+  border: var(--borda);
+  border-radius: var(--raio-md);
+  padding: var(--e3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e3);
+  flex-wrap: wrap;
+}
+
+.pacote-info {
+  display: grid;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.pacote-nome {
+  font-weight: 700;
+  font-size: clamp(14px, 3vw, 16px);
+}
+
+.pacote-detalhe {
+  font-size: clamp(11px, 2.4vw, 13px);
+  opacity: var(--op-media);
+}
+
+/* ===== Tela Configurações ===== */
+.lista-opcoes {
+  display: grid;
+  gap: var(--e3);
+}
+
+.linha-opcao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e3);
+  border: var(--borda);
+  border-radius: var(--raio-md);
+  padding: var(--e3);
+}
+
+.opcao-texto {
+  display: grid;
+  gap: 2px;
+  min-inline-size: 0;
+  cursor: pointer;
+}
+
+.opcao-titulo {
+  font-weight: 700;
+  font-size: clamp(13px, 2.9vw, 15px);
+}
+
+.opcao-descricao {
+  font-size: clamp(11px, 2.4vw, 13px);
+  opacity: var(--op-media);
+}
+
+/* Toggle line-art: ligado = trilho preenchido, polegar branco. */
+.toggle {
+  flex: none;
+  inline-size: 60px;
+  block-size: 32px;
+  border: var(--borda);
+  border-radius: var(--raio-pill);
+  background: var(--cor-fundo);
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toggle-polegar {
+  inline-size: 24px;
+  block-size: 24px;
+  border: var(--borda);
+  border-radius: 50%;
+  background: var(--cor-tinta);
+  transition: transform var(--dur-media) ease, background-color var(--dur-media) ease;
+}
+
+.toggle.ligado {
+  background: var(--cor-tinta);
+}
+
+.toggle.ligado .toggle-polegar {
+  background: var(--cor-fundo);
+  transform: translateX(28px);
+}
+
+/* ===== Tela Busca ===== */
+.rotulo-campo {
+  display: block;
+  font-size: clamp(12px, 2.6vw, 14px);
+  font-weight: 700;
+  margin-block-end: var(--e2);
+}
+
+#busca-campo {
+  inline-size: 100%;
+  min-block-size: var(--toque-min);
+  border: var(--borda);
+  border-radius: var(--raio-sm);
+  padding: var(--e2) var(--e3);
+  background: var(--cor-fundo);
+  color: var(--cor-tinta);
+  font-size: clamp(14px, 3vw, 16px);
+}
+
+.lista-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e2);
+  margin-block: var(--e3);
+}
+
+/* Chip ativo por inversão. */
+.chip {
+  border: var(--borda);
+  border-radius: var(--raio-pill);
+  background: var(--cor-fundo);
+  color: var(--cor-tinta);
+  padding: var(--e2) var(--e3);
+  font-size: clamp(11px, 2.4vw, 13px);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.chip.ativo {
+  background: var(--cor-tinta);
+  color: var(--cor-fundo);
+}
+
+/* ===== Desktop ===== */
+@media (min-width: 1024px) {
+  /* Baú e mochila lado a lado, conforme a composição aprovada. */
+  .bau-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--e5);
+  }
+
+  .mochila-lateral {
+    display: block;
+    margin-block-end: 0;
+    position: sticky;
+    top: var(--e5);
+  }
+
+  .perfil-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--e4);
+    align-items: start;
+  }
+
+  /* O bloco de progresso ocupa a linha inteira abaixo dos dois cartões. */
+  .perfil-progresso {
+    grid-column: 1 / -1;
+  }
+
+  .painel {
+    padding: var(--e5);
+  }
+}

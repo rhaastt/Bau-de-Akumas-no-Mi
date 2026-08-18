@@ -1,0 +1,53 @@
+/* ===== Tokens de design =====
+   Paleta estritamente monocromática: preto e branco.
+   Hierarquia vem de tamanho, peso, espaçamento e inversão
+   (preenchimento preto com conteúdo branco) — nunca de cor. */
+:root {
+  /* Cor */
+  --cor-tinta: #000;
+  --cor-fundo: #fff;
+
+  /* Traço e raio (valores já praticados no projeto) */
+  --borda: 1px solid var(--cor-tinta);
+  --borda-forte: 2px solid var(--cor-tinta);
+  --raio-sm: 8px;
+  --raio-md: 12px;
+  --raio-lg: 16px;
+  --raio-pill: 999px;
+
+  /* Espaço */
+  --e1: 6px;
+  --e2: 8px;
+  --e3: 12px;
+  --e4: 18px;
+  --e5: 26px;
+  --e6: 40px;
+
+  /* Ergonomia */
+  --toque-min: 48px;
+
+  /* Opacidades já usadas no design, promovidas a token */
+  --op-fraca: 0.35;
+  --op-media: 0.75;
+
+  /* Layout */
+  --largura-app: min(420px, 92vw);
+  --largura-conteudo: 1100px;
+  --rail-largura: 88px;
+  --altura-nav-mobile: 76px;
+
+  /* Movimento */
+  --dur-rapida: 150ms;
+  --dur-media: 250ms;
+  --dur-lenta: 350ms;
+}
+
+/* Desligar animações por configuração do usuário, pelo mesmo caminho
+   que o prefers-reduced-motion do reset.css já usa. */
+:root[data-animacoes="off"] *,
+:root[data-animacoes="off"] *::before,
+:root[data-animacoes="off"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}

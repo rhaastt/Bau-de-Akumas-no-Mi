@@ -1,5 +1,7 @@
 @import url(reset.css);
+@import url(tokens.css);
 @import url(componentes.css);
+@import url(telas.css);
 @import url(mochila.css);
 @import url(dropItem.css);
 @import url(modal-item.css);

@@ -1,69 +1,29 @@
-/* Layout */
+/* ===== Casca: topo, conteúdo, navegação e o baú ===== */
+
 html {
   font-size: clamp(14px, 2.2vmin, 18px);
 }
+
 body {
-  padding-block: clamp(8px, 4vw, 26px);
-  padding-inline: clamp(12px, 5vw, 26px);
-  max-width: 100%;
   min-height: 100dvh;
-  font-size: clamp(8px, 2.8vw, 18px);
+  padding-inline: clamp(12px, 5vw, var(--e5));
+  padding-block-start: 0;
+  /* Espaço para a nav fixa do mobile não encobrir o conteúdo. */
+  padding-block-end: calc(var(--altura-nav-mobile) + var(--e5));
+  background-color: var(--cor-fundo);
+  color: var(--cor-tinta);
 }
+
 .container-game {
   inline-size: 100%;
-  max-inline-size: min(420px, 92vw);
+  max-inline-size: var(--largura-app);
   margin-inline: auto;
 }
 
-#container-top {
-  display: flex;
-  gap: 12px;
-  justify-content: space-between;
-  align-items: center;
-  padding: max(8px, env(safe-area-inset-bottom)) 26px;
-  background-color: #fff;
-}
-
-.container-fixed-bottom {
-  position: relative;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  inline-size: 100%;
-  padding: max(8px, env(safe-area-inset-bottom)) 26px;
-}
-.container-fixed-top {
-  position: relative;
-  left: 0;
-  right: 0;
-  top: 0;
-  inline-size: 100%;
-  padding: max(8px, env(safe-area-inset-top)) 6px;
-}
-
-.container-icone-img {
-  inline-size: clamp(48px, 12vw, 60px);
-  aspect-ratio: 1;
-}
-.container-icone-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-/* Empilha baú fechado/aberto na mesma célula para o crossfade, e serve de
-   âncora para o overlay de drop (que é position: absolute). */
-#container-bau {
-  position: relative;
-  display: grid;
-  place-items: center;
-  margin-block-end: 24px;
-}
-
-/* Ultilitarios */
+/* ===== Utilitários ===== */
 .border {
-  border: 1px solid black;
-  border-radius: 8px;
+  border: var(--borda);
+  border-radius: var(--raio-sm);
 }
 .box {
   display: flex;
@@ -73,82 +33,109 @@ body {
 .box-space-between {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--e3);
 }
 
-button:hover {
-  transform: scale(1.08);
-}
-
+/* Hover só onde existe ponteiro fino: em touch o :hover dispara ao
+   segurar o toque e o elemento fica "preso" ampliado. */
 @media (hover: hover) and (pointer: fine) {
-  button:hover,
-  .nav-item:hover {
+  button:hover:not(:disabled) {
     transform: scale(1.04);
-    transition: transform 0.15s ease;
+    transition: transform var(--dur-rapida) ease;
   }
 }
 
-/*  Avatar Icone */
-.avatar {
-  inline-size: clamp(48px, 14vw, 60px);
-  aspect-ratio: 1;
-  border: 1px solid #000;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: #fff;
+/* ===== Barra superior ===== */
+.barra-topo {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  background-color: var(--cor-fundo);
+  padding-block: max(var(--e2), env(safe-area-inset-top)) var(--e2);
 }
 
-#avatar-img {
+#container-top {
+  display: flex;
+  gap: var(--e3);
+  justify-content: space-between;
+  align-items: center;
+}
+
+.avatar {
+  inline-size: clamp(var(--toque-min), 14vw, 60px);
+  aspect-ratio: 1;
+  border: var(--borda);
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--cor-fundo);
+  padding: 0;
+  flex: none;
+}
+.avatar img {
   display: block;
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
 }
 
-/* Barra de berrys(dinheiro)*/
 #berrys {
-  inline-size: clamp(180px, 60vw, 260px);
-  min-block-size: clamp(44px, 12vw, 60px);
-  padding: 12px 26px;
-  font-size: clamp(14px, 2.8vw, 18px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  min-block-size: clamp(var(--toque-min), 12vw, 60px);
+  padding: var(--e3) var(--e4);
+  font-size: clamp(13px, 2.8vw, 18px);
   text-align: center;
 }
-
-/*container carrinho*/
-#container-carrinho {
-  inline-size: clamp(44px, 12vw, 64px);
+#berrys span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/*container-acao*/
-.container-acao {
+.botao-icone {
+  inline-size: clamp(var(--toque-min), 12vw, 64px);
+  aspect-ratio: 1;
+  flex: none;
+  padding: var(--e2);
+  background: var(--cor-fundo);
+}
+.botao-icone img {
   inline-size: 100%;
-  max-inline-size: min(420px, 92vw);
-  margin-inline: auto;
+  block-size: 100%;
+  object-fit: contain;
 }
 
-/*icone busca*/
-#container-bau-e-busca {
-  margin-block: 26px 18px;
+/* ===== Cabeçalho da tela ===== */
+.cabecalho-tela {
+  align-items: center;
+  margin-block: var(--e5) var(--e4);
 }
 
-#elemento-em-acao-nome {
-  inline-size: clamp(60px, 20vw, 80px);
-  min-block-size: clamp(20px, 12vw, 30px);
+#titulo-tela {
+  font-size: clamp(16px, 4vw, 22px);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  justify-content: flex-start;
 }
 
-/*bau*/
+/* ===== Baú ===== */
+/* Empilha fechado/aberto na mesma célula do grid para o crossfade, e ancora
+   o overlay de drop, que é position: absolute. */
+#container-bau {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-block-end: var(--e5);
+}
 
 #container-bau > img {
   grid-area: 1 / 1;
-  width: 100%;
-  height: auto;
+  inline-size: 100%;
+  block-size: auto;
   display: block;
   object-fit: contain;
   opacity: 0;
-  transition: opacity 0.35s ease;
+  transition: opacity var(--dur-lenta) ease;
   will-change: opacity;
 }
 
@@ -161,74 +148,119 @@ button:hover {
 
 #acoes-bau {
   inline-size: 100%;
-  margin-block-end: clamp(24px, 6vw, 56px);
   display: grid;
-  justify-content: space-between;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
+  gap: var(--e3);
+  align-items: stretch;
 }
 
 #contador-bau {
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 8px;
+  padding: var(--e1) var(--e2);
 }
 
 #qtd-bau {
-  font-size: clamp(28px, 8vw, 48px);
+  font-size: clamp(28px, 8vw, 44px);
   line-height: 1;
 }
 #texto-contador-bau {
-  font-size: clamp(18px, 3.6vw, 20px);
+  font-size: clamp(15px, 3.4vw, 18px);
 }
 
-#btn-bau {
-  inline-size: 100%;
-  max-inline-size: 220px;
-  min-block-size: clamp(44px, 10vw, 78px);
-  padding: 18px 26px;
-  font-size: clamp(14px, 2.8vw, 16px);
-  letter-spacing: 0.3px;
-  background: #fff;
+/* ===== Navegação: rodapé no mobile ===== */
+.nav-principal {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 100;
+  padding-inline: clamp(12px, 5vw, var(--e5));
+  padding-block: var(--e2) max(var(--e2), env(safe-area-inset-bottom));
+  background-color: var(--cor-fundo);
 }
-
-/* Navageção */
 
 .nav-itens {
   display: flex;
-  gap: 12px;
+  gap: var(--e2);
   justify-content: space-between;
   align-items: center;
-  padding: max(8px, env(safe-area-inset-bottom)) 26px;
-  background-color: #fff;
+  inline-size: 100%;
+  max-inline-size: var(--largura-app);
+  margin-inline: auto;
+  padding: var(--e2);
+  background-color: var(--cor-fundo);
 }
 
 .nav-item {
-  inline-size: clamp(54px, 12vw, 54px);
-  block-size: clamp(54px, 12vw, 54px);
+  inline-size: clamp(var(--toque-min), 13vw, 60px);
+  block-size: clamp(var(--toque-min), 13vw, 60px);
   display: flex;
+  padding: var(--e2);
+  background: var(--cor-fundo);
+}
+.nav-item img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+  display: block;
 }
 
-/* breakpoints*/
-@media (min-width: 480px) {
-  .container-game,
-  .card-acao {
-    max-inline-size: 480px;
-  }
-  #acoes-bau {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  }
+/* Ativo por inversão — sem cor, conforme o design monocromático.
+   brightness(0) achata o ícone em preto e invert(1) o traz para branco:
+   funciona igual para os ícones em traço e para o chapéu colorido, que
+   com invert(1) sozinho viraria azul. */
+.nav-item.ativo {
+  background-color: var(--cor-tinta);
 }
-@media (min-width: 768px) {
-  .container-game,
-  .card-acao {
-    max-inline-size: 560px;
+.nav-item.ativo img {
+  filter: brightness(0) invert(1);
+}
+
+/* ===== Desktop: rail lateral + conteúdo ===== */
+@media (min-width: 1024px) {
+  body {
+    padding-block-end: var(--e5);
+    padding-inline: var(--e5);
   }
-  nav,
-  section {
-    padding-block: 12px;
-    padding-inline: clamp(26px, 5vw, 56px);
+
+  .container-game {
+    max-inline-size: var(--largura-conteudo);
+    display: grid;
+    grid-template-areas:
+      "rail topo"
+      "rail conteudo";
+    grid-template-columns: var(--rail-largura) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: var(--e5);
+    align-items: start;
+  }
+
+  .barra-topo {
+    grid-area: topo;
+  }
+  .area-conteudo {
+    grid-area: conteudo;
+  }
+
+  /* Mesma <nav> do mobile, reposicionada — sem duplicar marcação. */
+  .nav-principal {
+    grid-area: rail;
+    position: sticky;
+    top: var(--e5);
+    inset-inline: auto;
+    bottom: auto;
+    padding: 0;
+    align-self: start;
+  }
+
+  .nav-itens {
+    flex-direction: column;
+    gap: var(--e3);
+    max-inline-size: none;
+    padding: var(--e3);
+  }
+
+  .nav-item {
+    inline-size: 56px;
+    block-size: 56px;
   }
 }
