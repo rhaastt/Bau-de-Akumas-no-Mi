@@ -1,17 +1,22 @@
-/* Busca — filtra o catálogo completo (109 frutas) por nome e tipo,
-   marcando quais já foram coletadas. */
+/* Busca — filtra o catálogo completo por nome, categoria e subtipo,
+   marcando quais itens já foram coletados.
 
-import { pegar, esc, slotHTML } from "../util.js";
+   Filtro em dois níveis: a categoria está sempre visível; os subtipos só
+   aparecem depois que uma categoria é escolhida, senão seriam 17 chips. */
+
+import { pegar, esc, slotHTML, ligarFallbackImagens } from "../util.js";
 import * as estado from "../estado.js";
 import { abrirItem } from "../modalItem.js";
 
 let campo;
-let chipsEl;
+let chipsCategoriaEl;
+let chipsTipoEl;
 let resultadosEl;
 let vazioEl;
 let resumoEl;
 
 let termo = "";
+let categoriaAtiva = null; // null = todas
 let tipoAtivo = null; // null = todos
 let visiveis = [];
 
@@ -24,29 +29,61 @@ function normalizar(s) {
 
 function filtrar() {
   const alvo = normalizar(termo.trim());
-  return estado.catalogo.filter((f) => {
-    if (tipoAtivo && f.tipo !== tipoAtivo) return false;
+  return estado.catalogo().filter((item) => {
+    if (categoriaAtiva && item.categoria !== categoriaAtiva) return false;
+    if (tipoAtivo && item.tipo !== tipoAtivo) return false;
     if (!alvo) return true;
-    return normalizar(f.nome).includes(alvo);
+    return normalizar(item.nome).includes(alvo);
   });
 }
 
-function renderChips() {
-  const opcoes = [{ rotulo: "Todos", valor: null }].concat(
-    estado.tipos.map((t) => ({ rotulo: t, valor: t }))
-  );
+function chipHTML(rotulo, total, ativo, attr, valor) {
+  return `<li>
+    <button class="chip${ativo ? " ativo" : ""}" type="button"
+      ${attr}="${valor === null ? "" : esc(valor)}"
+      aria-pressed="${ativo}">${esc(rotulo)} (${total})</button>
+  </li>`;
+}
 
-  chipsEl.innerHTML = opcoes
-    .map((o) => {
-      const ativo = o.valor === tipoAtivo;
-      const total = o.valor ? estado.totalPorTipo[o.valor] : estado.catalogo.length;
-      return `<li>
-        <button class="chip${ativo ? " ativo" : ""}" type="button"
-          data-tipo="${o.valor === null ? "" : esc(o.valor)}"
-          aria-pressed="${ativo}">${esc(o.rotulo)} (${total})</button>
-      </li>`;
-    })
-    .join("");
+function renderChips() {
+  const totalCat = estado.totalPorCategoria();
+  const totalTipo = estado.totalPorTipo();
+
+  chipsCategoriaEl.innerHTML = [
+    chipHTML(
+      "Tudo",
+      estado.catalogo().length,
+      categoriaAtiva === null,
+      "data-categoria",
+      null
+    ),
+    ...estado
+      .categorias()
+      .map((c) =>
+        chipHTML(c, totalCat[c], c === categoriaAtiva, "data-categoria", c)
+      ),
+  ].join("");
+
+  // Segundo nível: só existe quando há uma categoria escolhida.
+  if (!categoriaAtiva) {
+    chipsTipoEl.innerHTML = "";
+    chipsTipoEl.hidden = true;
+    return;
+  }
+
+  chipsTipoEl.hidden = false;
+  chipsTipoEl.innerHTML = [
+    chipHTML(
+      "Todos os tipos",
+      totalCat[categoriaAtiva],
+      tipoAtivo === null,
+      "data-tipo",
+      null
+    ),
+    ...estado
+      .tiposDe(categoriaAtiva)
+      .map((t) => chipHTML(t, totalTipo[t], t === tipoAtivo, "data-tipo", t)),
+  ].join("");
 }
 
 export function renderBusca() {
@@ -56,24 +93,26 @@ export function renderBusca() {
   const obtidos = estado.nomesObtidos();
 
   resultadosEl.innerHTML = visiveis
-    .map((f, i) => slotHTML(f, { idx: i, obtida: obtidos.has(f.nome) }))
+    .map((item, i) => slotHTML(item, { idx: i, obtida: obtidos.has(item.nome) }))
     .join("");
+  ligarFallbackImagens(resultadosEl);
 
   const temResultado = visiveis.length > 0;
   vazioEl.hidden = temResultado;
   resultadosEl.hidden = !temResultado;
 
-  const coletadas = visiveis.filter((f) => obtidos.has(f.nome)).length;
+  const coletados = visiveis.filter((i) => obtidos.has(i.nome)).length;
   resumoEl.textContent = temResultado
     ? `${visiveis.length} ${
-        visiveis.length === 1 ? "fruta" : "frutas"
-      } · ${coletadas} na mochila`
+        visiveis.length === 1 ? "item" : "itens"
+      } · ${coletados} na mochila`
     : "";
 }
 
 export function iniciarBusca() {
   campo = pegar("busca-campo");
-  chipsEl = pegar("busca-chips");
+  chipsCategoriaEl = pegar("busca-chips-categoria");
+  chipsTipoEl = pegar("busca-chips-tipo");
   resultadosEl = pegar("busca-resultados");
   vazioEl = pegar("busca-vazio");
   resumoEl = pegar("busca-resumo");
@@ -83,7 +122,15 @@ export function iniciarBusca() {
     renderBusca();
   });
 
-  chipsEl.addEventListener("click", (e) => {
+  chipsCategoriaEl.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-categoria]");
+    if (!btn) return;
+    categoriaAtiva = btn.dataset.categoria === "" ? null : btn.dataset.categoria;
+    tipoAtivo = null; // trocar de categoria zera o subtipo, que não vale mais
+    renderBusca();
+  });
+
+  chipsTipoEl.addEventListener("click", (e) => {
     const btn = e.target.closest("button[data-tipo]");
     if (!btn) return;
     tipoAtivo = btn.dataset.tipo === "" ? null : btn.dataset.tipo;

@@ -7,23 +7,37 @@
  * Sem persistência por decisão de produto — recarregar a página zera tudo.
  */
 
-import { bauDeItens } from "./akumasNoMi.js";
+// O catálogo chega de dados/*.json em tempo de execução, por isso é
+// preenchido por definirCatalogo() e lido por funções, não por consts.
+let _catalogo = [];
+let _categorias = [];
+let _tiposPorCategoria = {};
+let _totalPorTipo = {};
+let _totalPorCategoria = {};
 
-/** Catálogo achatado: as 109 frutas numa lista só. */
-export const catalogo = [
-  ...bauDeItens.paramecia,
-  ...bauDeItens.logia,
-  ...bauDeItens.zoan,
-];
+export function definirCatalogo(itens) {
+  _catalogo = itens;
+  _categorias = [...new Set(itens.map((i) => i.categoria))];
 
-/** Tipos reais presentes no campo `tipo`, na ordem em que aparecem. */
-export const tipos = [...new Set(catalogo.map((f) => f.tipo))];
+  _tiposPorCategoria = {};
+  _totalPorTipo = {};
+  _totalPorCategoria = {};
 
-/** Quantas frutas existem por tipo — base das barras do Perfil. */
-export const totalPorTipo = catalogo.reduce((acc, f) => {
-  acc[f.tipo] = (acc[f.tipo] || 0) + 1;
-  return acc;
-}, {});
+  for (const item of itens) {
+    _totalPorTipo[item.tipo] = (_totalPorTipo[item.tipo] || 0) + 1;
+    _totalPorCategoria[item.categoria] =
+      (_totalPorCategoria[item.categoria] || 0) + 1;
+
+    const lista = (_tiposPorCategoria[item.categoria] ||= []);
+    if (!lista.includes(item.tipo)) lista.push(item.tipo);
+  }
+}
+
+export const catalogo = () => _catalogo;
+export const categorias = () => _categorias;
+export const tiposDe = (categoria) => _tiposPorCategoria[categoria] ?? [];
+export const totalPorTipo = () => _totalPorTipo;
+export const totalPorCategoria = () => _totalPorCategoria;
 
 const estadoInicial = () => ({
   mochila: [],
@@ -39,7 +53,6 @@ const estadoInicial = () => ({
 let estado = estadoInicial();
 const ouvintes = new Set();
 
-/** Cópia rasa para leitura. Telas não devem mutar o estado direto. */
 export function obter() {
   return estado;
 }
@@ -98,18 +111,29 @@ export function resetarProgresso() {
   notificar();
 }
 
-/** Nomes das frutas já coletadas — usado por Perfil e Busca. */
+/** Nomes dos itens já coletados — usado por Perfil e Busca. */
 export function nomesObtidos() {
-  return new Set(estado.mochila.map((f) => f.nome));
+  return new Set(estado.mochila.map((i) => i.nome));
 }
 
-/** Quantas frutas distintas foram coletadas, por tipo. */
+/** Quantos itens distintos foram coletados, por tipo. */
 export function obtidasPorTipo() {
   const obtidos = nomesObtidos();
   const contagem = {};
-  for (const tipo of tipos) contagem[tipo] = 0;
-  for (const fruta of catalogo) {
-    if (obtidos.has(fruta.nome)) contagem[fruta.tipo] += 1;
+  for (const tipo of Object.keys(_totalPorTipo)) contagem[tipo] = 0;
+  for (const item of _catalogo) {
+    if (obtidos.has(item.nome)) contagem[item.tipo] += 1;
+  }
+  return contagem;
+}
+
+/** Quantos itens distintos foram coletados, por categoria. */
+export function obtidasPorCategoria() {
+  const obtidos = nomesObtidos();
+  const contagem = {};
+  for (const cat of _categorias) contagem[cat] = 0;
+  for (const item of _catalogo) {
+    if (obtidos.has(item.nome)) contagem[item.categoria] += 1;
   }
   return contagem;
 }

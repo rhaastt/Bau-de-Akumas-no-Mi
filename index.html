@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/styles.css" />
-    <title>Baú de Akumas no Mi</title>
+    <title>Baú de Itens</title>
   </head>
   <body>
     <main class="container-game">
@@ -209,16 +209,17 @@
             <input
               type="search"
               id="busca-campo"
-              placeholder="Nome da fruta..."
+              placeholder="Nome do item..."
               autocomplete="off"
             />
-            <ul class="lista-chips" id="busca-chips"></ul>
+            <ul class="lista-chips" id="busca-chips-categoria"></ul>
+            <ul class="lista-chips lista-chips-tipo" id="busca-chips-tipo" hidden></ul>
             <p class="texto-apoio" id="busca-resumo" role="status" aria-live="polite"></p>
           </div>
           <div class="painel">
             <ul class="grade-slots" id="busca-resultados"></ul>
             <p class="estado-vazio" id="busca-vazio" hidden>
-              Nenhuma fruta encontrada.
+              Nenhum item encontrado.
             </p>
           </div>
         </section>

@@ -2,7 +2,7 @@
    a tela cheia (mobile e desktop) e o painel lateral do desktop.
    Ambos leem o estado compartilhado, então ficam sincronizados sozinhos. */
 
-import { pegar, slotHTML } from "../util.js";
+import { pegar, slotHTML, ligarFallbackImagens } from "../util.js";
 import * as estado from "../estado.js";
 import { ligarGradeAoModal } from "../modalItem.js";
 
@@ -19,6 +19,7 @@ function montar(grade) {
     partes.push(mochila[i] ? slotHTML(mochila[i], { idx: i }) : slotHTML(null));
   }
   grade.innerHTML = partes.join("");
+  ligarFallbackImagens(grade);
 }
 
 export function renderMochila() {

@@ -1,0 +1,161 @@
+{
+  "categoria": "Arma",
+  "itens": [
+    {
+      "nome": "Yoru",
+      "tipo": "Lâmina Negra",
+      "img": "./imagens/armas/yoru.webp",
+      "desc": "Uma gigantesca espada em forma de crucifixo. É uma Lâmina Negra (Kokuto) e pertence a Dracule Mihawk, o espadachim mais forte do mundo."
+    },
+    {
+      "nome": "Murakumogiri",
+      "tipo": "Naginata",
+      "img": "./imagens/armas/murakumogiri.webp",
+      "desc": "Uma imensa naginata (alabarda japonesa) empunhada pelo falecido Edward Newgate (Barba Branca)."
+    },
+    {
+      "nome": "Ace",
+      "tipo": "Sabre",
+      "img": "./imagens/armas/ace.webp",
+      "desc": "Um sabre clássico com guarda de mão, empunhado por Gol D. Roger, o Rei dos Piratas. Ele batizou seu filho com o mesmo nome de sua espada."
+    },
+    {
+      "nome": "Shodai Kitetsu",
+      "tipo": "Katana",
+      "img": "./imagens/armas/shodai-kitetsu.webp",
+      "desc": "A primeira espada amaldiçoada forjada pelo lendário Kitetsu. Seu paradeiro oficial é desconhecido (embora existam fortes teorias de que esteja com um dos Gorosei)."
+    },
+    {
+      "nome": "Wado Ichimonji",
+      "tipo": "Katana",
+      "img": "./imagens/armas/wado-ichimonji.webp",
+      "desc": "A espada branca de Roronoa Zoro, forjada por Shimotsuki Kozaburo. Originalmente pertencia à sua amiga de infância, Kuina."
+    },
+    {
+      "nome": "Shusui",
+      "tipo": "Lâmina Negra",
+      "img": "./imagens/armas/shusui.webp",
+      "desc": "Uma Lâmina Negra lendária forjada em Wano, empunhada pelo falecido \"Deus da Espada\" Shimotsuki Ryuma. Foi dada a Zoro, que posteriormente a devolveu a Wano."
+    },
+    {
+      "nome": "Enma",
+      "tipo": "Katana",
+      "img": "./imagens/armas/enma.webp",
+      "desc": "Forjada por Shimotsuki Kozaburo, é uma espada que drena ativamente o Haki de quem a empunha. Pertenceu a Kozuki Oden e atualmente está com Roronoa Zoro."
+    },
+    {
+      "nome": "Ame no Habakiri",
+      "tipo": "Katana",
+      "img": "./imagens/armas/ame-no-habakiri.webp",
+      "desc": "A espada \"irmã\" da Enma, forjada por Tenguyama Hitetsu. Pertenceu a Kozuki Oden e foi deixada como herança para seu filho, Kozuki Momonosuke."
+    },
+    {
+      "nome": "Nidai Kitetsu",
+      "tipo": "Katana",
+      "img": "./imagens/armas/nidai-kitetsu.webp",
+      "desc": "A segunda espada amaldiçoada da linhagem Kitetsu. Esteve sob a guarda de Tenguyama Hitetsu e foi brevemente usada por Luffy no início do arco de Wano."
+    },
+    {
+      "nome": "Yubashiri",
+      "tipo": "Katana",
+      "img": "./imagens/armas/yubashiri.webp",
+      "desc": "Uma espada extremamente leve dada a Zoro pelo dono de uma loja de espadas em Loguetown. Foi tragicamente destruída pelo poder da ferrugem do Capitão Shu em Enies Lobby."
+    },
+    {
+      "nome": "Kashu",
+      "tipo": "Espada",
+      "img": "./imagens/armas/kashu.webp",
+      "desc": "Originalmente empunhada pelo agente da Baroque Works, Mr. 11. Após derrotá-lo, a Capitã Tashigi da Marinha a confiscou."
+    },
+    {
+      "nome": "Yamaoroshi",
+      "tipo": "Espada",
+      "img": "./imagens/armas/yamaoroshi.webp",
+      "desc": "Uma espada que pertenceu a \"Billy, o Assassino de Orcas\", antes de ser derrotado e ter a lâmina confiscada por Tashigi."
+    },
+    {
+      "nome": "Sandai Kitetsu",
+      "tipo": "Katana",
+      "img": "./imagens/armas/sandai-kitetsu.webp",
+      "desc": "A terceira e mais fraca das espadas amaldiçoadas da linhagem Kitetsu. Foi encontrada por Zoro em um barril de pechinchas em Loguetown."
+    },
+    {
+      "nome": "Shigure",
+      "tipo": "Katana",
+      "img": "./imagens/armas/shigure.webp",
+      "desc": "A espada pessoal e principal arma de combate de Tashigi."
+    },
+    {
+      "nome": "Gryphon",
+      "tipo": "Sabre",
+      "img": "./imagens/armas/gryphon.webp",
+      "desc": "O sabre de lâmina longa empunhado pelo Yonko Shanks, o Ruivo."
+    },
+    {
+      "nome": "Kikoku",
+      "tipo": "Nodachi",
+      "img": "./imagens/armas/kikoku.webp",
+      "desc": "Uma nodachi (espada longa) amaldiçoada empunhada por Trafalgar D. Water Law."
+    },
+    {
+      "nome": "Oto e Kogarashi",
+      "tipo": "Par de Espadas",
+      "img": "./imagens/armas/oto-e-kogarashi.webp",
+      "desc": "O par de espadas empunhado pelo pirata voador Shiki, o Leão Dourado. Ele as prendeu no lugar de suas próprias pernas após amputá-las para fugir de Impel Down."
+    },
+    {
+      "nome": "Raiu",
+      "tipo": "Espada",
+      "img": "./imagens/armas/raiu.webp",
+      "desc": "A espada longa usada por Shiryu da Chuva, dos Piratas do Barba Negra."
+    },
+    {
+      "nome": "Durandal",
+      "tipo": "Rapieira",
+      "img": "./imagens/armas/durandal.webp",
+      "desc": "Um rapieiro (espada fina e pontiaguda de esgrima) altamente decorado e incrivelmente forte, pertencente ao capitão pirata Cavendish."
+    },
+    {
+      "nome": "Pretzel",
+      "tipo": "Espada",
+      "img": "./imagens/armas/pretzel.webp",
+      "desc": "Uma espada massiva e comprida, empunhada por Charlotte Cracker, um dos Generais Doçura da Big Mom."
+    },
+    {
+      "nome": "Shirauo",
+      "tipo": "Lâmina Fina",
+      "img": "./imagens/armas/shirauo.webp",
+      "desc": "Uma lâmina incrivelmente fina que lembra um peixe branco (ou uma longa faca de filé). Pertence à espadachim Charlotte Amande."
+    },
+    {
+      "nome": "Mogura",
+      "tipo": "Tridente",
+      "img": "./imagens/armas/mogura.webp",
+      "desc": "Um tridente de guerra gigante empunhado por Charlotte Katakuri."
+    },
+    {
+      "nome": "Takeru",
+      "tipo": "Kanabō",
+      "img": "./imagens/armas/takeru.webp",
+      "desc": "Um kanabo (clava de metal pontiaguda) utilizado por Yamato em Wano."
+    },
+    {
+      "nome": "Soto Muso",
+      "tipo": "Katana",
+      "img": "./imagens/armas/soto-muso.webp",
+      "desc": "A espada guardada sem tsuba (guarda-mão) empunhada pelo samurai Kawamatsu."
+    },
+    {
+      "nome": "Konpira",
+      "tipo": "Espada",
+      "img": "./imagens/armas/konpira.webp",
+      "desc": "A espada que pertence à Vice-Almirante da Marinha, Gion (Momousagi)."
+    },
+    {
+      "nome": "Punish",
+      "tipo": "Foice",
+      "img": "./imagens/armas/punish.webp",
+      "desc": "O par de foices acopladas a manoplas giratórias, empunhadas por Killer, vice-capitão dos Piratas do Kid."
+    }
+  ]
+}

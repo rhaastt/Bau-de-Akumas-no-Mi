@@ -19,9 +19,10 @@ let aberto = false;
 let busy = false;
 let dropTimeoutId = null;
 
+/** Sorteio uniforme sobre o catálogo inteiro — frutas e armas juntas. */
 function sortearItem() {
-  const i = Math.floor(Math.random() * estado.catalogo.length);
-  return estado.catalogo[i];
+  const itens = estado.catalogo();
+  return itens[Math.floor(Math.random() * itens.length)];
 }
 
 function atualizarBotao() {
@@ -76,10 +77,19 @@ export function iniciarBau() {
   dropImgEl = pegar("dropImg");
   dropLegendEl = pegar("dropLegend");
 
+  // O overlay de drop não é um .slot, então precisa do próprio fallback:
+  // sem isso, um item cuja imagem ainda não existe mostra ícone quebrado.
+  dropImgEl.addEventListener("error", () =>
+    dropItemEl.classList.add("sem-imagem")
+  );
+  dropImgEl.addEventListener("load", () =>
+    dropItemEl.classList.remove("sem-imagem")
+  );
+
   preload("imagens/bau-fechado.webp");
   preload("imagens/bau-aberto.webp");
-  // Todas as frutas compartilham a mesma imagem hoje; o Set evita 109 requisições.
-  for (const src of new Set(estado.catalogo.map((f) => f.img))) preload(src);
+  // As 109 frutas compartilham a mesma imagem; o Set evita repetir requisições.
+  for (const src of new Set(estado.catalogo().map((i) => i.img))) preload(src);
 
   btnAbrirBau.addEventListener("click", () => {
     if (busy) return;

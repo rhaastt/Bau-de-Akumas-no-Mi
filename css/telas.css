@@ -298,6 +298,38 @@
   color: var(--cor-fundo);
 }
 
+/* Segundo nível do filtro: recuado e menor, para ler como subordinado
+   à faixa de categorias acima. */
+.lista-chips-tipo {
+  margin-block-start: 0;
+  padding-inline-start: var(--e3);
+  border-inline-start: var(--borda);
+}
+
+.lista-chips-tipo .chip {
+  font-size: clamp(10px, 2.2vw, 12px);
+  padding: var(--e1) var(--e3);
+}
+
+/* ===== Perfil: progresso agrupado por categoria ===== */
+.grupo-progresso + .grupo-progresso {
+  margin-block-start: var(--e4);
+  padding-block-start: var(--e4);
+  border-block-start: var(--borda);
+}
+
+.detalhe-subtipos > summary {
+  margin-block-start: var(--e2);
+  font-size: clamp(11px, 2.4vw, 13px);
+  opacity: var(--op-media);
+}
+
+.detalhe-subtipos .subtipos {
+  margin-block-start: var(--e3);
+  padding-inline-start: var(--e3);
+  border-inline-start: var(--borda);
+}
+
 /* ===== Desktop ===== */
 @media (min-width: 1024px) {
   /* Baú e mochila lado a lado, conforme a composição aprovada. */

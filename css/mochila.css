@@ -61,11 +61,24 @@
   pointer-events: none;
 }
 
-/* Catálogo: fruta ainda não coletada — mesmo tratamento esmaecido do slot
+/* Catálogo: item ainda não coletado — mesmo tratamento esmaecido do slot
    vazio, mantendo o contorno para revelar o que falta. */
 .grade-slots .slot.nao-obtida .pad img,
 .grade-slots .slot.nao-obtida .label {
   opacity: var(--op-fraca);
+}
+
+/* Imagem que não carregou (arte ainda não adicionada em imagens/): cai no
+   mesmo "+" do slot vazio em vez de mostrar ícone de imagem quebrada. */
+.grade-slots .slot.sem-imagem .pad img {
+  display: none;
+}
+
+.grade-slots .slot.sem-imagem .pad::after {
+  content: "+";
+  font-size: 28px;
+  opacity: var(--op-fraca);
+  pointer-events: none;
 }
 
 @media (min-width: 1024px) {

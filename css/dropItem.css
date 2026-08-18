@@ -6,6 +6,12 @@
   transform: translate(-50%, -10%);
   transform-style: preserve-3d;
 }
+/* Item cuja arte ainda não existe: some com a imagem quebrada e deixa só a
+   legenda, que já diz o nome do item. */
+#dropItem.sem-imagem img {
+  display: none;
+}
+
 #dropItem.hidden {
   display: none;
 }

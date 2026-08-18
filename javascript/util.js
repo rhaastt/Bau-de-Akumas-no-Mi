@@ -82,6 +82,27 @@ export function slotHTML(item, { idx, obtida = true, rotuloVazio = "Vazio" } = {
   </li>`;
 }
 
+/**
+ * Marca slots cujas imagens falharam ao carregar, para caírem no mesmo
+ * tratamento visual do slot vazio em vez de exibir ícone de imagem quebrada.
+ *
+ * Precisa ser chamado após cada innerHTML: o evento `error` não borbulha,
+ * então não dá para delegar a partir de um ancestral.
+ */
+export function ligarFallbackImagens(container) {
+  for (const img of container.querySelectorAll("img")) {
+    if (img.complete && img.naturalWidth === 0) {
+      img.closest(".slot")?.classList.add("sem-imagem");
+      continue;
+    }
+    img.addEventListener(
+      "error",
+      () => img.closest(".slot")?.classList.add("sem-imagem"),
+      { once: true }
+    );
+  }
+}
+
 /** Barra de progresso line-art: retângulo com borda, preenchimento preto. */
 export function barraProgressoHTML(rotulo, atual, total) {
   const pct = total > 0 ? Math.round((atual / total) * 100) : 0;
