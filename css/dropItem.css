@@ -11,7 +11,6 @@
 }
 #dropItem.show {
   display: block;
-  animation: ItemJump 600ms ease-out both;
 }
 
 #dropItem .drop-inner {
@@ -22,8 +21,9 @@
 }
 
 #dropItem img {
-  width: 140px;
-  height: 140px;
+  width: clamp(96px, 30vw, 140px);
+  aspect-ratio: 1;
+  height: auto;
   border: 1px solid black;
   border-radius: 16px;
   object-fit: contain;
@@ -52,7 +52,7 @@
 
 #dropItem .drop-legend {
   position: relative;
-  max-width: 240px;
+  max-width: min(240px, 70vw);
   padding: 8px 10px;
   font-size: 12px;
   line-height: 1.2;
