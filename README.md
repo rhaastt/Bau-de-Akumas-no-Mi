@@ -67,10 +67,16 @@ No começo quase todo drop é novo, então quem paga é a descoberta. Com a cole
 cheia, 87% dos drops são repetidos e quem paga é a venda. Os valores ficam em
 `javascript/raridade.js`, ao lado dos pesos do sorteio.
 
-**Duplicata é ter 2 ou mais cópias do mesmo item.** Vender remove uma cópia e
-nunca a última, então a coleção nunca encolhe — o item continua marcado como
-obtido no Perfil e na Busca. Dá para vender item a item pelo modal ou todas de
-uma vez pelo botão na Mochila.
+Clicar num item da Mochila abre o card com o botão de vender. **Qualquer item
+pode ser vendido, inclusive o único** — mas vender a última cópia tira o item da
+coleção, então o Perfil perde a contagem e a Busca volta a marcar como não
+obtido. Por isso a última cópia pede confirmação em dois cliques.
+
+O botão "vender todas as duplicatas", na Mochila, toca **só nas cópias extras**:
+um clique nunca destrói um item único.
+
+Reencontrar um item que você vendeu **não** paga o bônus de descoberta de novo —
+ele rende uma vez por item, para sempre.
 
 ## Telas
 

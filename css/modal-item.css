@@ -79,6 +79,13 @@
   display: none;
 }
 
+/* Confirmação por inversão, como o resto do design: sem cor nova. */
+#btnVenderItem.confirmando {
+  background: var(--cor-tinta);
+  border-color: var(--cor-tinta);
+  color: var(--cor-fundo);
+}
+
 #btnFecharCardItemIventario {
   border: 1px solid #000;
   background: #fff;

@@ -11,15 +11,17 @@ let tipo;
 let raridade;
 let descricao;
 let btnVender;
-let aoVenderAtual = null;
+let vendaAtual = null;
+let aguardandoConfirmacao = false;
 
 /**
  * @param {object} item
  * @param {object} [opcoes]
- * @param {{valor:number, vender:()=>void}} [opcoes.venda] quando presente,
- *   mostra o botão de venda. O modal não conhece a regra de duplicata — quem
- *   abre decide se o item é vendável. Por isso a Busca, que usa o mesmo modal
- *   para itens do catálogo, não ganha botão nenhum.
+ * @param {{valor:number, ultima:boolean, vender:()=>void}} [opcoes.venda]
+ *   quando presente, mostra o botão de venda. O modal não conhece a regra de
+ *   duplicata — quem abre decide se o item é vendável e se é a última cópia.
+ *   Por isso a Busca, que usa o mesmo modal para itens do catálogo, não ganha
+ *   botão nenhum.
  */
 export function abrirItem(item, opcoes = {}) {
   img.src = item.img;
@@ -34,15 +36,24 @@ export function abrirItem(item, opcoes = {}) {
   raridade.hidden = !item.raridade;
   card.dataset.raridade = item.raridade ?? "";
 
-  const venda = opcoes.venda ?? null;
-  aoVenderAtual = venda ? venda.vender : null;
-  btnVender.hidden = !venda;
-  if (venda) {
-    btnVender.textContent = `VENDER POR ${formatarBerrys(venda.valor)}`;
-  }
+  // Abrir um item sempre começa do zero: a confirmação pendente de um item
+  // anterior nunca pode vazar para o próximo.
+  vendaAtual = opcoes.venda ?? null;
+  pintarVenda(false);
 
   modal.classList.add("active");
   document.body.style.overflow = "hidden";
+}
+
+/** Desenha o botão de venda no estado normal ou no de confirmação. */
+function pintarVenda(confirmando) {
+  aguardandoConfirmacao = confirmando;
+  btnVender.hidden = !vendaAtual;
+  btnVender.classList.toggle("confirmando", confirmando);
+  if (!vendaAtual) return;
+  btnVender.textContent = confirmando
+    ? "CONFIRMAR · ÚLTIMA CÓPIA"
+    : `VENDER POR ${formatarBerrys(vendaAtual.valor)}`;
 }
 
 export function fecharItem() {
@@ -52,6 +63,9 @@ export function fecharItem() {
   const finalizar = () => {
     modal.classList.remove("active", "closing");
     document.body.style.overflow = "";
+    // Fechar cancela qualquer confirmação pendente.
+    vendaAtual = null;
+    pintarVenda(false);
   };
 
   // animationend é o caminho normal; o timeout cobre o caso de a animação
@@ -77,8 +91,15 @@ export function iniciarModal() {
   btnVender = pegar("btnVenderItem");
 
   btnVender.addEventListener("click", () => {
-    const vender = aoVenderAtual;
-    if (!vender) return;
+    if (!vendaAtual) return;
+
+    // Última cópia é irreversível e some da coleção: exige um segundo clique.
+    if (vendaAtual.ultima && !aguardandoConfirmacao) {
+      pintarVenda(true);
+      return;
+    }
+
+    const vender = vendaAtual.vender;
     fecharItem();
     vender();
   });

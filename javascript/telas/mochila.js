@@ -37,20 +37,24 @@ export function renderMochila() {
   } · +${formatarBerrys(total)}`;
 }
 
-/** Só oferece venda quando o slot é uma cópia extra. */
+/** Todo slot preenchido pode ser vendido; a última cópia pede confirmação. */
 function dadosDoSlot(idx) {
   const item = estado.obter().mochila[idx];
   if (!item) return undefined;
-  if (!estado.ehDuplicata(idx)) return { item };
+
+  const ultima = !estado.ehDuplicata(idx);
   return {
     item,
     venda: {
       valor: VALOR_VENDA[item.raridade] ?? 0,
+      ultima,
       vender: () => {
         const recebido = estado.venderItem(idx);
-        avisoEl.textContent = `${item.nome} vendida por ${formatarBerrys(
-          recebido
-        )} Berrys.`;
+        avisoEl.textContent = ultima
+          ? `${item.nome} vendida por ${formatarBerrys(
+              recebido
+            )} Berrys — saiu da coleção.`
+          : `${item.nome} vendida por ${formatarBerrys(recebido)} Berrys.`;
       },
     },
   };

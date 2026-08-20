@@ -50,6 +50,11 @@ export const totalPorRaridade = () => _totalPorRaridade;
 // (1.100) fica logo fora de alcance de propósito.
 const estadoInicial = () => ({
   mochila: [],
+  // Nomes já encontrados alguma vez. Só cresce, e existe separado da mochila
+  // porque o bônus de descoberta precisa de memória própria: como vender pode
+  // esvaziar a mochila, olhar para ela faria todo item voltar a ser "inédito"
+  // e o bônus seria pago de novo a cada ciclo vender-reencontrar.
+  descobertos: [],
   berrys: 1000,
   baus: { atual: 2, total: 20 },
   bausAbertos: 0,
@@ -91,16 +96,26 @@ export function atualizar(patch) {
  * @returns {number} Berrys creditados (0 se era duplicata)
  */
 export function adicionarItem(item) {
-  const inedito = !estado.mochila.some((i) => i.nome === item.nome);
+  // Inédito é o que nunca foi descoberto, não o que não está na mochila:
+  // sem isso, vender tudo e reencontrar pagaria o bônus outra vez.
+  const inedito = !estado.descobertos.includes(item.nome);
   const bonus = inedito ? BONUS_DESCOBERTA[item.raridade] ?? 0 : 0;
 
   atualizar({
     mochila: [...estado.mochila, item],
+    descobertos: inedito
+      ? [...estado.descobertos, item.nome]
+      : estado.descobertos,
     bausAbertos: estado.bausAbertos + 1,
     berrys: Number((estado.berrys + bonus).toFixed(2)),
   });
 
   return bonus;
+}
+
+/** Se o item já rendeu bônus de descoberta alguma vez. */
+export function foiDescoberto(nome) {
+  return estado.descobertos.includes(nome);
 }
 
 /** Quantas cópias de cada nome existem na mochila. */
@@ -113,8 +128,11 @@ function contarPorNome(mochila) {
 }
 
 /**
- * Duplicata é ter 2+ cópias do mesmo nome. Vender nunca tira a última, então
- * a coleção não encolhe e o item segue marcado como obtido no Perfil e na Busca.
+ * Duplicata é ter 2+ cópias do mesmo nome.
+ *
+ * Vender é permitido em qualquer item, inclusive no único — mas quem é a última
+ * cópia pede confirmação e some da coleção, porque Perfil e Busca leem a mochila.
+ * A venda em massa continua tocando só nas duplicatas.
  */
 export function ehDuplicata(idx) {
   const item = estado.mochila[idx];
@@ -142,11 +160,12 @@ export function valorDasDuplicatas() {
 }
 
 /**
- * Vende uma cópia duplicada.
- * @returns {number} Berrys recebidos, ou 0 se o item não era duplicata.
+ * Vende uma cópia — duplicata ou única. Vender a última tira o item da
+ * coleção: `nomesObtidos()` deriva da mochila, então Perfil e Busca refletem.
+ * @returns {number} Berrys recebidos, ou 0 se o índice não existe.
  */
 export function venderItem(idx) {
-  if (!ehDuplicata(idx)) return 0;
+  if (!estado.mochila[idx]) return 0;
   const valor = VALOR_VENDA[estado.mochila[idx].raridade] ?? 0;
   atualizar({
     mochila: estado.mochila.filter((_, i) => i !== idx),

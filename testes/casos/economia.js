@@ -87,11 +87,47 @@ export async function executar({ navegador, url }) {
     "sem duplicata, o botão de vender todas não aparece",
     await page.$eval("#btn-vender-duplicatas", (e) => e.hidden)
   );
+  // --- Cópia única: vende, mas com confirmação ---
+  const antesUnica = await berrys(page);
   await page.click("#mochila-itens li.slot[data-idx]");
   await page.waitForTimeout(400);
   check(
-    "cópia única não oferece venda no modal",
-    await page.$eval("#btnVenderItem", (e) => e.hidden)
+    "cópia única oferece venda no modal",
+    await page.$eval("#btnVenderItem", (e) => !e.hidden)
+  );
+
+  // primeiro clique só pede confirmação
+  await page.click("#btnVenderItem");
+  await page.waitForTimeout(300);
+  const emConfirmacao = await page.evaluate(() => ({
+    aberto: document.getElementById("inventarioItem").classList.contains("active"),
+    rotulo: document.getElementById("btnVenderItem").textContent,
+    berrys: document.getElementById("qtd-berrys").textContent,
+  }));
+  check(
+    "primeiro clique na última cópia só pede confirmação",
+    emConfirmacao.aberto && /CONFIRMAR/.test(emConfirmacao.rotulo),
+    emConfirmacao.rotulo
+  );
+  check(
+    "pedir confirmação ainda não credita nada",
+    (await berrys(page)) === antesUnica
+  );
+
+  // fechar cancela e não vende
+  await page.keyboard.press("Escape");
+  await page.waitForTimeout(450);
+  const aposCancelar = await page.evaluate(
+    () => document.querySelectorAll("#mochila-itens li.slot[data-idx]").length
+  );
+  check("fechar sem confirmar não vende", aposCancelar === 1 && (await berrys(page)) === antesUnica);
+
+  // reabrir não herda a confirmação pendente
+  await page.click("#mochila-itens li.slot[data-idx]");
+  await page.waitForTimeout(400);
+  check(
+    "reabrir não vem com a confirmação pendente",
+    await page.$eval("#btnVenderItem", (e) => /VENDER POR/.test(e.textContent))
   );
   await page.keyboard.press("Escape");
   await page.waitForTimeout(400);
@@ -132,6 +168,7 @@ export async function executar({ navegador, url }) {
     rotulo.includes(String(VALOR_VENDA[raridadeDup])),
     `${raridadeDup}: ${rotulo}`
   );
+  // Duplicata vende no primeiro clique — sem confirmação.
   await page.click("#btnVenderItem");
   await page.waitForTimeout(500);
   const depoisVenda = await berrys(page);
@@ -145,12 +182,12 @@ export async function executar({ navegador, url }) {
   );
   check("vender remove uma cópia", copiasDepois === copiasAntes - 1, `${copiasAntes} -> ${copiasDepois}`);
 
-  // --- A coleção não encolhe ---
+  // Vender duplicata mantém o item na coleção: sobrou uma cópia.
   const aindaObtido = await page.evaluate(async (n) => {
     const estado = await import("./javascript/estado.js");
     return estado.nomesObtidos().has(n);
   }, nomeDup);
-  check("o item vendido continua marcado como obtido", aindaObtido, nomeDup);
+  check("vender duplicata mantém o item na coleção", aindaObtido, nomeDup);
 
   check(
     "após vender a duplicata, o botão some de novo",
@@ -183,6 +220,85 @@ export async function executar({ navegador, url }) {
     return estado.duplicatasNaMochila().length;
   });
   check("não sobra duplicata na mochila", sobraram === 0, `sobraram ${sobraram}`);
+
+  // --- Vender a última cópia tira o item da coleção ---
+  const antesUltima = await page.evaluate(async () => {
+    const estado = await import("./javascript/estado.js");
+    const item = estado.obter().mochila[0];
+    return {
+      nome: item.nome,
+      raridade: item.raridade,
+      distintos: estado.nomesObtidos().size,
+      berrys: estado.obter().berrys,
+    };
+  });
+
+  await page.click("#mochila-itens li.slot[data-idx]");
+  await page.waitForTimeout(400);
+  await page.click("#btnVenderItem"); // pede confirmação
+  await page.waitForTimeout(300);
+  await page.click("#btnVenderItem"); // confirma
+  await page.waitForTimeout(550);
+
+  const depoisUltima = await page.evaluate(async (n) => {
+    const estado = await import("./javascript/estado.js");
+    return {
+      naMochila: estado.obter().mochila.some((i) => i.nome === n),
+      obtido: estado.nomesObtidos().has(n),
+      distintos: estado.nomesObtidos().size,
+      berrys: estado.obter().berrys,
+      aindaDescoberto: estado.foiDescoberto(n),
+    };
+  }, antesUltima.nome);
+
+  check(
+    "confirmar vende a última cópia e credita o valor",
+    !depoisUltima.naMochila &&
+      Math.round(depoisUltima.berrys - antesUltima.berrys) ===
+        VALOR_VENDA[antesUltima.raridade],
+    `ganhou ${Math.round(depoisUltima.berrys - antesUltima.berrys)}, esperado ${
+      VALOR_VENDA[antesUltima.raridade]
+    }`
+  );
+  check(
+    "a coleção encolhe: o item deixa de ser obtido",
+    !depoisUltima.obtido && depoisUltima.distintos === antesUltima.distintos - 1,
+    `${antesUltima.distintos} -> ${depoisUltima.distintos}`
+  );
+
+  // A Busca reflete o mesmo modelo
+  await page.click("#btn-buscar");
+  await page.waitForTimeout(400);
+  await page.fill("#busca-campo", antesUltima.nome);
+  await page.waitForTimeout(400);
+  check(
+    "a Busca volta a marcar o item como não obtido",
+    await page.$eval("#busca-resultados li.slot", (e) =>
+      e.classList.contains("nao-obtida")
+    )
+  );
+  await page.fill("#busca-campo", "");
+  await page.waitForTimeout(300);
+
+  // --- Anti-brecha: reencontrar não paga o bônus de novo ---
+  check(
+    "o item vendido continua registrado como já descoberto",
+    depoisUltima.aindaDescoberto,
+    antesUltima.nome
+  );
+
+  const reencontro = await page.evaluate(async (n) => {
+    const estado = await import("./javascript/estado.js");
+    const item = estado.catalogo().find((i) => i.nome === n);
+    const antes = estado.obter().berrys;
+    const bonus = estado.adicionarItem({ ...item });
+    return { bonus, delta: estado.obter().berrys - antes };
+  }, antesUltima.nome);
+  check(
+    "reencontrar item já descoberto NÃO paga o bônus de novo",
+    reencontro.bonus === 0 && Math.round(reencontro.delta) === 0,
+    `bônus=${reencontro.bonus} delta=${reencontro.delta}`
+  );
 
   // --- A Busca usa o mesmo modal e não pode oferecer venda ---
   await page.click("#btn-buscar");

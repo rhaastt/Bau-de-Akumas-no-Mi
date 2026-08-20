@@ -58,13 +58,22 @@ um ancestral — o listener precisa ser preso a cada `<img>` após o render.
 item a item nos JSON. Um item com campo `raridade` próprio sobrescreve o mapa,
 para exceções pontuais.
 
-**Duplicata é ter 2+ cópias do mesmo nome, e vender nunca tira a última.**
-`ehDuplicata()` e `duplicatasNaMochila()` em `estado.js` garantem isso. É o que
-mantém `nomesObtidos()` intacto — vender não pode fazer o Perfil ou a Busca
-desmarcarem um item já coletado.
+**Dá para vender qualquer item, inclusive o único — e vender o único tira o
+item da coleção.** `nomesObtidos()` deriva da mochila, então o Perfil perde a
+contagem e a Busca desmarca. Por isso a última cópia pede confirmação em dois
+cliques no modal. `ehDuplicata()` decide se pede confirmação; a venda em massa
+(`venderDuplicatas()`) continua tocando **só em duplicatas**, para um clique
+nunca destruir item único.
+
+**`mochila` e `descobertos` são coisas diferentes, e misturá-las quebra a
+economia.** `mochila` é o que o jogador tem agora; `descobertos` é o que ele já
+encontrou alguma vez e **só cresce**. O bônus de descoberta lê `descobertos`.
+Se lesse a mochila, vender tudo depois de cada drop faria todo item voltar a
+ser inédito: +317 Berrys líquidos por baú, dinheiro infinito. Já simulei — dava
+5.000 baús e 1,5 milhão de Berrys sem nunca travar. Há teste guardando isso.
 
 **Todo valor de economia mora em `raridade.js`**, junto de `PESOS`:
-`VALOR_VENDA` (duplicata) e `BONUS_DESCOBERTA` (item inédito). O bônus é sempre
+`VALOR_VENDA` (venda) e `BONUS_DESCOBERTA` (item inédito). O bônus é sempre
 maior que a venda da mesma raridade, de propósito: sem isso o incentivo inverte
 e o jogador passa a torcer por repetido.
 
