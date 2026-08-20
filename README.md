@@ -47,9 +47,13 @@ O sorteio é **ponderado**: escolhe-se a raridade primeiro e depois um item
 dentro dela, então as porcentagens valem independentemente de uma raridade ter
 63 itens e outra 11.
 
-A cor aparece na borda do slot, na borda da imagem do modal, no selo e na
-legenda do drop. Ela nunca é o único sinal — o selo diz o nome da raridade por
-escrito, e Épico e Lendário ainda ganham traço mais grosso.
+A cor aparece na borda do slot, na borda da imagem do drop, na legenda do drop,
+na borda da imagem do modal e no selo. Ela nunca é o único sinal — o selo diz o
+nome da raridade por escrito, e Épico e Lendário ainda ganham traço mais grosso.
+
+A cor pinta **o item, nunca a ação**: o botão de vender é preto em qualquer
+raridade, como todo botão do sistema. Se ele mudasse de cor junto com o item,
+pareceria que a cor diz algo sobre a venda.
 
 ## Economia
 
@@ -94,8 +98,8 @@ aparece com o mesmo tratamento de um slot vazio, sem imagem quebrada.
 
 ## Testes
 
-A suíte dirige um navegador de verdade com Playwright e cobre dados, fluxo do
-jogo, navegação entre telas, responsividade e acessibilidade.
+A suíte dirige um navegador de verdade com Playwright e cobre dados, economia,
+fluxo do jogo, navegação entre telas, responsividade e acessibilidade.
 
 ```sh
 npm install        # instala o Playwright (só para desenvolvimento)
@@ -110,7 +114,8 @@ sem dependência alguma**.
 
 ```
 index.html
-css/          tokens.css define as variáveis; styles.css importa o resto
+css/          tokens.css guarda cor, espaço, tipografia e raio;
+              styles.css importa o resto
 javascript/   dados.js carrega, estado.js guarda, telas/ desenha
 dados/        catálogo em JSON, um arquivo por categoria
 imagens/

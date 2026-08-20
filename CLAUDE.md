@@ -33,7 +33,11 @@ javascript/
   util.js               esc, slotHTML, fallback de imagem, formatação
   telas/                bau, mochila, perfil, loja, config, busca
 dados/                  catálogo, um JSON por categoria
-testes/                 suíte Playwright + servidor estático
+testes/
+  executar.js           runner: sobe o servidor, roda os casos, derruba
+  auxiliar.js           coletor de checks, ganharItem() e filtro de ruído
+  servidor.js           servidor estático (serve o npm start também)
+  casos/                dados, economia, jogo, telas, layout
 ```
 
 ## Regras que não dá para deduzir lendo o código
@@ -135,9 +139,20 @@ Se mexer nesses valores, simule antes: a curva é sensível, e entre
 110/220/450/950/2400 e 130/260/550/1100/2800 a partida salta de 248 para 539
 baús abertos.
 
+**`rem` não é confiável aqui.** `componentes.css` define
+`html { font-size: var(--txt-raiz) }`, e `--txt-raiz` é
+`clamp(14px, 2.2vmin, 18px)` — a raiz depende da viewport. Então `rem` num
+componente vira um número que ninguém prevê lendo o código: o
+`padding: 0.5rem 0.9rem` do botão Fechar do modal resolvia para 7px / 12.6px
+em 390px de largura. É por isso que espaçamento sai de `--e-*`, e não de `rem`.
+
 **Cuidado com teste que verifica o atributo e não o efeito.** O mesmo bug acima
 passou batido porque o teste conferia `data-raridade`, não a cor computada.
-Quando o objetivo é visual, verifique o valor computado.
+Quando o objetivo é visual, verifique o valor computado. Os dois checks de cor
+mais novos seguem esse padrão, e o do botão de vender vai um passo além: em vez
+de fixar `rgb(0, 0, 0)` e mais nada, compara a cor computada num item Comum com
+a de um Lendário. Assim ele acusa o dia em que alguém reintroduzir a herança de
+`--cor-raridade`, mesmo que a tinta preta mude de valor.
 
 ## Ao mexer nos dados
 
@@ -152,7 +167,8 @@ Quando o objetivo é visual, verifique o valor computado.
 
 ## Antes de entregar
 
-Rode `npm test` e exija tudo verde. A suíte cobre dados e raridade, o fluxo do
-jogo, navegação e busca, e layout/acessibilidade em cinco larguras.
+Rode `npm test` e exija tudo verde. Na ordem em que `testes/executar.js` roda:
+dados e raridade; economia (bônus, venda, e a brecha do dinheiro infinito); o
+fluxo do jogo; navegação e busca; e layout/acessibilidade em cinco larguras.
 
 O idioma do projeto é português — código, comentários, commits e documentação.
