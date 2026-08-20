@@ -22,6 +22,38 @@ export const PESOS = {
   Lendário: 3,
 };
 
+/**
+ * Quanto rende vender uma duplicata. Valor esperado ≈ 201 Berrys, quase o
+ * custo de um baú (200 no pacote de 10): o loop quase se paga quando as
+ * duplicatas ficam frequentes.
+ */
+export const VALOR_VENDA = {
+  Comum: 45,
+  Incomum: 110,
+  Raro: 280,
+  Épico: 700,
+  Lendário: 2000,
+};
+
+/**
+ * Quanto paga encontrar um item inédito.
+ *
+ * Existe porque venda de duplicata sozinha não sustenta o início: nos
+ * primeiros 10 baús aparecem ~0,3 duplicatas, então o começo produz itens
+ * novos, não repetidos. As duas torneiras se complementam ao longo da curva.
+ *
+ * Sempre acima do VALOR_VENDA da mesma raridade, para achar item novo seguir
+ * sendo a melhor notícia — senão o incentivo inverte e o jogador torce por
+ * repetido.
+ */
+export const BONUS_DESCOBERTA = {
+  Comum: 110,
+  Incomum: 220,
+  Raro: 450,
+  Épico: 950,
+  Lendário: 2400,
+};
+
 /** tipo -> raridade. Cobre as duas categorias do catálogo. */
 const POR_TIPO = {
   // Frutas

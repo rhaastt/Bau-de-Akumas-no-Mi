@@ -7,6 +7,8 @@
  * Sem persistência por decisão de produto — recarregar a página zera tudo.
  */
 
+import { VALOR_VENDA, BONUS_DESCOBERTA } from "./raridade.js";
+
 // O catálogo chega de dados/*.json em tempo de execução, por isso é
 // preenchido por definirCatalogo() e lido por funções, não por consts.
 let _catalogo = [];
@@ -44,10 +46,12 @@ export const totalPorTipo = () => _totalPorTipo;
 export const totalPorCategoria = () => _totalPorCategoria;
 export const totalPorRaridade = () => _totalPorRaridade;
 
+// 1.000 Berrys compram exatamente 4 baús avulsos (250 cada); o pacote de 5
+// (1.100) fica logo fora de alcance de propósito.
 const estadoInicial = () => ({
   mochila: [],
-  berrys: 9999.99,
-  baus: { atual: 6, total: 20 },
+  berrys: 1000,
+  baus: { atual: 2, total: 20 },
   bausAbertos: 0,
   config: {
     animacoes: true,
@@ -80,11 +84,91 @@ export function atualizar(patch) {
 
 // ===== Ações de domínio =====
 
+/**
+ * Guarda o item na mochila. Item inédito paga o bônus de descoberta na hora;
+ * duplicata não paga nada aqui — ela rende quando o jogador vende.
+ *
+ * @returns {number} Berrys creditados (0 se era duplicata)
+ */
 export function adicionarItem(item) {
+  const inedito = !estado.mochila.some((i) => i.nome === item.nome);
+  const bonus = inedito ? BONUS_DESCOBERTA[item.raridade] ?? 0 : 0;
+
   atualizar({
     mochila: [...estado.mochila, item],
     bausAbertos: estado.bausAbertos + 1,
+    berrys: Number((estado.berrys + bonus).toFixed(2)),
   });
+
+  return bonus;
+}
+
+/** Quantas cópias de cada nome existem na mochila. */
+function contarPorNome(mochila) {
+  const contagem = new Map();
+  for (const item of mochila) {
+    contagem.set(item.nome, (contagem.get(item.nome) ?? 0) + 1);
+  }
+  return contagem;
+}
+
+/**
+ * Duplicata é ter 2+ cópias do mesmo nome. Vender nunca tira a última, então
+ * a coleção não encolhe e o item segue marcado como obtido no Perfil e na Busca.
+ */
+export function ehDuplicata(idx) {
+  const item = estado.mochila[idx];
+  if (!item) return false;
+  return contarPorNome(estado.mochila).get(item.nome) > 1;
+}
+
+/** Índices da mochila que podem ser vendidos, preservando uma cópia de cada. */
+export function duplicatasNaMochila() {
+  const vistos = new Set();
+  const indices = [];
+  estado.mochila.forEach((item, idx) => {
+    if (vistos.has(item.nome)) indices.push(idx);
+    else vistos.add(item.nome);
+  });
+  return indices;
+}
+
+/** Soma que o jogador receberia vendendo todas as duplicatas de uma vez. */
+export function valorDasDuplicatas() {
+  return duplicatasNaMochila().reduce(
+    (soma, idx) => soma + (VALOR_VENDA[estado.mochila[idx].raridade] ?? 0),
+    0
+  );
+}
+
+/**
+ * Vende uma cópia duplicada.
+ * @returns {number} Berrys recebidos, ou 0 se o item não era duplicata.
+ */
+export function venderItem(idx) {
+  if (!ehDuplicata(idx)) return 0;
+  const valor = VALOR_VENDA[estado.mochila[idx].raridade] ?? 0;
+  atualizar({
+    mochila: estado.mochila.filter((_, i) => i !== idx),
+    berrys: Number((estado.berrys + valor).toFixed(2)),
+  });
+  return valor;
+}
+
+/**
+ * Vende todas as duplicatas de uma vez.
+ * @returns {{quantidade: number, total: number}}
+ */
+export function venderDuplicatas() {
+  const indices = new Set(duplicatasNaMochila());
+  if (indices.size === 0) return { quantidade: 0, total: 0 };
+
+  const total = valorDasDuplicatas();
+  atualizar({
+    mochila: estado.mochila.filter((_, i) => !indices.has(i)),
+    berrys: Number((estado.berrys + total).toFixed(2)),
+  });
+  return { quantidade: indices.size, total };
 }
 
 export function consumirBau() {

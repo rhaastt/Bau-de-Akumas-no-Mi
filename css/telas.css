@@ -60,6 +60,11 @@
   cursor: not-allowed;
 }
 
+/* Botão de venda: separado da grade, para não parecer parte dos slots. */
+.btn-vender {
+  margin-block-start: var(--e4);
+}
+
 .btn-compacto {
   inline-size: auto;
   min-inline-size: 128px;

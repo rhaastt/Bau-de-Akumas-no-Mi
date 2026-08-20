@@ -33,7 +33,7 @@ export async function executar({ navegador, url }) {
     JSON.stringify({ f: depois.fechado, a: depois.aberto })
   );
   check("drop aparece com legenda", depois.drop && depois.legenda.length > 0, depois.legenda);
-  check("contador decrementa 6 -> 5", depois.qtd === "5", depois.qtd);
+  check("contador decrementa 2 -> 1", depois.qtd === "1", depois.qtd);
 
   const CORES = {
     Comum: "rgb(17, 17, 17)",
@@ -95,6 +95,7 @@ export async function executar({ navegador, url }) {
   await page.click("#container-carrinho");
   await page.waitForTimeout(400);
   const saldoAntes = await page.textContent("#qtd-berrys");
+  const bausAntes = Number(await page.textContent("#qtd-atual"));
   await page.click('#loja-pacotes button[data-pacote="p5"]');
   await page.waitForTimeout(400);
   const posCompra = await page.evaluate(() => ({
@@ -103,17 +104,23 @@ export async function executar({ navegador, url }) {
   }));
   await page.click('.nav-item[data-tela="bau"]');
   await page.waitForTimeout(350);
+  const bausDepois = Number(await page.textContent("#qtd-atual"));
   check("compra debita Berrys no topo", posCompra.saldo !== saldoAntes, `${saldoAntes} -> ${posCompra.saldo}`);
-  check("compra credita baús", (await page.textContent("#qtd-atual")) === "10");
+  check("compra credita 5 baús", bausDepois === bausAntes + 5, `${bausAntes} -> ${bausDepois}`);
   check("loja responde ao usuário", /comprado/i.test(posCompra.aviso), posCompra.aviso);
 
+  // Pacote inacessível fica desabilitado e o rótulo diz o porquê — checar só
+  // o `disabled` passaria pelo motivo errado (saldo em vez de limite).
   await page.click("#container-carrinho");
   await page.waitForTimeout(350);
-  await page.click('#loja-pacotes button[data-pacote="p10"]');
-  await page.waitForTimeout(400);
+  const p10 = await page.$eval('#loja-pacotes button[data-pacote="p10"]', (e) => ({
+    desabilitado: e.disabled,
+    rotulo: e.textContent.trim(),
+  }));
   check(
-    "pacote bloqueia ao estourar o limite",
-    await page.$eval('#loja-pacotes button[data-pacote="p10"]', (e) => e.disabled)
+    "pacote inacessível fica desabilitado com motivo",
+    p10.desabilitado && /Berrys insuficientes|Limite de baús/.test(p10.rotulo),
+    JSON.stringify(p10)
   );
 
   // --- Ajustes ---
@@ -154,7 +161,7 @@ export async function executar({ navegador, url }) {
   await page.click('.nav-item[data-tela="mochila"]');
   await page.waitForTimeout(350);
   check("reset limpa a mochila", (await page.$$eval("#mochila-itens li.slot[data-idx]", (e) => e.length)) === 0);
-  check("reset restaura os Berrys", (await page.textContent("#qtd-berrys")) === "9.999,99");
+  check("reset restaura os Berrys", (await page.textContent("#qtd-berrys")) === "1.000,00");
 
   // --- Baús esgotados ---
   await page.click('.nav-item[data-tela="bau"]');

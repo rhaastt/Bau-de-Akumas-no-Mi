@@ -38,11 +38,12 @@ function atualizarBotao() {
 
 function dropItem() {
   const item = sortearItem();
-  estado.adicionarItem(item);
+  // Item inédito paga na hora; duplicata rende quando o jogador vende.
+  const bonus = estado.adicionarItem(item);
 
   dropImgEl.src = item.img;
   dropImgEl.alt = item.nome;
-  dropLegendEl.textContent = item.nome;
+  dropLegendEl.textContent = bonus > 0 ? `${item.nome} · +${bonus}` : item.nome;
   // A cor da raridade tinge a legenda do drop.
   dropItemEl.dataset.raridade = item.raridade ?? "";
 

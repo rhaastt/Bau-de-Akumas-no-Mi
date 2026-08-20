@@ -51,6 +51,27 @@ A cor aparece na borda do slot, na borda da imagem do modal, no selo e na
 legenda do drop. Ela nunca é o único sinal — o selo diz o nome da raridade por
 escrito, e Épico e Lendário ainda ganham traço mais grosso.
 
+## Economia
+
+O jogador começa com **1.000 Berrys e 2 baús**. Os 1.000 compram exatamente 4
+baús avulsos (250 cada); o pacote de 5, a 1.100, fica logo fora de alcance.
+
+Duas fontes de Berrys, que se complementam ao longo da partida:
+
+| | Quando rende | Comum → Lendário |
+|---|---|---|
+| **Bônus de descoberta** | ao tirar um item **inédito**, automático | 110 · 220 · 450 · 950 · 2.400 |
+| **Venda de duplicata** | quando o jogador **vende** uma cópia extra | 45 · 110 · 280 · 700 · 2.000 |
+
+No começo quase todo drop é novo, então quem paga é a descoberta. Com a coleção
+cheia, 87% dos drops são repetidos e quem paga é a venda. Os valores ficam em
+`javascript/raridade.js`, ao lado dos pesos do sorteio.
+
+**Duplicata é ter 2 ou mais cópias do mesmo item.** Vender remove uma cópia e
+nunca a última, então a coleção nunca encolhe — o item continua marcado como
+obtido no Perfil e na Busca. Dá para vender item a item pelo modal ou todas de
+uma vez pelo botão na Mochila.
+
 ## Telas
 
 Baú, Mochila, Perfil, Loja, Ajustes e Busca — todas na mesma página, com troca

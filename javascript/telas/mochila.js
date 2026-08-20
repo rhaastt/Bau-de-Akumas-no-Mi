@@ -2,14 +2,17 @@
    a tela cheia (mobile e desktop) e o painel lateral do desktop.
    Ambos leem o estado compartilhado, então ficam sincronizados sozinhos. */
 
-import { pegar, slotHTML, ligarFallbackImagens } from "../util.js";
+import { pegar, slotHTML, ligarFallbackImagens, formatarBerrys } from "../util.js";
 import * as estado from "../estado.js";
 import { ligarGradeAoModal } from "../modalItem.js";
+import { VALOR_VENDA } from "../raridade.js";
 
 const MIN_SLOTS = 12;
 
 let gradeTela;
 let gradeLateral;
+let btnVenderTudo;
+let avisoEl;
 
 function montar(grade) {
   const { mochila } = estado.obter();
@@ -25,15 +28,50 @@ function montar(grade) {
 export function renderMochila() {
   montar(gradeTela);
   montar(gradeLateral);
+
+  const quantas = estado.duplicatasNaMochila().length;
+  const total = estado.valorDasDuplicatas();
+  btnVenderTudo.hidden = quantas === 0;
+  btnVenderTudo.textContent = `VENDER ${quantas} ${
+    quantas === 1 ? "DUPLICATA" : "DUPLICATAS"
+  } · +${formatarBerrys(total)}`;
+}
+
+/** Só oferece venda quando o slot é uma cópia extra. */
+function dadosDoSlot(idx) {
+  const item = estado.obter().mochila[idx];
+  if (!item) return undefined;
+  if (!estado.ehDuplicata(idx)) return { item };
+  return {
+    item,
+    venda: {
+      valor: VALOR_VENDA[item.raridade] ?? 0,
+      vender: () => {
+        const recebido = estado.venderItem(idx);
+        avisoEl.textContent = `${item.nome} vendida por ${formatarBerrys(
+          recebido
+        )} Berrys.`;
+      },
+    },
+  };
 }
 
 export function iniciarMochila() {
   gradeTela = pegar("mochila-itens");
   gradeLateral = pegar("mochila-lateral-itens");
+  btnVenderTudo = pegar("btn-vender-duplicatas");
+  avisoEl = pegar("mochila-aviso");
 
-  const resolver = (idx) => estado.obter().mochila[idx];
-  ligarGradeAoModal(gradeTela, resolver);
-  ligarGradeAoModal(gradeLateral, resolver);
+  ligarGradeAoModal(gradeTela, dadosDoSlot);
+  ligarGradeAoModal(gradeLateral, dadosDoSlot);
+
+  btnVenderTudo.addEventListener("click", () => {
+    const { quantidade, total } = estado.venderDuplicatas();
+    if (quantidade === 0) return;
+    avisoEl.textContent = `${quantidade} ${
+      quantidade === 1 ? "duplicata vendida" : "duplicatas vendidas"
+    } por ${formatarBerrys(total)} Berrys.`;
+  });
 
   renderMochila();
 }

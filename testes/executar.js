@@ -11,11 +11,12 @@ import { chromium } from "playwright";
 import { subir } from "./servidor.js";
 
 import * as dados from "./casos/dados.js";
+import * as economia from "./casos/economia.js";
 import * as jogo from "./casos/jogo.js";
 import * as telas from "./casos/telas.js";
 import * as layout from "./casos/layout.js";
 
-const CASOS = [dados, jogo, telas, layout];
+const CASOS = [dados, economia, jogo, telas, layout];
 
 async function principal() {
   const servidor = await subir();

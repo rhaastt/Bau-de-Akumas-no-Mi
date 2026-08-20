@@ -1,7 +1,7 @@
 /* Modal de detalhe da fruta — compartilhado por Mochila, Busca e a mochila
    lateral do desktop. Fecha por botão, clique fora e Escape. */
 
-import { pegar } from "./util.js";
+import { pegar, formatarBerrys } from "./util.js";
 
 let modal;
 let card;
@@ -10,8 +10,18 @@ let nome;
 let tipo;
 let raridade;
 let descricao;
+let btnVender;
+let aoVenderAtual = null;
 
-export function abrirItem(item) {
+/**
+ * @param {object} item
+ * @param {object} [opcoes]
+ * @param {{valor:number, vender:()=>void}} [opcoes.venda] quando presente,
+ *   mostra o botão de venda. O modal não conhece a regra de duplicata — quem
+ *   abre decide se o item é vendável. Por isso a Busca, que usa o mesmo modal
+ *   para itens do catálogo, não ganha botão nenhum.
+ */
+export function abrirItem(item, opcoes = {}) {
   img.src = item.img;
   img.alt = item.nome;
   nome.textContent = item.nome;
@@ -23,6 +33,13 @@ export function abrirItem(item) {
   raridade.textContent = item.raridade ?? "";
   raridade.hidden = !item.raridade;
   card.dataset.raridade = item.raridade ?? "";
+
+  const venda = opcoes.venda ?? null;
+  aoVenderAtual = venda ? venda.vender : null;
+  btnVender.hidden = !venda;
+  if (venda) {
+    btnVender.textContent = `VENDER POR ${formatarBerrys(venda.valor)}`;
+  }
 
   modal.classList.add("active");
   document.body.style.overflow = "hidden";
@@ -57,6 +74,14 @@ export function iniciarModal() {
   tipo = pegar("inventarioItemTipo");
   raridade = pegar("inventarioItemRaridade");
   descricao = pegar("inventarioItemDescricao");
+  btnVender = pegar("btnVenderItem");
+
+  btnVender.addEventListener("click", () => {
+    const vender = aoVenderAtual;
+    if (!vender) return;
+    fecharItem();
+    vender();
+  });
 
   pegar("btnFecharCardItemIventario").addEventListener("click", fecharItem);
 
@@ -72,13 +97,14 @@ export function iniciarModal() {
 /**
  * Delegação de clique numa grade de slots.
  * @param {HTMLElement} lista  o <ul> da grade
- * @param {(idx:number)=>object|undefined} resolver  índice -> item
+ * @param {(idx:number)=>{item:object, venda?:object}|undefined} montar
+ *   recebe o índice do slot e devolve o item e, opcionalmente, a venda
  */
-export function ligarGradeAoModal(lista, resolver) {
+export function ligarGradeAoModal(lista, montar) {
   lista.addEventListener("click", (e) => {
     const li = e.target.closest("li.slot");
     if (!li || li.dataset.idx === undefined) return;
-    const item = resolver(Number(li.dataset.idx));
-    if (item) abrirItem(item);
+    const dados = montar(Number(li.dataset.idx));
+    if (dados?.item) abrirItem(dados.item, { venda: dados.venda });
   });
 }

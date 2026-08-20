@@ -58,6 +58,20 @@ um ancestral — o listener precisa ser preso a cada `<img>` após o render.
 item a item nos JSON. Um item com campo `raridade` próprio sobrescreve o mapa,
 para exceções pontuais.
 
+**Duplicata é ter 2+ cópias do mesmo nome, e vender nunca tira a última.**
+`ehDuplicata()` e `duplicatasNaMochila()` em `estado.js` garantem isso. É o que
+mantém `nomesObtidos()` intacto — vender não pode fazer o Perfil ou a Busca
+desmarcarem um item já coletado.
+
+**Todo valor de economia mora em `raridade.js`**, junto de `PESOS`:
+`VALOR_VENDA` (duplicata) e `BONUS_DESCOBERTA` (item inédito). O bônus é sempre
+maior que a venda da mesma raridade, de propósito: sem isso o incentivo inverte
+e o jogador passa a torcer por repetido.
+
+**O modal não conhece regra de jogo.** `abrirItem(item, { venda })` só mostra o
+botão de vender se quem abriu passou a opção. Por isso a Busca, que usa o mesmo
+modal para itens do catálogo, não oferece venda.
+
 **Cor existe só para raridade, e nunca sozinha.** O resto do design é line-art
 preto e branco. Onde a cor aparece, a informação também é dada por texto (o
 selo diz o nome) ou por forma (Épico e Lendário têm borda mais grossa).
@@ -85,6 +99,14 @@ carregamento; e os 404 dessas imagens são ruído esperado, filtrado em
 **Ao acrescentar uma declaração num bloco CSS existente, confira se o próprio
 bloco a redefine mais abaixo.** A cor da legenda do drop nasceu morta assim: a
 linha nova foi inserida no topo do bloco, que já tinha `color: #111` no fim.
+
+**Venda de duplicata sozinha não sustenta o começo do jogo.** Nos primeiros 10
+baús aparecem ~0,3 duplicatas: o começo produz item novo, não repetido. Simulei
+e aumentar o preço de venda não resolve — triplicar a tabela dá exatamente os
+mesmos 4 baús antes de travar. É por isso que o bônus de descoberta existe.
+Se mexer nesses valores, simule antes: a curva é sensível, e entre
+110/220/450/950/2400 e 130/260/550/1100/2800 a partida salta de 248 para 539
+baús abertos.
 
 **Cuidado com teste que verifica o atributo e não o efeito.** O mesmo bug acima
 passou batido porque o teste conferia `data-raridade`, não a cor computada.

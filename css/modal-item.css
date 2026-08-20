@@ -69,6 +69,16 @@
   line-height: 1.4;
 }
 
+/* Venda herda a cor da raridade do card, como o resto do modal. */
+#btnVenderItem {
+  border-color: var(--cor-raridade, var(--cor-tinta));
+  color: var(--cor-raridade, var(--cor-tinta));
+}
+
+#btnVenderItem[hidden] {
+  display: none;
+}
+
 #btnFecharCardItemIventario {
   border: 1px solid #000;
   background: #fff;
