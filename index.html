@@ -52,6 +52,30 @@
           </button>
         </div>
 
+        <!-- ---------- Tela: Desafio (principal) ---------- -->
+        <section class="tela" id="tela-quiz" aria-labelledby="titulo-tela">
+          <div id="quiz-trilha">
+            <div id="quiz-categorias" class="quiz-trilha-lista"></div>
+            <p class="aviso" id="quiz-aviso" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="painel quiz-rodada" id="quiz-rodada" hidden>
+            <p class="texto-apoio" id="quiz-contexto"></p>
+
+            <div id="quiz-pergunta-vista">
+              <h2 class="quiz-enunciado" id="quiz-enunciado"></h2>
+              <ul class="quiz-opcoes" id="quiz-opcoes"></ul>
+            </div>
+
+            <div id="quiz-resultado" role="status" aria-live="polite" hidden>
+              <p class="quiz-resultado-titulo" id="quiz-resultado-titulo"></p>
+              <p class="quiz-resultado-valor" id="quiz-resultado-valor"></p>
+              <p class="texto-apoio" id="quiz-resultado-apoio"></p>
+              <div class="quiz-acoes" id="quiz-acoes"></div>
+            </div>
+          </div>
+        </section>
+
         <!-- ---------- Tela: Baú ---------- -->
         <section class="tela" id="tela-bau" aria-labelledby="titulo-tela">
           <div class="bau-layout">
@@ -195,7 +219,8 @@
           <div class="painel">
             <h2 class="titulo-painel">Progresso</h2>
             <p class="texto-apoio">
-              O progresso não é salvo: recarregar a página já zera tudo.
+              O progresso fica salvo neste navegador: mochila, Berrys, baús e o
+              Desafio voltam como estavam. Resetar apaga o save.
             </p>
             <button class="btn" id="btn-resetar" type="button">
               RESETAR PROGRESSO
@@ -238,6 +263,19 @@
               aria-label="Perfil"
             >
               <img src="imagens/icon-perfil.webp" alt="" />
+            </button>
+          </li>
+          <li>
+            <button
+              class="border nav-item"
+              type="button"
+              data-tela="quiz"
+              aria-label="Desafio"
+            >
+              <!-- Não existe arte de desafio em imagens/, e reaproveitar o
+                   ícone de outra tela mentiria sobre o destino. O glifo em
+                   traço cabe no design line-art e inverte igual aos demais. -->
+              <span class="nav-glifo" aria-hidden="true">?</span>
             </button>
           </li>
           <li>

@@ -204,6 +204,19 @@ body {
   display: block;
 }
 
+/* Item sem arte própria: glifo em traço, no mesmo degrau tipográfico.
+   Vira <img> sem mexer em lógica no dia em que o ícone existir. */
+.nav-glifo {
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  block-size: 100%;
+  font-size: var(--txt-xl);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--cor-tinta);
+}
+
 /* Ativo por inversão — sem cor, conforme o design monocromático.
    brightness(0) achata o ícone em preto e invert(1) o traz para branco:
    funciona igual para os ícones em traço e para o chapéu colorido, que
@@ -213,6 +226,18 @@ body {
 }
 .nav-item.ativo img {
   filter: brightness(0) invert(1);
+}
+.nav-item.ativo .nav-glifo {
+  color: var(--cor-fundo);
+}
+
+/* Com cinco itens, os alvos de 48px mais o gap padrão estouram a largura em
+   320px. O alvo não encolhe — quem cede é o espaço entre eles. */
+@media (max-width: 359px) {
+  .nav-itens {
+    gap: var(--e-2xs);
+    padding: var(--e-xs);
+  }
 }
 
 /* ===== Desktop: rail lateral + conteúdo ===== */

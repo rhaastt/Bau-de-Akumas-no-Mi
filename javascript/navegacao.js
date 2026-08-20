@@ -1,10 +1,12 @@
 /* Troca de telas na mesma página.
  *
- * Página única por consequência da decisão "sem persistência": recarregar
- * zeraria mochila e Berrys, então cada navegação precisa manter o estado vivo.
+ * Nasceu de "sem persistência", quando navegar de verdade zerava o estado.
+ * O save existe agora, mas a página única fica: a troca é instantânea e não
+ * há recarga entre telas para o estado atravessar.
  */
 
 const TITULOS = {
+  quiz: "DESAFIO",
   bau: "BAÚ",
   mochila: "MOCHILA",
   perfil: "PERFIL",
@@ -55,5 +57,6 @@ export function iniciarNavegacao() {
   for (const el of document.querySelectorAll("[data-tela]")) {
     el.addEventListener("click", () => irPara(el.dataset.tela));
   }
-  irPara("bau");
+  // O Desafio é a tela principal: é onde o jogo começa.
+  irPara("quiz");
 }

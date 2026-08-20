@@ -45,6 +45,14 @@ export const telasVisiveis = (page) =>
     [...document.querySelectorAll(".tela")].filter((s) => !s.hidden).map((s) => s.id)
   );
 
+/** Garante que a tela do Baú está visível — o jogo abre no Desafio. */
+export async function irAoBau(page) {
+  if (await page.$eval("#tela-bau", (e) => e.hidden)) {
+    await page.click('.nav-item[data-tela="bau"]');
+    await page.waitForTimeout(350);
+  }
+}
+
 /**
  * Abre baús até um item cair na mochila.
  *
@@ -53,6 +61,7 @@ export const telasVisiveis = (page) =>
  * já estava aberto de uma interação anterior.
  */
 export async function ganharItem(page) {
+  await irAoBau(page);
   const contar = () =>
     page.evaluate(
       () => document.querySelectorAll("#mochila-itens li.slot[data-idx]").length

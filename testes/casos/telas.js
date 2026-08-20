@@ -27,6 +27,7 @@ export async function executar({ navegador, url }) {
     ["mochila", "MOCHILA"],
     ["config", "AJUSTES"],
     ["bau", "BAÚ"],
+    ["quiz", "DESAFIO"],
   ]) {
     const sel = `.nav-item[data-tela="${tela}"]`;
     await page.click(sel);

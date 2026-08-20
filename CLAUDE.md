@@ -19,25 +19,28 @@ npm test      # suíte completa; sobe e derruba o servidor sozinha
 ## Estrutura
 
 ```
-index.html              topo, navegação e as 6 <section class="tela">
+index.html              topo, navegação e as 7 <section class="tela">
 css/
   styles.css            barril de @import — a ordem importa
   tokens.css            variáveis: cor, espaço, tipografia, raio, raridade
-  reset.css componentes.css telas.css mochila.css dropItem.css modal-item.css
+  reset.css componentes.css telas.css mochila.css quiz.css dropItem.css
+  modal-item.css
 javascript/
   dados.js              carrega os JSON e carimba categoria e raridade
   raridade.js           mapa tipo→raridade, pesos e sorteio ponderado
-  estado.js             estado observável compartilhado
+  quiz.js               categorias, valores das perguntas e taxa de rejogo
+  persistencia.js       localStorage: carregar, salvar, limpar
+  estado.js             estado observável compartilhado, e que persiste
   navegacao.js          troca de telas
   modalItem.js          modal de detalhe, compartilhado por 3 telas
   util.js               esc, slotHTML, fallback de imagem, formatação
-  telas/                bau, mochila, perfil, loja, config, busca
-dados/                  catálogo, um JSON por categoria
+  telas/                quiz, bau, mochila, perfil, loja, config, busca
+dados/                  catálogo (um JSON por categoria) + quiz.json
 testes/
   executar.js           runner: sobe o servidor, roda os casos, derruba
   auxiliar.js           coletor de checks, ganharItem() e filtro de ruído
   servidor.js           servidor estático (serve o npm start também)
-  casos/                dados, economia, jogo, telas, layout
+  casos/                dados, economia, quiz, jogo, telas, layout
 ```
 
 ## Regras que não dá para deduzir lendo o código
@@ -47,8 +50,27 @@ testes/
 depois que os módulos já carregaram, então não existe constante para exportar
 no topo do arquivo.
 
-**Página única, telas trocadas por JS.** Não é preferência: sem persistência,
-navegar entre páginas de verdade zeraria mochila e Berrys a cada clique.
+**Página única, telas trocadas por JS.** Nasceu de "sem persistência", quando
+navegar de verdade zerava o estado. O save existe agora, mas a página única
+fica: a troca é instantânea e não há recarga para o estado atravessar.
+
+**O jogo abre no Desafio, não no Baú.** `iniciarNavegacao()` chama
+`irPara("quiz")`. Teste que clica `#btn-bau` logo depois do `goto` precisa
+navegar antes — use `irAoBau()` de `testes/auxiliar.js`, que `ganharItem()` já
+chama sozinho.
+
+**Tudo é salvo, e nada pode lançar ao salvar.** `notificar()` chama
+`persistencia.salvar()`, então todo `atualizar()` já grava e nenhuma tela
+precisa saber disso. Em compensação, `persistencia.js` engole exceção em tudo:
+`localStorage` **lança** em navegação privada e com cookies bloqueados, e um
+throw ali derrubaria o jogo a cada compra. Há teste rodando com o storage
+lançando de propósito.
+
+**O save é mesclado sobre `estadoInicial()`, um nível fundo.** Campo novo que
+você acrescentar volta `undefined` para quem já tem save se o merge for
+esquecido — quebra em produção e passa nos testes, que sempre partem de storage
+vazio. `resetarProgresso()` limpa o storage **antes** de notificar, senão o
+próprio notificar regrava e o progresso ressuscita no reload.
 
 **`esc()` é obrigatório em qualquer texto que entre por `innerHTML`.** As
 grades e listas são montadas com template string, então nome e descrição
@@ -76,6 +98,27 @@ Se lesse a mochila, vender tudo depois de cada drop faria todo item voltar a
 ser inédito: +317 Berrys líquidos por baú, dinheiro infinito. Já simulei — dava
 5.000 baús e 1,5 milhão de Berrys sem nunca travar. Há teste guardando isso.
 
+**No Desafio, `progresso[cat]` conta perguntas RESPONDIDAS, não acertadas.** É
+o que faz o erro encerrar a tentativa sem apagar o desbloqueio, como o desenho
+pede. Quem contasse acertos travaria o jogador na mesma pergunta para sempre.
+
+**A rodada em andamento mora no estado, não no módulo da tela.** Assim ela
+sobrevive a sair da tela e voltar, e o pote em aberto não some sozinho. Efeito
+colateral bom: como o save roda em todo `atualizar()`, a resposta errada é
+gravada antes de qualquer reload — não dá para recarregar a página para escapar
+do erro.
+
+**O Desafio não é enfeite: sem ele a coleção não fecha.** Simulando a partida
+inteira, só com baú e venda o jogador trava em 110/135 itens depois de ~255
+baús. Com a primeira passada do Desafio chega a 131/135. Só com o rejogo a
+coleção fecha, em ~1.194 baús e ~17 ciclos. Se mexer em `TAXA_REJOGO` ou nos
+valores de `quiz.js`, rode a simulação de novo — é essa curva que está em jogo.
+
+**O rejogo não tem risco, e tudo bem.** Quem decorou as respostas arrisca de
+graça na repetição; a tensão é propriedade da primeira passada. Não há
+embaralhamento nem cooldown de propósito — se o valor precisar cair, `TAXA_REJOGO`
+é uma linha só.
+
 **Todo valor de economia mora em `raridade.js`**, junto de `PESOS`:
 `VALOR_VENDA` (venda) e `BONUS_DESCOBERTA` (item inédito). O bônus é sempre
 maior que a venda da mesma raridade, de propósito: sem isso o incentivo inverte
@@ -88,6 +131,12 @@ modal para itens do catálogo, não oferece venda.
 **Cor existe só para raridade, e nunca sozinha.** O resto do design é line-art
 preto e branco. Onde a cor aparece, a informação também é dada por texto (o
 selo diz o nome) ou por forma (Épico e Lendário têm borda mais grossa).
+
+**A raridade também pesa no tempo do drop.** `tempoDoDrop()` em `telas/bau.js`
+vai de 1.400 ms num Comum a 3.400 ms num Lendário, e Épico e Lendário ganham
+`.destaque`. Isso é exportado justamente para o teste esperar pela raridade
+sorteada: espera fixa falharia nos 3% em que sai Lendário — flake que só
+aparece semanas depois.
 
 **A cor da raridade pinta o item, nunca a ação.** Slot, borda da imagem do
 drop, legenda do drop, imagem do modal e selo carregam `--cor-raridade`. O
@@ -164,11 +213,15 @@ a de um Lendário. Assim ele acusa o dia em que alguém reintroduzir a herança 
   `raridade.js`. Tipo sem mapa cai em `Comum` silenciosamente.
 - Os testes checam contagens exatas (135 itens, distribuição 63/27/22/11/12).
   Ao mexer no catálogo, atualize `testes/casos/dados.js` junto.
+- Perguntas novas entram em `dados/quiz.json`. São 3 categorias × 5 perguntas,
+  e `PERGUNTAS_POR_CATEGORIA` em `quiz.js` fecha com `VALOR_POR_POSICAO`: mudar
+  a quantidade exige mexer nos dois, senão a última pergunta fica sem valor.
 
 ## Antes de entregar
 
 Rode `npm test` e exija tudo verde. Na ordem em que `testes/executar.js` roda:
 dados e raridade; economia (bônus, venda, e a brecha do dinheiro infinito); o
-fluxo do jogo; navegação e busca; e layout/acessibilidade em cinco larguras.
+Desafio (risco, rejogo, persistência e storage indisponível); o fluxo do jogo;
+navegação e busca; e layout/acessibilidade em cinco larguras.
 
 O idioma do projeto é português — código, comentários, commits e documentação.

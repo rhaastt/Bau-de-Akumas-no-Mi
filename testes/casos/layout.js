@@ -95,6 +95,8 @@ export async function executar({ navegador, url }) {
   check("mochila lateral visível", layout.lateralVisivel);
   check("baú e mochila em duas colunas", layout.duasColunas);
 
+  await page2.click('.nav-item[data-tela="bau"]');
+  await page2.waitForTimeout(350);
   await page2.click("#btn-bau");
   await page2.waitForTimeout(1000);
   const lateral = await page2.$$eval("#mochila-lateral-itens li.slot[data-idx]", (e) => e.length);
@@ -126,6 +128,8 @@ export async function executar({ navegador, url }) {
   const vig3 = vigiar(page3);
   await page3.goto(url);
   await page3.waitForTimeout(800);
+  await page3.click('.nav-item[data-tela="bau"]');
+  await page3.waitForTimeout(350);
   await page3.click("#btn-bau");
   await page3.waitForTimeout(900);
   await page3.click('.nav-item[data-tela="mochila"]');

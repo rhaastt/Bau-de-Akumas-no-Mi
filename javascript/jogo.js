@@ -3,10 +3,11 @@
 
 import { pegar, formatarBerrys } from "./util.js";
 import * as estado from "./estado.js";
-import { carregarCatalogo } from "./dados.js";
+import { carregarCatalogo, carregarQuiz } from "./dados.js";
 import { iniciarNavegacao } from "./navegacao.js";
 import { iniciarModal } from "./modalItem.js";
 
+import { iniciarQuiz, renderQuiz } from "./telas/quiz.js";
 import { iniciarBau, renderBau } from "./telas/bau.js";
 import { iniciarMochila, renderMochila } from "./telas/mochila.js";
 import { iniciarPerfil, renderPerfil } from "./telas/perfil.js";
@@ -19,7 +20,7 @@ function mostrarFalha(erro) {
   const area = document.querySelector(".area-conteudo");
   if (!area) return;
   area.innerHTML = `<div class="painel">
-    <h2 class="titulo-painel">Não foi possível carregar os itens</h2>
+    <h2 class="titulo-painel">Não foi possível carregar os dados</h2>
     <p class="texto-apoio">Verifique se a pasta <strong>dados/</strong> está
     acessível e recarregue a página.</p>
   </div>`;
@@ -29,7 +30,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   // O catálogo vem de dados/*.json, então a inicialização espera o fetch
   // antes de montar qualquer tela.
   try {
-    estado.definirCatalogo(await carregarCatalogo());
+    const [itens, categoriasQuiz] = await Promise.all([
+      carregarCatalogo(),
+      carregarQuiz(),
+    ]);
+    estado.definirCatalogo(itens);
+    estado.definirQuiz(categoriasQuiz);
   } catch (erro) {
     mostrarFalha(erro);
     return;
@@ -39,6 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   iniciarModal();
 
+  iniciarQuiz();
   iniciarBau();
   iniciarMochila();
   iniciarPerfil();
@@ -48,6 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function renderTudo() {
     berrysEl.textContent = formatarBerrys(estado.obter().berrys);
+    renderQuiz();
     renderBau();
     renderMochila();
     renderPerfil();

@@ -43,6 +43,19 @@
   backface-visibility: hidden;
 }
 
+/* Épico e Lendário: traço mais grosso e revelação mais lenta — o mesmo
+   segundo sinal, além da cor, que os slots já usam para essas duas. */
+#dropItem.destaque img {
+  border-width: 2px;
+}
+#dropItem.destaque .drop-legend {
+  border-width: 2px;
+  font-weight: 700;
+}
+#dropItem.destaque.show .drop-inner img {
+  animation-duration: 1.8s;
+}
+
 @keyframes ItemFlip {
   0% {
     opacity: 0;

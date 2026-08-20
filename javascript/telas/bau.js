@@ -1,12 +1,36 @@
 /* Tela do Baú — abrir, sortear e animar o drop. */
 
-import { pegar, preload } from "../util.js";
+import { pegar, preload, prefersReducedMotion } from "../util.js";
 import * as estado from "../estado.js";
 import { irPara } from "../navegacao.js";
 import { sortearPorRaridade } from "../raridade.js";
 
 const ANIM_MS = 380;
-const VISIBLE_MS = 1400;
+
+/**
+ * Tempo do drop na tela, por raridade.
+ *
+ * Antes era 1400 para todo mundo: um Lendário de 3% aparecia exatamente igual
+ * a um Comum de 50%. A raridade existia no dado e na cor, mas não no peso da
+ * revelação — quem tirou o item raro não tinha como sentir isso.
+ */
+const TEMPO_POR_RARIDADE = {
+  Comum: 1400,
+  Incomum: 1400,
+  Raro: 2000,
+  Épico: 2600,
+  Lendário: 3400,
+};
+
+/** As duas raridades que ganham tratamento de destaque, como nos slots. */
+const DESTAQUE = new Set(["Épico", "Lendário"]);
+
+/** Exposto para o teste esperar pela raridade sorteada, e não por um número fixo. */
+export function tempoDoDrop(raridade) {
+  // Movimento reduzido: sem alongar a permanência, que também é animação.
+  if (prefersReducedMotion()) return TEMPO_POR_RARIDADE.Comum;
+  return TEMPO_POR_RARIDADE[raridade] ?? TEMPO_POR_RARIDADE.Comum;
+}
 
 let btnAbrirBau;
 let contBau;
@@ -41,11 +65,18 @@ function dropItem() {
   // Item inédito paga na hora; duplicata rende quando o jogador vende.
   const bonus = estado.adicionarItem(item);
 
+  const destaque = DESTAQUE.has(item.raridade);
+
   dropImgEl.src = item.img;
   dropImgEl.alt = item.nome;
-  dropLegendEl.textContent = bonus > 0 ? `${item.nome} · +${bonus}` : item.nome;
-  // A cor da raridade tinge a legenda do drop.
+  // Nas duas raridades de destaque a legenda diz o nome da raridade por
+  // escrito: o realce não pode existir só na cor e no tempo.
+  const partes = [destaque ? `${item.raridade} · ${item.nome}` : item.nome];
+  if (bonus > 0) partes.push(`+${bonus}`);
+  dropLegendEl.textContent = partes.join(" · ");
+  // A cor da raridade tinge a legenda e a borda da imagem do drop.
   dropItemEl.dataset.raridade = item.raridade ?? "";
+  dropItemEl.classList.toggle("destaque", destaque);
 
   dropItemEl.classList.remove("show");
   void dropItemEl.offsetWidth; // força reflow para reiniciar a animação
@@ -56,7 +87,7 @@ function dropItem() {
   dropTimeoutId = setTimeout(() => {
     dropItemEl.classList.remove("show");
     dropItemEl.classList.add("hidden");
-  }, VISIBLE_MS);
+  }, tempoDoDrop(item.raridade));
 
   if (estado.obter().config.irParaMochilaAoGanhar) {
     irPara("mochila");

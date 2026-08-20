@@ -1,6 +1,6 @@
 /* Fluxo do jogo: abrir baú, drop, mochila, modal, loja e ajustes. */
 
-import { criarColetor, vigiar, telasVisiveis, ganharItem } from "../auxiliar.js";
+import { criarColetor, vigiar, telasVisiveis, ganharItem, irAoBau } from "../auxiliar.js";
 
 export const nome = "Jogo";
 
@@ -14,6 +14,10 @@ export async function executar({ navegador, url }) {
   await page.waitForTimeout(1000);
 
   // --- Abrir o baú ---
+  // O jogo abre no Desafio; a tela do Baú é um clique de distância.
+  check("o jogo abre no Desafio", (await telasVisiveis(page))[0] === "tela-quiz", (await telasVisiveis(page))[0]);
+  await irAoBau(page);
+
   const antes = await page.$eval("#bau-fechado", (e) => getComputedStyle(e).opacity);
   await page.click("#btn-bau");
   await page.waitForTimeout(900);
@@ -54,8 +58,18 @@ export async function executar({ navegador, url }) {
     `${depois.raridade}: ${depois.corBordaImg} (esperado ${CORES[depois.raridade]})`
   );
 
-  await page.waitForTimeout(1200);
-  check("drop some depois do tempo", await page.$eval("#dropItem", (e) => e.classList.contains("hidden")));
+  // Esperar 1.200 ms fixos falharia nos 3% em que sai um Lendário, que agora
+  // fica 3.400 ms na tela. A espera sai da própria raridade sorteada.
+  const tempo = await page.evaluate(async (r) => {
+    const { tempoDoDrop } = await import("./javascript/telas/bau.js");
+    return tempoDoDrop(r);
+  }, depois.raridade);
+  await page.waitForTimeout(tempo + 400);
+  check(
+    "drop some depois do tempo da raridade",
+    await page.$eval("#dropItem", (e) => e.classList.contains("hidden")),
+    `${depois.raridade}: ${tempo}ms`
+  );
 
   // --- Mochila e modal ---
   await page.click('.nav-item[data-tela="mochila"]');

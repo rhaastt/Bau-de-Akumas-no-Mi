@@ -4,10 +4,13 @@
  * de baús e a tela de Perfil sem fiação manual entre telas: cada tela assina
  * e se redesenha quando algo muda.
  *
- * Sem persistência por decisão de produto — recarregar a página zera tudo.
+ * O progresso é salvo: notificar() persiste o estado inteiro, então toda ação
+ * de domínio já grava sem que nenhuma tela precise saber disso.
  */
 
 import { VALOR_VENDA, BONUS_DESCOBERTA } from "./raridade.js";
+import { PERGUNTAS_POR_CATEGORIA, POTE_VAZIO, recompensaDe, somar } from "./quiz.js";
+import * as persistencia from "./persistencia.js";
 
 // O catálogo chega de dados/*.json em tempo de execução, por isso é
 // preenchido por definirCatalogo() e lido por funções, não por consts.
@@ -39,6 +42,18 @@ export function definirCatalogo(itens) {
   }
 }
 
+// As perguntas chegam de dados/quiz.json em tempo de execução, pelo mesmo
+// motivo do catálogo: não existe constante para exportar no topo do arquivo.
+let _perguntas = [];
+
+export function definirQuiz(categorias) {
+  _perguntas = categorias;
+}
+
+export const categoriasQuiz = () => _perguntas;
+export const perguntasDe = (nome) =>
+  _perguntas.find((c) => c.nome === nome)?.perguntas ?? [];
+
 export const catalogo = () => _catalogo;
 export const categorias = () => _categorias;
 export const tiposDe = (categoria) => _tiposPorCategoria[categoria] ?? [];
@@ -62,9 +77,39 @@ const estadoInicial = () => ({
     animacoes: true,
     irParaMochilaAoGanhar: false,
   },
+  // progresso[cat] conta perguntas RESPONDIDAS, não acertadas: é o que faz o
+  // erro encerrar a tentativa sem apagar o que já foi desbloqueado.
+  // ciclos[cat] conta voltas completas — a partir da primeira, a categoria
+  // rende a taxa de rejogo.
+  quiz: { progresso: {}, ciclos: {} },
+  // Sequência em andamento. Mora no estado, e não no módulo da tela, para
+  // sobreviver a sair da tela e voltar: o pote em aberto não some sozinho.
+  rodada: null,
 });
 
-let estado = estadoInicial();
+/**
+ * Mescla o save sobre o estado inicial, um nível fundo.
+ *
+ * Sem isso, um campo novo acrescentado depois volta `undefined` para quem já
+ * tem save antigo: o jogo quebraria em produção e passaria nos testes, que
+ * sempre partem de storage vazio.
+ */
+function mesclarSalvo(salvo) {
+  const base = estadoInicial();
+  if (!salvo) return base;
+
+  const resultado = { ...base, ...salvo };
+  for (const [chave, valorBase] of Object.entries(base)) {
+    const valorSalvo = salvo[chave];
+    const objetoSimples = (v) => v && typeof v === "object" && !Array.isArray(v);
+    if (objetoSimples(valorBase) && objetoSimples(valorSalvo)) {
+      resultado[chave] = { ...valorBase, ...valorSalvo };
+    }
+  }
+  return resultado;
+}
+
+let estado = mesclarSalvo(persistencia.carregar());
 const ouvintes = new Set();
 
 export function obter() {
@@ -78,6 +123,7 @@ export function assinar(fn) {
 }
 
 function notificar() {
+  persistencia.salvar(estado);
   for (const fn of ouvintes) fn(estado);
 }
 
@@ -215,8 +261,132 @@ export function definirConfig(chave, valor) {
 }
 
 export function resetarProgresso() {
+  // Limpar antes: sem isso o notificar() logo abaixo regravaria o save e o
+  // progresso ressuscitaria no reload seguinte.
+  persistencia.limpar();
   estado = estadoInicial();
   notificar();
+}
+
+// ===== Desafio =====
+
+export const progressoDe = (categoria) => estado.quiz.progresso[categoria] ?? 0;
+export const ciclosDe = (categoria) => estado.quiz.ciclos[categoria] ?? 0;
+
+/** Categoria completada é a que teve as 5 respondidas, ou já deu uma volta. */
+export function foiCompletada(categoria) {
+  return progressoDe(categoria) >= PERGUNTAS_POR_CATEGORIA || ciclosDe(categoria) > 0;
+}
+
+/**
+ * A primeira categoria começa liberada; as outras esperam a anterior fechar.
+ * Fechar é responder as 5 — errar não trava, só encerra a tentativa.
+ */
+export function categoriaLiberada(categoria, ordem) {
+  const i = ordem.indexOf(categoria);
+  if (i <= 0) return i === 0;
+  return foiCompletada(ordem[i - 1]);
+}
+
+/**
+ * Começa uma sequência. Categoria já completada recomeça do zero e passa a
+ * contar como rejogo, que rende a taxa reduzida.
+ */
+export function iniciarRodada(categoria) {
+  const completa = progressoDe(categoria) >= PERGUNTAS_POR_CATEGORIA;
+  const ciclos = ciclosDe(categoria) + (completa ? 1 : 0);
+
+  atualizar({
+    quiz: {
+      progresso: { ...estado.quiz.progresso, [categoria]: completa ? 0 : progressoDe(categoria) },
+      ciclos: { ...estado.quiz.ciclos, [categoria]: ciclos },
+    },
+    rodada: {
+      categoria,
+      posicao: completa ? 0 : progressoDe(categoria),
+      pote: POTE_VAZIO,
+      rejogo: ciclos > 0,
+      fase: "pergunta",
+    },
+  });
+}
+
+/**
+ * Registra a resposta da pergunta atual.
+ *
+ * O progresso avança nos dois casos — a pergunta foi respondida. O que o erro
+ * custa é o pote acumulado, não o desbloqueio.
+ *
+ * @returns {"acertou"|"completou"|"errou"|null}
+ */
+export function responderQuiz(acertou) {
+  const rodada = estado.rodada;
+  if (!rodada || rodada.fase !== "pergunta") return null;
+
+  const respondidas = rodada.posicao + 1;
+  const pote = acertou
+    ? somar(rodada.pote, recompensaDe(rodada.categoria, rodada.posicao, rodada.rejogo))
+    : POTE_VAZIO;
+  const fase = !acertou
+    ? "errou"
+    : respondidas >= PERGUNTAS_POR_CATEGORIA
+    ? "completou"
+    : "acertou";
+
+  atualizar({
+    quiz: {
+      ...estado.quiz,
+      progresso: { ...estado.quiz.progresso, [rodada.categoria]: respondidas },
+    },
+    // `perdido` guarda o que o erro custou: o pote já foi zerado acima, e o
+    // card de resultado precisa dizer o número em vez de "0".
+    rodada: { ...rodada, pote, fase, perdido: acertou ? null : rodada.pote },
+  });
+
+  return fase;
+}
+
+/** ARRISCAR: segue para a próxima pergunta com o pote em jogo. */
+export function arriscar() {
+  const rodada = estado.rodada;
+  if (!rodada || rodada.fase !== "acertou") return false;
+  atualizar({
+    rodada: { ...rodada, posicao: rodada.posicao + 1, fase: "pergunta" },
+  });
+  return true;
+}
+
+/**
+ * GUARDAR: credita o pote e encerra a sequência.
+ *
+ * Baús são limitados pelo teto da Loja, então o que passa do limite não é
+ * creditado — a tela avisa com o número que de fato entrou, em vez de mentir.
+ *
+ * @returns {{berrys:number, baus:number, bausPerdidos:number}}
+ */
+export function guardarRecompensa() {
+  const rodada = estado.rodada;
+  if (!rodada || (rodada.fase !== "acertou" && rodada.fase !== "completou")) {
+    return { ...POTE_VAZIO, bausPerdidos: 0 };
+  }
+
+  const cabem = Math.max(0, estado.baus.total - estado.baus.atual);
+  const baus = Math.min(rodada.pote.baus, cabem);
+  const berrys = rodada.pote.berrys;
+
+  atualizar({
+    berrys: Number((estado.berrys + berrys).toFixed(2)),
+    baus: { ...estado.baus, atual: estado.baus.atual + baus },
+    rodada: null,
+  });
+
+  return { berrys, baus, bausPerdidos: rodada.pote.baus - baus };
+}
+
+/** Sai da sequência sem creditar nada — usado depois do erro. */
+export function abandonarRodada() {
+  if (!estado.rodada) return;
+  atualizar({ rodada: null });
 }
 
 /** Nomes dos itens já coletados — usado por Perfil e Busca. */

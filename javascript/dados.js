@@ -11,13 +11,18 @@
 import { raridadeDoTipo } from "./raridade.js";
 
 const ARQUIVOS = ["dados/frutas.json", "dados/armas.json"];
+const ARQUIVO_QUIZ = "dados/quiz.json";
 
-async function carregarArquivo(caminho) {
+async function buscarJSON(caminho) {
   const resposta = await fetch(caminho);
   if (!resposta.ok) {
     throw new Error(`Falha ao carregar ${caminho}: ${resposta.status}`);
   }
-  const dados = await resposta.json();
+  return resposta.json();
+}
+
+async function carregarArquivo(caminho) {
+  const dados = await buscarJSON(caminho);
   if (!dados || !Array.isArray(dados.itens)) {
     throw new Error(`${caminho} não tem uma lista "itens".`);
   }
@@ -35,4 +40,19 @@ async function carregarArquivo(caminho) {
 export async function carregarCatalogo() {
   const listas = await Promise.all(ARQUIVOS.map(carregarArquivo));
   return listas.flat();
+}
+
+/**
+ * Carrega as perguntas do Desafio.
+ *
+ * Arquivo separado do catálogo porque a forma é outra: o catálogo vira uma
+ * lista achatada de itens, e o quiz é uma lista de categorias, cada uma com
+ * suas perguntas em ordem — a ordem é a progressão.
+ */
+export async function carregarQuiz() {
+  const dados = await buscarJSON(ARQUIVO_QUIZ);
+  if (!dados || !Array.isArray(dados.categorias)) {
+    throw new Error(`${ARQUIVO_QUIZ} não tem uma lista "categorias".`);
+  }
+  return dados.categorias;
 }

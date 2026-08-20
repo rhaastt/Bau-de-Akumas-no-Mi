@@ -1,0 +1,124 @@
+{
+  "categorias": [
+    {
+      "nome": "East Blue",
+      "perguntas": [
+        {
+          "pergunta": "Qual é o sonho de Monkey D. Luffy?",
+          "opcoes": [
+            "Ser o Rei dos Piratas",
+            "Encontrar o All Blue",
+            "Ser o maior espadachim do mundo",
+            "Desenhar o mapa do mundo"
+          ],
+          "correta": 0
+        },
+        {
+          "pergunta": "Que Akuma no Mi o Luffy comeu?",
+          "opcoes": [
+            "Bara Bara no Mi",
+            "Gomu Gomu no Mi",
+            "Mera Mera no Mi",
+            "Hana Hana no Mi"
+          ],
+          "correta": 1
+        },
+        {
+          "pergunta": "Quem deu o chapéu de palha ao Luffy?",
+          "opcoes": ["Garp", "Ace", "Shanks", "Dragon"],
+          "correta": 2
+        },
+        {
+          "pergunta": "Quem foi o primeiro a entrar no bando do Chapéu de Palha?",
+          "opcoes": ["Nami", "Usopp", "Sanji", "Roronoa Zoro"],
+          "correta": 3
+        },
+        {
+          "pergunta": "Qual pirata dominava a vila Cocoyasi e explorava a Nami?",
+          "opcoes": ["Arlong", "Buggy", "Kuro", "Don Krieg"],
+          "correta": 0
+        }
+      ]
+    },
+    {
+      "nome": "Grand Line",
+      "perguntas": [
+        {
+          "pergunta": "Qual navio o bando ganha em Water Seven?",
+          "opcoes": ["Going Merry", "Thousand Sunny", "Oro Jackson", "Moby Dick"],
+          "correta": 1
+        },
+        {
+          "pergunta": "Qual é a Akuma no Mi da Nico Robin?",
+          "opcoes": [
+            "Yomi Yomi no Mi",
+            "Suke Suke no Mi",
+            "Hana Hana no Mi",
+            "Ope Ope no Mi"
+          ],
+          "correta": 2
+        },
+        {
+          "pergunta": "Como se chama a ilha do céu que o bando visita?",
+          "opcoes": ["Jaya", "Drum", "Alabasta", "Skypiea"],
+          "correta": 3
+        },
+        {
+          "pergunta": "Qual Shichibukai comandava a Baroque Works como Mr. 0?",
+          "opcoes": ["Crocodile", "Doflamingo", "Gecko Moria", "Bartholomew Kuma"],
+          "correta": 0
+        },
+        {
+          "pergunta": "Quem era o rei de Alabasta, pai da Vivi?",
+          "opcoes": ["Igaram", "Nefertari Cobra", "Dalton", "Wapol"],
+          "correta": 1
+        }
+      ]
+    },
+    {
+      "nome": "Novo Mundo",
+      "perguntas": [
+        {
+          "pergunta": "Quem era o imediato de Gol D. Roger?",
+          "opcoes": [
+            "Crocus",
+            "Scopper Gaban",
+            "Silvers Rayleigh",
+            "Shanks"
+          ],
+          "correta": 2
+        },
+        {
+          "pergunta": "Que Akuma no Mi o Barba Negra tomou do Barba Branca?",
+          "opcoes": [
+            "Yami Yami no Mi",
+            "Goro Goro no Mi",
+            "Magu Magu no Mi",
+            "Gura Gura no Mi"
+          ],
+          "correta": 3
+        },
+        {
+          "pergunta": "Qual Yonkou governa a ilha de Whole Cake?",
+          "opcoes": ["Big Mom", "Kaido", "Shanks", "Barba Negra"],
+          "correta": 0
+        },
+        {
+          "pergunta": "Qual é o nome verdadeiro do Barba Negra?",
+          "opcoes": [
+            "Douglas Bullet",
+            "Marshall D. Teach",
+            "Edward Weevil",
+            "Marshall D. Blake"
+          ],
+          "correta": 1
+        },
+        {
+          "pergunta": "Qual é o nome da espada de Dracule Mihawk?",
+          "opcoes": ["Shusui", "Enma", "Yoru", "Ace"],
+          "correta": 2
+        }
+      ]
+    }
+  ]
+}
