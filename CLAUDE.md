@@ -22,7 +22,7 @@ npm test      # suíte completa; sobe e derruba o servidor sozinha
 index.html              topo, navegação e as 6 <section class="tela">
 css/
   styles.css            barril de @import — a ordem importa
-  tokens.css            variáveis: cor, espaço, raio, raridade
+  tokens.css            variáveis: cor, espaço, tipografia, raio, raridade
   reset.css componentes.css telas.css mochila.css dropItem.css modal-item.css
 javascript/
   dados.js              carrega os JSON e carimba categoria e raridade
@@ -85,8 +85,26 @@ modal para itens do catálogo, não oferece venda.
 preto e branco. Onde a cor aparece, a informação também é dada por texto (o
 selo diz o nome) ou por forma (Épico e Lendário têm borda mais grossa).
 
-**Valores visuais vêm de `tokens.css`.** Nada de cor, espaço ou raio cru dentro
-dos componentes — use as variáveis.
+**A cor da raridade pinta o item, nunca a ação.** Slot, borda da imagem do
+drop, legenda do drop, imagem do modal e selo carregam `--cor-raridade`. O
+botão de vender fica preto como qualquer outro botão — ele estava herdando a
+raridade e ficava bronze num Lendário, o que sugeria que a cor dizia algo sobre
+a venda. A confirmação continua se distinguindo por inversão, não por cor nova.
+
+**Valores visuais vêm de `tokens.css`.** Nada de cor, espaço, raio ou tamanho
+de fonte cru dentro dos componentes — use as variáveis. São três escalas, e
+todas têm degraus suficientes:
+
+- espaço: `--e-2xs` 2px · `--e-xs` 4px · `--e-sm` 6px · `--e-md` 8px ·
+  `--e-lg` 12px · `--e-xl` 18px · `--e-2xl` 26px · `--e-3xl` 40px;
+- tipografia: `--txt-2xs` … `--txt-xl` e `--txt-display`, um degrau por papel
+  (rótulo de slot, selo, chip, apoio, corpo, título de painel, nome do item,
+  contador do baú). Todo `font-size` do projeto sai daqui — se um tamanho novo
+  parecer necessário, quase sempre o certo é usar o degrau vizinho;
+- raio: `--raio-sm/md/lg/pill`.
+
+`reset.css` é a única exceção: ele normaliza o navegador antes do tema e
+mantém os valores próprios de reset (`80%` em `sub`/`sup`, borda de `input`).
 
 **Uma assinatura só redesenha tudo.** `jogo.js` assina `estado.assinar()` uma
 vez e chama todos os `render*`. É proposital: as telas são pequenas e redesenho

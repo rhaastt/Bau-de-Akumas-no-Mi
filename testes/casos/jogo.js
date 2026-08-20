@@ -24,6 +24,7 @@ export async function executar({ navegador, url }) {
     legenda: document.getElementById("dropLegend").textContent,
     raridade: document.getElementById("dropItem").dataset.raridade,
     corLegenda: getComputedStyle(document.querySelector("#dropItem .drop-legend")).color,
+    corBordaImg: getComputedStyle(document.getElementById("dropImg")).borderTopColor,
     qtd: document.getElementById("qtd-atual").textContent,
   }));
 
@@ -46,6 +47,11 @@ export async function executar({ navegador, url }) {
     "legenda do drop assume a cor da raridade",
     depois.corLegenda === CORES[depois.raridade],
     `${depois.raridade}: ${depois.corLegenda}`
+  );
+  check(
+    "borda da imagem do drop assume a cor da raridade",
+    depois.corBordaImg === CORES[depois.raridade],
+    `${depois.raridade}: ${depois.corBordaImg} (esperado ${CORES[depois.raridade]})`
   );
 
   await page.waitForTimeout(1200);

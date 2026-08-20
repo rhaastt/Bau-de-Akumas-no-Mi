@@ -5,7 +5,7 @@
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: var(--e-xl);
   backdrop-filter: blur(6px);
   background: rgba(0, 0, 0, 0.06);
   z-index: 2000;
@@ -17,13 +17,13 @@
 
 #inventarioItemCard {
   display: grid;
-  gap: 0.5rem;
+  gap: var(--e-md);
   justify-items: center;
   width: min(90vw, 360px);
-  background-color: #fff;
-  border: 1px solid #000;
-  border-radius: 8px;
-  padding: 1rem;
+  background-color: var(--cor-fundo);
+  border: var(--borda);
+  border-radius: var(--raio-sm);
+  padding: var(--e-xl);
   text-align: center;
   animation: fadeInUp 0.3s ease forwards;
 }
@@ -33,17 +33,17 @@
   height: 96px;
   object-fit: contain;
   border: 2px solid var(--cor-raridade, var(--cor-tinta));
-  border-radius: 8px;
+  border-radius: var(--raio-sm);
   display: block;
 }
 
 #inventarioItemNome {
-  font-size: 1.2rem;
+  font-size: var(--txt-xl);
   font-weight: bold;
 }
 
 #inventarioItemTipo {
-  font-size: 0.85rem;
+  font-size: var(--txt-sm);
   font-style: italic;
   opacity: 0.75;
 }
@@ -53,8 +53,8 @@
   border: 1px solid var(--cor-raridade, var(--cor-tinta));
   color: var(--cor-raridade, var(--cor-tinta));
   border-radius: var(--raio-pill);
-  padding: 2px var(--e3);
-  font-size: 0.75rem;
+  padding: var(--e-2xs) var(--e-lg);
+  font-size: var(--txt-xs);
   font-weight: 700;
   letter-spacing: 0.4px;
   text-transform: uppercase;
@@ -65,14 +65,15 @@
 }
 
 #inventarioItemDescricao {
-  font-size: 0.95rem;
+  font-size: var(--txt-base);
   line-height: 1.4;
 }
 
-/* Venda herda a cor da raridade do card, como o resto do modal. */
+/* Venda é preto em qualquer raridade: a cor informa o item, não a ação.
+   Quem carrega a raridade no modal é a borda da imagem e o selo. */
 #btnVenderItem {
-  border-color: var(--cor-raridade, var(--cor-tinta));
-  color: var(--cor-raridade, var(--cor-tinta));
+  border-color: var(--cor-tinta);
+  color: var(--cor-tinta);
 }
 
 #btnVenderItem[hidden] {
@@ -87,10 +88,10 @@
 }
 
 #btnFecharCardItemIventario {
-  border: 1px solid #000;
-  background: #fff;
-  border-radius: 8px;
-  padding: 0.5rem 0.9rem;
+  border: var(--borda);
+  background: var(--cor-fundo);
+  border-radius: var(--raio-sm);
+  padding: var(--e-md) var(--e-lg);
   cursor: pointer;
 }
 

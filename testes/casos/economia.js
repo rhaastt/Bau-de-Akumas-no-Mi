@@ -312,6 +312,34 @@ export async function executar({ navegador, url }) {
   await page.keyboard.press("Escape");
   await page.waitForTimeout(400);
 
+  // --- A cor da raridade fica no item, não na ação ---
+  // Antes, o botão herdava --cor-raridade e ficava bronze num Lendário.
+  // O modal carimba data-raridade no card, então a variável cascateia até o
+  // botão: a checagem compara a cor computada nos dois extremos da tabela.
+  const coresBotao = await page.evaluate(async () => {
+    const estado = await import("./javascript/estado.js");
+    const { abrirItem, fecharItem } = await import("./javascript/modalItem.js");
+    const btn = document.getElementById("btnVenderItem");
+    const ler = (raridade) => {
+      const item = estado.catalogo().find((i) => i.raridade === raridade);
+      abrirItem(item, { venda: { valor: 1, ultima: false, vender() {} } });
+      const s = getComputedStyle(btn);
+      const cor = { texto: s.color, borda: s.borderTopColor };
+      fecharItem();
+      return cor;
+    };
+    return { comum: ler("Comum"), lendario: ler("Lendário") };
+  });
+  await page.waitForTimeout(450);
+  check(
+    "o botão de vender é preto em qualquer raridade",
+    coresBotao.comum.texto === coresBotao.lendario.texto &&
+      coresBotao.comum.borda === coresBotao.lendario.borda &&
+      coresBotao.lendario.texto === "rgb(0, 0, 0)" &&
+      coresBotao.lendario.borda === "rgb(0, 0, 0)",
+    JSON.stringify(coresBotao)
+  );
+
   // --- A economia não trava nos primeiros baús ---
   await page.click('.nav-item[data-tela="config"]');
   await page.waitForTimeout(300);

@@ -15,13 +15,33 @@
   --raio-lg: 16px;
   --raio-pill: 999px;
 
-  /* Espaço */
-  --e1: 6px;
-  --e2: 8px;
-  --e3: 12px;
-  --e4: 18px;
-  --e5: 26px;
-  --e6: 40px;
+  /* Espaço — nomes conversam com a escala tipográfica abaixo.
+     Os seis maiores mantêm os valores que o projeto já usava; os dois menores
+     existem para absorver medidas que estavam cruas nos componentes. */
+  --e-2xs: 2px;
+  --e-xs: 4px;
+  --e-sm: 6px;
+  --e-md: 8px;
+  --e-lg: 12px;
+  --e-xl: 18px;
+  --e-2xl: 26px;
+  --e-3xl: 40px;
+
+  /* Tipografia — um degrau por papel, em vez dos 18 tamanhos avulsos que
+     existiam antes. Todo font-size do projeto sai daqui. */
+  --txt-2xs: clamp(9px, 2vw, 11px);
+  --txt-xs: clamp(10px, 2.2vw, 12px);
+  --txt-sm: clamp(11px, 2.4vw, 13px);
+  --txt-md: clamp(12px, 2.6vw, 14px);
+  --txt-base: clamp(13px, 2.8vw, 16px);
+  --txt-lg: clamp(15px, 3.4vw, 18px);
+  --txt-xl: clamp(18px, 4.4vw, 24px);
+  --txt-display: clamp(28px, 8vw, 44px);
+
+  --txt-raiz: clamp(14px, 2.2vmin, 18px);
+
+  /* Glifo do slot vazio — decorativo, mas fora do texto corrido. */
+  --simbolo-vazio: 28px;
 
   /* Ergonomia */
   --toque-min: 48px;

@@ -10,34 +10,34 @@
 .painel {
   border: var(--borda);
   border-radius: var(--raio-lg);
-  padding: var(--e4);
-  margin-block-end: var(--e4);
+  padding: var(--e-xl);
+  margin-block-end: var(--e-xl);
   background-color: var(--cor-fundo);
 }
 
 .titulo-painel {
-  font-size: clamp(15px, 3.4vw, 18px);
+  font-size: var(--txt-lg);
   font-weight: 700;
-  margin-block-end: var(--e3);
+  margin-block-end: var(--e-lg);
 }
 
 .texto-apoio {
-  font-size: clamp(12px, 2.6vw, 14px);
+  font-size: var(--txt-md);
   opacity: var(--op-media);
-  margin-block-end: var(--e3);
+  margin-block-end: var(--e-lg);
 }
 
 .aviso {
-  font-size: clamp(12px, 2.6vw, 14px);
-  margin-block-start: var(--e3);
+  font-size: var(--txt-md);
+  margin-block-start: var(--e-lg);
   min-block-size: 1.2em;
 }
 
 .estado-vazio {
   text-align: center;
-  padding-block: var(--e6);
+  padding-block: var(--e-3xl);
   opacity: var(--op-fraca);
-  font-size: clamp(14px, 3vw, 16px);
+  font-size: var(--txt-base);
 }
 
 /* ===== Botão ===== */
@@ -49,8 +49,8 @@
   cursor: pointer;
   inline-size: 100%;
   min-block-size: var(--toque-min);
-  padding: var(--e3) var(--e5);
-  font-size: clamp(13px, 2.8vw, 16px);
+  padding: var(--e-lg) var(--e-2xl);
+  font-size: var(--txt-base);
   font-weight: 700;
   letter-spacing: 0.3px;
 }
@@ -62,20 +62,20 @@
 
 /* Botão de venda: separado da grade, para não parecer parte dos slots. */
 .btn-vender {
-  margin-block-start: var(--e4);
+  margin-block-start: var(--e-xl);
 }
 
 .btn-compacto {
   inline-size: auto;
   min-inline-size: 128px;
-  padding: var(--e2) var(--e4);
-  font-size: clamp(11px, 2.4vw, 13px);
+  padding: var(--e-md) var(--e-xl);
+  font-size: var(--txt-sm);
 }
 
 /* ===== Tela Baú ===== */
 .bau-layout {
   display: grid;
-  gap: var(--e4);
+  gap: var(--e-xl);
 }
 
 /* A mochila lateral é exclusiva do desktop; no mobile a Mochila é tela. */
@@ -87,7 +87,7 @@
 .perfil-cartao {
   display: grid;
   justify-items: center;
-  gap: var(--e1);
+  gap: var(--e-sm);
   text-align: center;
 }
 
@@ -96,52 +96,52 @@
 }
 
 .perfil-nome {
-  font-size: clamp(18px, 4.4vw, 24px);
+  font-size: var(--txt-xl);
   font-weight: 700;
 }
 
 .perfil-subtitulo {
-  font-size: clamp(12px, 2.6vw, 14px);
+  font-size: var(--txt-md);
   opacity: var(--op-media);
 }
 
 .lista-estatisticas {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: var(--e3);
+  gap: var(--e-lg);
 }
 
 .estatistica {
   border: var(--borda);
   border-radius: var(--raio-md);
-  padding: var(--e3);
+  padding: var(--e-lg);
   display: grid;
-  gap: 2px;
+  gap: var(--e-2xs);
   text-align: center;
 }
 
 .estatistica-valor {
-  font-size: clamp(18px, 4.6vw, 24px);
+  font-size: var(--txt-xl);
   font-weight: 700;
   line-height: 1.1;
 }
 
 .estatistica-rotulo {
-  font-size: clamp(11px, 2.4vw, 12px);
+  font-size: var(--txt-xs);
   opacity: var(--op-media);
 }
 
 /* Barra de progresso: trilho com borda, preenchimento sólido preto. */
 .progresso-linha + .progresso-linha {
-  margin-block-start: var(--e3);
+  margin-block-start: var(--e-lg);
 }
 
 .progresso-topo {
   display: flex;
   justify-content: space-between;
-  gap: var(--e2);
-  font-size: clamp(12px, 2.6vw, 14px);
-  margin-block-end: var(--e1);
+  gap: var(--e-md);
+  font-size: var(--txt-md);
+  margin-block-end: var(--e-sm);
 }
 
 .progresso-valor {
@@ -165,66 +165,66 @@
 /* ===== Tela Loja ===== */
 .lista-pacotes {
   display: grid;
-  gap: var(--e3);
+  gap: var(--e-lg);
 }
 
 .pacote {
   border: var(--borda);
   border-radius: var(--raio-md);
-  padding: var(--e3);
+  padding: var(--e-lg);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--e3);
+  gap: var(--e-lg);
   flex-wrap: wrap;
 }
 
 .pacote-info {
   display: grid;
-  gap: 2px;
+  gap: var(--e-2xs);
   min-inline-size: 0;
 }
 
 .pacote-nome {
   font-weight: 700;
-  font-size: clamp(14px, 3vw, 16px);
+  font-size: var(--txt-base);
 }
 
 .pacote-detalhe {
-  font-size: clamp(11px, 2.4vw, 13px);
+  font-size: var(--txt-sm);
   opacity: var(--op-media);
 }
 
 /* ===== Tela Configurações ===== */
 .lista-opcoes {
   display: grid;
-  gap: var(--e3);
+  gap: var(--e-lg);
 }
 
 .linha-opcao {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--e3);
+  gap: var(--e-lg);
   border: var(--borda);
   border-radius: var(--raio-md);
-  padding: var(--e3);
+  padding: var(--e-lg);
 }
 
 .opcao-texto {
   display: grid;
-  gap: 2px;
+  gap: var(--e-2xs);
   min-inline-size: 0;
   cursor: pointer;
 }
 
 .opcao-titulo {
   font-weight: 700;
-  font-size: clamp(13px, 2.9vw, 15px);
+  font-size: var(--txt-base);
 }
 
 .opcao-descricao {
-  font-size: clamp(11px, 2.4vw, 13px);
+  font-size: var(--txt-sm);
   opacity: var(--op-media);
 }
 
@@ -236,7 +236,7 @@
   border: var(--borda);
   border-radius: var(--raio-pill);
   background: var(--cor-fundo);
-  padding: 3px;
+  padding: var(--e-xs);
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -263,9 +263,9 @@
 /* ===== Tela Busca ===== */
 .rotulo-campo {
   display: block;
-  font-size: clamp(12px, 2.6vw, 14px);
+  font-size: var(--txt-md);
   font-weight: 700;
-  margin-block-end: var(--e2);
+  margin-block-end: var(--e-md);
 }
 
 #busca-campo {
@@ -273,17 +273,17 @@
   min-block-size: var(--toque-min);
   border: var(--borda);
   border-radius: var(--raio-sm);
-  padding: var(--e2) var(--e3);
+  padding: var(--e-md) var(--e-lg);
   background: var(--cor-fundo);
   color: var(--cor-tinta);
-  font-size: clamp(14px, 3vw, 16px);
+  font-size: var(--txt-base);
 }
 
 .lista-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--e2);
-  margin-block: var(--e3);
+  gap: var(--e-md);
+  margin-block: var(--e-lg);
 }
 
 /* Chip ativo por inversão. */
@@ -292,8 +292,8 @@
   border-radius: var(--raio-pill);
   background: var(--cor-fundo);
   color: var(--cor-tinta);
-  padding: var(--e2) var(--e3);
-  font-size: clamp(11px, 2.4vw, 13px);
+  padding: var(--e-md) var(--e-lg);
+  font-size: var(--txt-sm);
   cursor: pointer;
   white-space: nowrap;
 }
@@ -307,31 +307,31 @@
    à faixa de categorias acima. */
 .lista-chips-tipo {
   margin-block-start: 0;
-  padding-inline-start: var(--e3);
+  padding-inline-start: var(--e-lg);
   border-inline-start: var(--borda);
 }
 
 .lista-chips-tipo .chip {
-  font-size: clamp(10px, 2.2vw, 12px);
-  padding: var(--e1) var(--e3);
+  font-size: var(--txt-xs);
+  padding: var(--e-sm) var(--e-lg);
 }
 
 /* ===== Perfil: progresso agrupado por categoria ===== */
 .grupo-progresso + .grupo-progresso {
-  margin-block-start: var(--e4);
-  padding-block-start: var(--e4);
+  margin-block-start: var(--e-xl);
+  padding-block-start: var(--e-xl);
   border-block-start: var(--borda);
 }
 
 .detalhe-subtipos > summary {
-  margin-block-start: var(--e2);
-  font-size: clamp(11px, 2.4vw, 13px);
+  margin-block-start: var(--e-md);
+  font-size: var(--txt-sm);
   opacity: var(--op-media);
 }
 
 .detalhe-subtipos .subtipos {
-  margin-block-start: var(--e3);
-  padding-inline-start: var(--e3);
+  margin-block-start: var(--e-lg);
+  padding-inline-start: var(--e-lg);
   border-inline-start: var(--borda);
 }
 
@@ -341,20 +341,20 @@
   .bau-layout {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
-    gap: var(--e5);
+    gap: var(--e-2xl);
   }
 
   .mochila-lateral {
     display: block;
     margin-block-end: 0;
     position: sticky;
-    top: var(--e5);
+    top: var(--e-2xl);
   }
 
   .perfil-layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: var(--e4);
+    gap: var(--e-xl);
     align-items: start;
   }
 
@@ -364,6 +364,6 @@
   }
 
   .painel {
-    padding: var(--e5);
+    padding: var(--e-2xl);
   }
 }

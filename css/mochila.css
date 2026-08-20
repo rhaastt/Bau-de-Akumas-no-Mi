@@ -5,7 +5,7 @@
 .grade-slots {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
-  gap: var(--e3);
+  gap: var(--e-lg);
   margin: 0;
   padding: 0;
 }
@@ -31,7 +31,7 @@
 
 .grade-slots .slot .pad {
   position: absolute;
-  inset: var(--e1) var(--e1) 26px;
+  inset: var(--e-sm) var(--e-sm) 26px;
   display: grid;
   place-items: center;
 }
@@ -47,9 +47,9 @@
   position: absolute;
   inset-inline: 4px;
   bottom: 4px;
-  padding: 2px 4px;
+  padding: var(--e-2xs) var(--e-xs);
   block-size: 20px;
-  font-size: 9px;
+  font-size: var(--txt-2xs);
   line-height: 16px;
   text-align: center;
   color: var(--cor-tinta);
@@ -63,7 +63,7 @@
 /* Slot vazio da mochila. */
 .grade-slots .slot.vazio .pad::after {
   content: "+";
-  font-size: 28px;
+  font-size: var(--simbolo-vazio);
   opacity: var(--op-fraca);
   pointer-events: none;
 }
@@ -83,7 +83,7 @@
 
 .grade-slots .slot.sem-imagem .pad::after {
   content: "+";
-  font-size: 28px;
+  font-size: var(--simbolo-vazio);
   opacity: var(--op-fraca);
   pointer-events: none;
 }

@@ -21,7 +21,7 @@
 
 #dropItem .drop-inner {
   display: grid;
-  gap: 8px;
+  gap: var(--e-md);
   justify-items: center;
   
 }
@@ -30,10 +30,12 @@
   width: clamp(96px, 30vw, 140px);
   aspect-ratio: 1;
   height: auto;
-  border: 1px solid black;
-  border-radius: 16px;
+  /* A borda carrega a raridade do item sorteado: #dropItem recebe
+     data-raridade no drop, então --cor-raridade já cascateia até aqui. */
+  border: 1px solid var(--cor-raridade, var(--cor-tinta));
+  border-radius: var(--raio-lg);
   object-fit: contain;
-  background: #ffffff;
+  background: var(--cor-fundo);
 }
 #dropItem.show .drop-inner img {
   animation: ItemFlip 1.2s ease-out both;
@@ -59,12 +61,12 @@
 #dropItem .drop-legend {
   position: relative;
   max-width: min(240px, 70vw);
-  padding: 8px 10px;
-  font-size: 12px;
+  padding: var(--e-md) var(--e-lg);
+  font-size: var(--txt-md);
   line-height: 1.2;
   text-align: center;
   background: var(--cor-fundo);
   color: var(--cor-raridade, var(--cor-tinta));
   border: 1px solid var(--cor-raridade, var(--cor-tinta));
-  border-radius: 10px;
+  border-radius: var(--raio-sm);
 }

@@ -1,15 +1,15 @@
 /* ===== Casca: topo, conteúdo, navegação e o baú ===== */
 
 html {
-  font-size: clamp(14px, 2.2vmin, 18px);
+  font-size: var(--txt-raiz);
 }
 
 body {
   min-height: 100dvh;
-  padding-inline: clamp(12px, 5vw, var(--e5));
+  padding-inline: clamp(12px, 5vw, var(--e-2xl));
   padding-block-start: 0;
   /* Espaço para a nav fixa do mobile não encobrir o conteúdo. */
-  padding-block-end: calc(var(--altura-nav-mobile) + var(--e5));
+  padding-block-end: calc(var(--altura-nav-mobile) + var(--e-2xl));
   background-color: var(--cor-fundo);
   color: var(--cor-tinta);
 }
@@ -33,7 +33,7 @@ body {
 .box-space-between {
   display: flex;
   justify-content: space-between;
-  gap: var(--e3);
+  gap: var(--e-lg);
 }
 
 /* Hover só onde existe ponteiro fino: em touch o :hover dispara ao
@@ -51,12 +51,12 @@ body {
   top: 0;
   z-index: 90;
   background-color: var(--cor-fundo);
-  padding-block: max(var(--e2), env(safe-area-inset-top)) var(--e2);
+  padding-block: max(var(--e-md), env(safe-area-inset-top)) var(--e-md);
 }
 
 #container-top {
   display: flex;
-  gap: var(--e3);
+  gap: var(--e-lg);
   justify-content: space-between;
   align-items: center;
 }
@@ -82,8 +82,8 @@ body {
   flex: 1 1 auto;
   min-inline-size: 0;
   min-block-size: clamp(var(--toque-min), 12vw, 60px);
-  padding: var(--e3) var(--e4);
-  font-size: clamp(13px, 2.8vw, 18px);
+  padding: var(--e-lg) var(--e-xl);
+  font-size: var(--txt-base);
   text-align: center;
 }
 #berrys span {
@@ -96,7 +96,7 @@ body {
   inline-size: clamp(var(--toque-min), 12vw, 64px);
   aspect-ratio: 1;
   flex: none;
-  padding: var(--e2);
+  padding: var(--e-md);
   background: var(--cor-fundo);
 }
 .botao-icone img {
@@ -108,11 +108,11 @@ body {
 /* ===== Cabeçalho da tela ===== */
 .cabecalho-tela {
   align-items: center;
-  margin-block: var(--e5) var(--e4);
+  margin-block: var(--e-2xl) var(--e-xl);
 }
 
 #titulo-tela {
-  font-size: clamp(16px, 4vw, 22px);
+  font-size: var(--txt-xl);
   font-weight: 700;
   letter-spacing: 0.5px;
   justify-content: flex-start;
@@ -125,7 +125,7 @@ body {
   position: relative;
   display: grid;
   place-items: center;
-  margin-block-end: var(--e5);
+  margin-block-end: var(--e-2xl);
 }
 
 #container-bau > img {
@@ -150,21 +150,21 @@ body {
   inline-size: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--e3);
+  gap: var(--e-lg);
   align-items: stretch;
 }
 
 #contador-bau {
   flex-direction: column;
-  padding: var(--e1) var(--e2);
+  padding: var(--e-sm) var(--e-md);
 }
 
 #qtd-bau {
-  font-size: clamp(28px, 8vw, 44px);
+  font-size: var(--txt-display);
   line-height: 1;
 }
 #texto-contador-bau {
-  font-size: clamp(15px, 3.4vw, 18px);
+  font-size: var(--txt-lg);
 }
 
 /* ===== Navegação: rodapé no mobile ===== */
@@ -173,20 +173,20 @@ body {
   inset-inline: 0;
   bottom: 0;
   z-index: 100;
-  padding-inline: clamp(12px, 5vw, var(--e5));
-  padding-block: var(--e2) max(var(--e2), env(safe-area-inset-bottom));
+  padding-inline: clamp(12px, 5vw, var(--e-2xl));
+  padding-block: var(--e-md) max(var(--e-md), env(safe-area-inset-bottom));
   background-color: var(--cor-fundo);
 }
 
 .nav-itens {
   display: flex;
-  gap: var(--e2);
+  gap: var(--e-md);
   justify-content: space-between;
   align-items: center;
   inline-size: 100%;
   max-inline-size: var(--largura-app);
   margin-inline: auto;
-  padding: var(--e2);
+  padding: var(--e-md);
   background-color: var(--cor-fundo);
 }
 
@@ -194,7 +194,7 @@ body {
   inline-size: clamp(var(--toque-min), 13vw, 60px);
   block-size: clamp(var(--toque-min), 13vw, 60px);
   display: flex;
-  padding: var(--e2);
+  padding: var(--e-md);
   background: var(--cor-fundo);
 }
 .nav-item img {
@@ -218,8 +218,8 @@ body {
 /* ===== Desktop: rail lateral + conteúdo ===== */
 @media (min-width: 1024px) {
   body {
-    padding-block-end: var(--e5);
-    padding-inline: var(--e5);
+    padding-block-end: var(--e-2xl);
+    padding-inline: var(--e-2xl);
   }
 
   .container-game {
@@ -230,7 +230,7 @@ body {
       "rail conteudo";
     grid-template-columns: var(--rail-largura) minmax(0, 1fr);
     grid-template-rows: auto 1fr;
-    column-gap: var(--e5);
+    column-gap: var(--e-2xl);
     align-items: start;
   }
 
@@ -245,7 +245,7 @@ body {
   .nav-principal {
     grid-area: rail;
     position: sticky;
-    top: var(--e5);
+    top: var(--e-2xl);
     inset-inline: auto;
     bottom: auto;
     padding: 0;
@@ -254,9 +254,9 @@ body {
 
   .nav-itens {
     flex-direction: column;
-    gap: var(--e3);
+    gap: var(--e-lg);
     max-inline-size: none;
-    padding: var(--e3);
+    padding: var(--e-lg);
   }
 
   .nav-item {
